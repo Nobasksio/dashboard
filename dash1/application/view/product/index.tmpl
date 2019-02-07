@@ -1,0 +1,25 @@
+{% include 'templates/header.tmpl' %}
+
+<div class="container">
+	<h4>Categories</h4>
+	<table class="table table-striped text-left">
+		<tr>
+			<th>Id</th>
+			<th>Name</th>
+			<th></th>
+		</tr>
+		{% for category in categories %}
+		<tr>
+			<td>{{category.id}}</td>
+			<td>{{category.name}}</td>
+			<td>
+				<a href="/?path=product/category&id={{category.id}}" class="btn btn-success btn-small" style="display:inline;">
+					Show products
+				</a>
+			</td>
+		</tr>
+		{% endfor %}
+	</table>
+</div>
+
+{% include 'templates/footer.tmpl' %}

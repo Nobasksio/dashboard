@@ -1,0 +1,23 @@
+{% include 'templates/header.tmpl' %}
+
+<div class="container">
+	<h4>My profile</h4>
+		<table class="table table-striped">
+			<tr>
+				<th>Name</th>
+				<th>Email</th>
+				<th></th>
+			</tr>
+			<tr>
+				<td>{{user.name}}</td>
+				<td>{{user.login}}</td>
+				<td>
+					<a href="/?path=user/edit" class="btn btn-success btn-small" style="display:inline;">
+						Edit
+					</a>
+				</td>
+			</tr>
+		</table>
+</div>
+
+{% include 'templates/footer.tmpl' %}

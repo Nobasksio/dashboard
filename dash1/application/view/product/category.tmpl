@@ -1,0 +1,33 @@
+{% include 'templates/header.tmpl' %}
+
+<div class="container">
+	<h4>Categories</h4>
+	<table class="table table-striped text-left">
+		<tr>
+			<th>Id</th>
+			<th>Name</th>
+			<th>Price</th>
+			<th>Show</th>
+			<th>Add</th>
+		</tr>
+		{% for product in categoryWithProducts %}
+		<tr>
+			<td>{{product.id}}</td>
+			<td>{{product.name}}</td>
+			<td>{{product.price}}</td>
+			<td>
+				<a href="/?path=product/show&id={{product.id}}" class="btn btn-success btn-small" style="display:inline;">
+					Show product
+				</a>
+			</td>			
+			<td>
+				<a href="/?path=product/add_to_basket&id={{product.id}}" class="btn btn-success btn-small" style="display:inline;">
+					Add product to basket
+				</a>
+			</td>
+		</tr>
+		{% endfor %}
+	</table>
+</div>
+
+{% include 'templates/footer.tmpl' %}

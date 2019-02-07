@@ -1,0 +1,21 @@
+<html>
+  <head>
+	<link rel="stylesheet" href="css/bootstrap.min.css">
+	<script src="js/bootstrap.min.js"></script>
+	<script src="https://code.jquery.com/jquery-3.3.1.min.js"   integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="   crossorigin="anonymous"></script>
+  </head>
+  <body>
+	<div class="container">
+		<h2>{{title}}</h2>
+		<nav class="navbar navbar-light bg-light">
+
+
+			{% if not user %}
+				<a class="navbar-brand" href="?path=auth/index">Log in</a>
+				<a class="navbar-brand" href="?path=auth/signup">Sign up</a>
+			{% else %}
+				<a class="navbar-brand" href="?path=auth/logout">Log out</a>
+			{% endif %}
+		</nav>
+
+

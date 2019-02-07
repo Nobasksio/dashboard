@@ -1,0 +1,25 @@
+{% include 'templates/header.tmpl' %}
+
+<div class="container">
+	<h4>{{product.name}}</h4>
+	<table class="table table-striped text-left">
+		<tr>
+			<th>Id</th>
+			<th>Name</th>
+			<th>Price</th>
+			<th>Add to basket</th>
+		</tr>
+		<tr>
+			<td>{{product.id}}</td>
+			<td>{{product.name}}</td>
+			<td>{{product.price}}</td>
+			<td>
+				<a href="/?path=product/add_to_basket&id={{product.id}}" class="btn btn-success btn-small" style="display:inline;">
+					Add product to basket
+				</a>
+			</td>
+		</tr>
+	</table>
+</div>
+
+{% include 'templates/footer.tmpl' %}
