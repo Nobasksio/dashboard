@@ -1,0 +1,61 @@
+<div class="row" >
+	<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12" >
+		<div class="page-header" >
+			<h2 class="pageheader-title" >
+                {% if type =='dashboard'%}
+                    {% if level == 'index' %}
+                        Пульс
+                    {% elseif level =='brands' %}
+                        Выручка по брендам
+                    {% elseif level =='brand' %}
+                        Выручка бренда
+                    {% elseif level =='departments' %}
+                        Выручка по подразделениями
+                    {% elseif level =='department' %}
+                        Выручка по подразделениями
+                    {% elseif level =='departments' %}
+                    {% endif %}
+                {% elseif type == 'marketing' %}
+                    {% if level == 'department' %}
+                    Информация о продажах {{ department }}
+                    {% else  %}
+                        Информация о продажах
+                    {% endif %}
+                {% endif %}
+            </h2 >
+			<p class="pageheader-text" >Nulla euismod urna eros, sit amet scelerisque torton lectus vel
+				mauris facilisis faucibus at enim quis massa lobortis rutrum.</p >
+			<div class="page-breadcrumb" >
+				<nav aria-label="breadcrumb" >
+					<ol class="breadcrumb" >
+						<li class="breadcrumb-item active" aria-current="page" >Данные за период с 01.{% if month == False %}01{% else %}{{ "now"|date("m") }}{% endif %}.{{ "now"|date("Y") }} до {{ "now"|date("d.m.Y") }} включительно
+							<!--(обновлено в <?=$time_update?>)-->
+						</li >
+					</ol >
+				</nav >
+			</div >
+
+		</div >
+
+	</div >
+</div >
+<div class="row">
+	<div class="col-xl-2 col-lg-6 col-md-6 col-sm-12 col-12 pb-5" >
+
+		<ul class="nav nav-pills">
+			<li role="presentation" {% if month == False %} class="active" {% endif %} ><a href="?path={{ type }}/{{ level }}&month=False&id_d={{ id_d }}">Год</a></li>
+			<li role="presentation" {% if month == TRUE %} class="active" {% endif %} ><a href="?path={{ type }}/{{ level }}&month=True&id_d={{ id_d }}">Месяц</a></li>
+		</ul>
+
+	</div>
+	<div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 pb-5" >
+
+		<ul class="nav nav-pills">
+			<li role="presentation" class="{% if level == "index" %}active{% endif %}"><a href="?path={{ type }}/index&month={% if month == False %}False{% else %}True{% endif %}">Сеть</a></li>
+			<li role="presentation" class="{% if level == "brands" %}active{% endif %}" ><a href="?path={{ type }}/brands&month={% if month == False %}False{% else %}True{% endif %}">Бренды</a></li>
+			<li role="presentation" class="{% if level == "departments" %}active{% endif %}"><a href="?path={{ type }}/departments&month={% if month == False %}False{% else %}True{% endif %}">Подразделения</a></li>
+		</ul>
+
+	</div>
+
+</div>

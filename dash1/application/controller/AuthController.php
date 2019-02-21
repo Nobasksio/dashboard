@@ -22,7 +22,7 @@ class AuthController extends BaseController {
 	}
 
 	public function action_index() {
-		return $this->view->render("auth/index");
+		return $this->view->render("auth/index2");
 	}	
 
 	/**
@@ -45,7 +45,7 @@ class AuthController extends BaseController {
 		}
 
 		$this->session->set("user", $user);
-		$this->request->redirect("?path=dashboard/index");
+		$this->request->redirect("?path=dashboard/departments");
 	}
 
 	/**
@@ -77,7 +77,7 @@ class AuthController extends BaseController {
 
 		$this->session->set("user", array('id'=>$user_id['id'],
             'login'=>$login));
-		$this->request->redirect("?path=user/index");
+		$this->request->redirect("?path=dashboard/departments");
 	}	
 
 	/**

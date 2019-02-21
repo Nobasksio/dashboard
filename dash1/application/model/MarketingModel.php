@@ -1,0 +1,415 @@
+<?php
+/**
+ * Created by PhpStorm.
+ * User: artur
+ * Date: 15/02/2019
+ * Time: 15:51
+ */
+
+namespace application\model;
+
+use \application\service\Service;
+use \application\model\BaseModel;
+use \application\model\GoodsModel;
+use \application\model\BasketModel;
+
+class MarketingModel extends BaseModel
+{
+    public $today_year;
+    public function __construct() {
+        parent::__construct();
+        $this->today_year = date('Y');
+    }
+
+    public function getCatStatistic($id_dep,$month)
+    {
+        $arr_name = $this->getNamesDepartmentFromId($id_dep,$month);
+        $array_account_all = array();
+        foreach($arr_name as $name){
+
+            $array_account = $this->getSalesFromMysql($name);
+            $array_account_all = array_merge($array_account_all, $array_account);
+        }
+
+
+        return $this->toBeatifullArray($array_account_all, $month);
+
+    }
+
+    public function getCheckStatistic($id_dep,$month){
+        $arr_name = $this->getNamesDepartmentFromId($id_dep,$month);
+        $array_account_all = array();
+        foreach ($arr_name as $name) {
+            $array_account = $this->getCheckFromMysql($name);
+            $array_account_all = array_merge($array_account_all, $array_account);
+        }
+        $today_year = date('Y');
+        $sum_dept = 0;
+        $count_check_dept = 0;
+        $count_guest_dept = 0;
+        foreach ($array_account_all as $item) {
+            $dep = $item['Department'];
+            $sum = $item['DishDiscountSumInt'];
+            $guest_count = $item['GuestNum'];
+            $check_count = $item['UniqOrderId'];
+            $date = $item['date'];
+            $year = self::clearDate($item['date'], 'Y');
+
+            if ($year==$today_year) {
+                $sum_dept += $sum;
+                $count_check_dept += $check_count;
+                $count_guest_dept += $guest_count;
+
+            }
+
+        }
+
+        return array(
+            'mean_check' => round($sum_dept/$count_check_dept,2),
+            'mean_guest' => round($sum_dept/$count_guest_dept,2)
+        );
+
+    }
+
+    protected function toBeatifullArray($array_account, $month, $brand=false)
+    {
+
+        $today_year = date('Y');
+        $last_year = $today_year - 1;
+
+        $group_sum = array();
+        $group_count = array();
+        $all_vir = 0;
+
+        $array_dish_sum = array();
+        $array_dish_count = array();
+
+        $arr_price = $this->getMaxPrice($array_account);
+
+        $arr_ss = $this->getMeanSs($array_account);
+        $top_high_ss = $this->getTopHightSs($arr_price,$arr_ss,0,10);
+
+        foreach ($array_account as $str) {
+            if (!$month) {
+                $separator = self::clearDate($str['date'], 'M');
+                $separator_name = 'month';
+            } else {
+                $separator = self::clearDate($str['date'], 'd');
+                $separator_name = 'day';
+            }
+            $year = self::clearDate($str['date'], 'Y');
+
+            if ($year==$today_year) {
+                if (!$brand) {
+                    $Department = $str['Department'];
+                } else {
+                    $Department = $brand;
+                }
+                $group = $str['group'];
+
+                $ss = $str['ss'];
+
+
+                $DishName = $str['DishName'];
+                $DishAmountInt = $str['DishAmountInt'];
+                $price = $arr_price[$DishName];
+
+                $array_dish_sum[$DishName] += $price * $DishAmountInt;
+
+                if ($price != 0) {
+                    $array_dish_count[$DishName] += $DishAmountInt;
+                }
+                $groupTop = $str['groupTop'];
+                if ($group == null) {
+                    $group = $str['group0'];;
+
+                }
+                $group_t[] = $groupTop;
+                $price = $str['price'];
+
+
+                $kol_sale = $str['DishAmountInt'];
+                $depart_name = $str['Department'];
+                $brand_id = $this->getBrandIdfromNameDepatment($depart_name);
+                $type_menu_arr = $this->type_menu[$brand_id];
+                $type_menu_str = $type_menu_arr[$groupTop];
+
+
+                if ($type_menu_str == 'bar') {
+                    $all_vir_bar += $kol_sale * $price;
+                } elseif ($type_menu_str == 'kitchen') {
+                    $all_vir_kitch += $kol_sale * $price;
+                }
+                $group_sum[$type_menu_str][$group] += $kol_sale * $price;
+                $group_count[$type_menu_str][$group] += $kol_sale;
+            }
+
+        }
+
+
+
+
+
+        $array_dish_sum_out = $this->getTop10($array_dish_sum,$array_dish_count,'sum');
+        $array_dish_count_out = $this->getTop10($array_dish_sum,$array_dish_count,'count');
+
+
+        asort($group_sum);
+        asort($group_count);
+
+
+
+        $return_array = array('vir_bar' => $all_vir_bar,
+            'vir_kitch' => $all_vir_kitch,
+            'sum_ar_bar' => $group_sum['bar'],
+            'sum_ar_kitch' => $group_sum['kitchen'],
+            'count_ar_bar' => $group_count['bar'],
+            'count_ar_kitch' => $group_count['kitchen'],
+            'top10sum' => $array_dish_sum_out,
+            'top10count' => $array_dish_count_out,
+            'top10high_ss' => $top_high_ss,
+            'department' => $Department
+        );
+
+        //print_r($return_array);
+        return $return_array;
+    }
+
+    protected function getMaxPrice($array_sales){
+        $arr_price = array();
+        foreach ($array_sales as $item) {
+            $name = $item['DishName'];
+            $price = $item['price'];
+            $year = self::clearDate($item['date'], 'Y');
+            if ($year==$this->today_year) {
+                if (isset($arr_price[$name])) {
+                    if ($price > $arr_price[$name]) {
+                        $arr_price[$name] = $price;
+                    }
+
+                } else {
+                    $arr_price[$name] = $price;
+                }
+            }
+        }
+
+        return $arr_price;
+    }
+
+    protected function getMeanSs($array_sales){
+        $arr_ss = array();
+        $arr_val_ss = array();
+        $arr_count_ss = array();
+        foreach ($array_sales as $item) {
+            $name = $item['DishName'];
+            $ss = $item['ss'];
+            $kol = $item['DishAmountInt'];
+            $year = self::clearDate($item['date'], 'Y');
+            if ($year==$this->today_year) {
+                $val_ss = $ss * $kol;
+
+                if (isset($arr_val_ss[$name])) {
+                    $arr_val_ss[$name] += $val_ss;
+                    $arr_count_ss[$name] += $kol;
+
+                } else {
+                    $arr_val_ss[$name] = $val_ss;
+                    $arr_count_ss[$name] = $kol;
+                }
+            }
+        }
+        foreach ($arr_val_ss as $name=>$val_ss){
+            $arr_ss[$name] = array( 'ss'=> $val_ss/$arr_count_ss[$name],
+                'val_ss'=>$val_ss);
+        }
+
+
+
+        return $arr_ss;
+    }
+    protected function getTopHightSs($arr_price,$arr_ss,$level_ss=0,$count_top=10){
+        $ss_per = array();
+        $ss_return = array();
+
+        $all_vall_ss = $this->getValSs($arr_ss);
+
+        foreach($arr_ss as $name=>$ss_item){
+            if ($arr_price[$name]!=0) {
+                $per = $ss_item['ss'] / $arr_price[$name];
+            } else {
+                continue;
+            }
+            $ss_per_order[$name] = $ss_item['val_ss'];
+
+            $ss_per[$name] = array('ss_per'=>$per,
+                'ss'=>$ss_item['ss'],
+                'val_ss'=>$ss_item['val_ss'],
+                'ves_ss'=>$ss_item['val_ss']/($all_vall_ss/100)
+                );
+        }
+        arsort($ss_per_order);
+        $i=0;
+        foreach($ss_per_order as $name=>$ss_item){
+            if (($ss_per[$name]['ss']/$arr_price[$name])>0.33) {
+                $ss_return[$name] = array('ss_per' => $ss_per[$name]['ss'] / $arr_price[$name],
+                    'ss' => $ss_per[$name]['ss'],
+                    'val_ss' => $ss_per[$name]['val_ss'],
+                    'ves_ss' => $ss_per[$name]['ves_ss'],
+                );
+                if ($i == $count_top) {
+                    break;
+                }
+
+                $i++;
+            } else {
+                continue;
+            }
+        }
+
+        return $ss_return;
+    }
+    protected function getValSs($ss_arr){
+        $all_val_ss = 0;
+        foreach($ss_arr as $item){
+
+            $all_val_ss += $item['val_ss'];
+        }
+
+        return $all_val_ss;
+    }
+
+    protected function toJsonC3($array_group, $vir){
+        $for_json_sum = '';
+        foreach ($array_group as $group => $summ) {
+            $per = round($summ / ($vir / 100), 1);
+            $for_json_sum .= "['{$group} $per%',{$summ}],";
+        }
+
+        return $for_json_sum;
+    }
+
+
+    protected function getSalesFromMysql($Department = '')
+    {
+
+        if ($Department != '') {
+            $where = 'Department = :Department';
+        } else {
+            $where = '';
+        }
+
+        $statement = self::$connection->prepare(
+            "SELECT * FROM 
+                          sales_this_month 
+                        where  
+                          $where
+                          order by Department ");
+        if ($Department != '') {
+            $statement->bindValue(':Department', $Department);
+        }
+        $statement->execute();
+
+        return $statement->fetchAll(\PDO::FETCH_ASSOC);
+    }
+
+    protected function getCheckFromMysql($Department = '')
+    {
+
+        if ($Department != '') {
+            $where = 'Department = :Department';
+        } else {
+            $where = '';
+        }
+
+        $statement = self::$connection->prepare(
+            "SELECT * FROM 
+                          check_this_month 
+                        where  
+                          $where
+                          order by Department ");
+        if ($Department != '') {
+            $statement->bindValue(':Department', $Department);
+        }
+        $statement->execute();
+
+        return $statement->fetchAll(\PDO::FETCH_ASSOC);
+    }
+
+    protected function getNamesDepartmentFromId($id_dep)
+    {
+
+        $keys = array_keys($this->department_id_ar,$id_dep);
+        return $keys;
+    }
+    protected function getActualNameDepartmentFromId($id_dep)
+    {
+        $array_return = array();
+        $keys = array_keys($this->department_id_ar,$id_dep);
+
+
+        foreach($keys as $name_depart){
+            $array_return[] = $this->department_ald_name_ar[$name_depart];
+        }
+        $array_return = array_unique($array_return);
+
+        if ((count($array_return))==1){
+            return $array_return[0];
+
+        } else {
+            return false;
+        }
+
+    }
+
+    public function getBrandIdfromNameDepatment($name_depart){
+        $brand_name = $this->brand_department_ar[$name_depart];
+        return $this->brand_id_department_ar[$brand_name];
+    }
+
+    public function getBrandIdfromIdDepart($id_department){
+        $names = array_keys($this->department_id_ar,$id_department);
+        $one_name = $names[0];
+        $name_brand = $this->brand_department_ar[$one_name];
+
+        return $this->brand_id_department_ar[$name_brand];
+
+    }
+    public function getIdsDepartFromBrandName($brand_name){
+
+        $array_depart = array_keys($this->brand_department_ar,$brand_name);
+
+        return $array_depart;
+
+    }
+    public function getIdsFromBrandId($brand_id){
+        $arr_brand = array_keys($this->brand_id_department_ar,$brand_id);
+        if (count($arr_brand)==1){
+            $array_depart = array_search($arr_brand[0],$this->brand_department_ar);
+        } else {
+            return false;
+        }
+        return $array_depart;
+    }
+
+    public function getTop10($array_dish_sum,$array_dish_count,$type_top){
+
+
+        $output = array();
+        if ($type_top=='sum'){
+            arsort($array_dish_sum);
+            $prepare = array_slice($array_dish_sum, 0, 10);
+        } else {
+            arsort($array_dish_count);
+            $prepare = array_slice($array_dish_count, 0, 10);
+        }
+
+        foreach ($prepare as $name => $value){
+            $output[] = array('name'=>$name,
+                'sum'=>$array_dish_sum[$name],
+                'count'=>$array_dish_count[$name],
+                );
+        }
+
+        return $output;
+    }
+}

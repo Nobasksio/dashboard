@@ -1,5 +1,5 @@
 <?php
-
+header("Content-type: text/html; charset=utf-8");
 define("BASE_PATH", dirname(dirname(__FILE__)));
 define("APP", dirname(dirname(__FILE__)).DIRECTORY_SEPARATOR."/application");
 

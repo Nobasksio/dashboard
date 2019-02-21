@@ -1,0 +1,18 @@
+<html>
+  <head></head>
+  <body>
+	<h2>{{title}}</h2>
+
+	<ul>
+	{% for customer in customerCollection %}
+		<li>{{customer.firstname}} {{customer.secondname}}</li>
+	{% endfor %}
+	</ul>
+	
+	<form method="post" action="/?path=product/new">
+		<input type="text" name="name"/>
+		<input type="submit" value="New" />
+	</form>
+
+  </body>
+</html>

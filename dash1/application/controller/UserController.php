@@ -8,6 +8,8 @@ use \application\model\UserModel;
 
 class UserController extends BaseController {
 
+
+
 	public function before() {
 
 		if (!$this->session->get("user")) {
