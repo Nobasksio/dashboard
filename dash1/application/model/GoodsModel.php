@@ -5,7 +5,7 @@ namespace application\model;
 use \application\service\Service;
 use \application\model\BaseModel;
 
-class GoodsModel extends BaseModel {	
+class ProductModel extends BaseModel {
 
 	const STATUS_ACTIVE = 10;
 	const STATUS_INACTIVE = 20;

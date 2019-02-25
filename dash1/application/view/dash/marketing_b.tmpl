@@ -2,10 +2,6 @@
 <html lang="RU/ru" >
 
 
-    <!-- ============================================================== -->
-    <!-- navbar -->
-    <!-- ============================================================== -->
-
                         {% include 'templates/menu.tmpl' %}
 
     <!-- ============================================================== -->
@@ -17,45 +13,44 @@
     <div class="dashboard-wrapper" >
         <div class="dashboard-ecommerce" >
             <div class="container-fluid dashboard-content " >
-                <div class="row" >
-                    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12" >
-                        <div class="page-header" >
-                            <h2 class="pageheader-title" >
-                                Список пользователей
-                            </h2 >
+                <!-- ============================================================== -->
+                <!-- pageheader  -->
+                <!-- ============================================================== -->
 
-                        </div >
+                {% include 'templates/header2.tmpl' %}
 
-                    </div >
-                </div >
+                <!-- ============================================================== -->
+                <!-- end pageheader  -->
                 <!-- ============================================================== -->
                 <div class="ecommerce-widget" >
 
                     <div class="row" >
                         <div class="col-xl-9 col-lg-12 col-md-6 col-sm-12 col-12" >
                             <div class="card" >
-
+                                <h5 class="card-header" >Выручка</h5 >
                                 <div class="card-body p-0" >
                                     <div class="table-responsive" >
                                         <table class="table table-hover" >
                                             <thead class="bg-light" >
                                             <tr class="border-0" >
                                                 <th class="border-0" >#</th >
-                                                <th class="border-0" >Login</th >
-                                                <th class="border-0" >Name</th >
-                                                <th class="border-0" >Роль</th >
+                                                <th class="border-0" >Бренд</th >
+                                                <th class="border-0" >Выручка</th >
+                                                <th class="border-0" >Выручка {{ "now"|date("Y")-1 }}</th >
+                                                <th class="border-0" >Динамика %</th >
                                             </tr >
                                             </thead >
                                             <tbody >
-                                           {% for user_item in users%}
-                                            <tr class='link-inline' onclick="window.location.href='?path=admin/user&user_id={{ user_item.uid }}'; return false">
+                                           {% for brand_item in brands%}
+                                            <tr class='link-inline' onclick="window.location.href='?path=marketing/brand&month={% if month == False %}False{% else %}True{% endif %}&id_b={{ brand_item.id_d }}'; return false">
 
                                                 <td > {{ loop.index }}</td >
                                                 <td >
-                                                    {{ user_item.login }}
+                                                    {{ brand_item.brand }}
                                                 </td >
-                                                <td >{{ user_item.uname }}</td >
-                                                <td >{{ user_item.name_role }}</td >
+                                                <td >{{ brand_item.vir|number_format(0, ' ', ' ')  }}</td >
+                                                <td >{{ brand_item.last_year_vir|number_format(0, ' ', ' ')  }}</td >
+                                                <td class="{{ brand_item.style }}"><i class="fa fa-fw {{ brand_item.ikon }}" ></i>{{ brand_item.delta }}</td >
                                                 </a>
                                             </tr >
                                            {% endfor %}

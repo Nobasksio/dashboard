@@ -15,14 +15,16 @@ class AuthController extends BaseController {
 		parent::before();
 
 		if ($this->session->get("user") && !($this->request->get("path") == "auth/logout")) {
-			$this->request->redirect("?path=user/index");
+			$this->request->redirect("?path=dashboard/index");
 		}
 
 		return true;
 	}
 
 	public function action_index() {
-		return $this->view->render("auth/index2");
+
+
+		return $this->view->render("auth/index2",array('type'=>$this->request->get("type")));
 	}	
 
 	/**
@@ -31,7 +33,7 @@ class AuthController extends BaseController {
 	public function action_login() {
 
 		if (!$this->request->isPost()) {
-			return $this->view->render("error500");	
+            $this->request->redirect("?path=auth/index");
 		}
 
 		$login = $this->request->getPost("login");
@@ -41,7 +43,9 @@ class AuthController extends BaseController {
 		$user = $userModel->getUserByNameAndPassword($login, $password);
 
 		if (!$user) {
-			$this->request->redirect("?path=auth/index");
+
+            return $this->view->render("auth/index2",array('error'=>'Пользователь с такими учетными данными не найден'));
+			//$this->request->redirect("?path=auth/index2",array('error'=>'Пользователь с такими учетными данными не найден'));
 		}
 
 		$this->session->set("user", $user);

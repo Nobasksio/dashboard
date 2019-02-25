@@ -1,78 +1,16 @@
 <!doctype html>
 <html lang="RU/ru" >
 
-<head >
-    <!-- Required meta tags -->
-    <meta charset="utf-8" >
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" >
-    <!-- Bootstrap CSS -->
-    <!-- Последняя компиляция и сжатый CSS -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 
-    <!-- Дополнение к теме -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
-    <script src="/dash/assets/vendor/jquery/jquery-3.3.1.min.js" ></script >
-    <!-- Последняя компиляция и сжатый JavaScript -->
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
-
-
-    <link rel="stylesheet" href="/dash/assets/vendor/bootstrap/css/bootstrap.min.css" >
-    <link href="/dash/assets/vendor/fonts/circular-std/style.css" rel="stylesheet" >
-    <link rel="stylesheet" href="css/style.css" >
-    <link rel="stylesheet" href="/dash/assets/vendor/fonts/fontawesome/css/fontawesome-all.css" >
-    <link rel="stylesheet" href="/dash/assets/vendor/charts/chartist-bundle/chartist.css" >
-    <link rel="stylesheet" href="/dash/assets/vendor/charts/morris-bundle/morris.css" >
-    <link rel="stylesheet" href="/dash/assets/vendor/fonts/material-design-iconic-font/css/materialdesignicons.min.css" >
-    <link rel="stylesheet" href="/dash/assets/vendor/charts/c3charts/c3.css" >
-    <link rel="stylesheet" href="/dash/assets/vendor/fonts/flag-icon-css/flag-icon.min.css" >
-    <title >Общая информация по доставке</title >
-</head >
-
-<body >
-<!-- ============================================================== -->
-<!-- main wrapper -->
-<!-- ============================================================== -->
-<div class="dashboard-main-wrapper" >
-    <!-- ============================================================== -->
-    <!-- navbar -->
-    <!-- ============================================================== -->
-    <div class="dashboard-header" >
-        <nav class="navbar navbar-expand-lg bg-white fixed-top" >
-            <a class="navbar-brand" href="?path=dashboard/index" >Dashboard</a >
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
-                    aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation" >
-                <span class="navbar-toggler-icon" ></span >
-            </button >
-
-        </nav >
-
-    </div >
     <!-- ============================================================== -->
     <!-- end navbar -->
     <!-- ============================================================== -->
     <!-- ============================================================== -->
     <!-- left sidebar -->
     <!-- ============================================================== -->
-    <div class="nav-left-sidebar sidebar-dark" >
-        <div class="menu-list" >
-            <nav class="navbar navbar-expand-lg navbar-light" >
-                <a class="d-xl-none d-lg-none" href="#" >Dashboard</a >
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
-                        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation" >
-                    <span class="navbar-toggler-icon" ></span >
-                </button >
-                <div class="collapse navbar-collapse" id="navbarNav" >
-                    <ul class="navbar-nav flex-column" >
-                        <li class="nav-divider" >
-                            Меню
-                        </li >
+
                         {% include 'templates/menu.tmpl' %}
 
-                    </ul >
-                </div >
-            </nav >
-        </div >
-    </div >
     <!-- ============================================================== -->
     <!-- end left sidebar -->
     <!-- ============================================================== -->
@@ -264,8 +202,6 @@
 <script src="/dash/assets/libs/js/dashboard-ecommerce.js" ></script >
 
 <script type="application/javascript" >
-
-
         new Morris.Line({
             // ID of the element in which to draw the chart.
             element: 'myfirstchartK',
@@ -292,9 +228,7 @@
             // chart.
             labels: ['2018', '2019'],
             parseTime: false
-
     })
-
     function setRight(right,id_dep,user_id) {
         $.ajax({
             type: 'GET',

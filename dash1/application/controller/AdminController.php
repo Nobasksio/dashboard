@@ -23,7 +23,7 @@ class AdminController extends BaseController
 
         $right_admin = $admin_model->getRight($this->session->get("user"));
 
-        if ($this->session->get("user") && !($this->request->get("path") == "auth/logout") &&($right_admin['id_role'] !=1)) {
+        if (!($this->session->get("user")) || ($right_admin['id_role'] !=1)) {
             return $this->view->render("error500");
         }
 
@@ -34,9 +34,6 @@ class AdminController extends BaseController
         $admin_model = new AdminModel;
 
         $user_arr = $admin_model->getAllusers();
-
-        print_r($user_arr);
-
         return $this->view->render("admin/users", array('users' => $user_arr));
     }
 

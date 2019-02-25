@@ -15,7 +15,7 @@ use \application\model\BaseModel;
 class AdminModel extends BaseModel
 {
     public function getRight($user) {
-        $statement = self::$connection->prepare("SELECT * FROM user_role WHERE id_str = :id");
+        $statement = self::$connection->prepare("SELECT * FROM user_role WHERE id_user = :id");
         $statement->bindValue(':id', $user['id'], \PDO::PARAM_INT);
         $statement->execute();
 
@@ -60,7 +60,9 @@ class AdminModel extends BaseModel
         $statement->bindValue(':id_dep', $id_dep, \PDO::PARAM_INT);
         $statement->execute();
 
-        return $statement->fetch(\PDO::FETCH_ASSOC);
+        $array_return = $statement->fetch(\PDO::FETCH_ASSOC);
+
+        return $array_return;
     }
 
     public function getAllUsers() {

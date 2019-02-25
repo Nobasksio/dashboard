@@ -21,11 +21,13 @@ class DashboardController extends BaseController
 
         $admin_model = new AdminModel();
         $user = $this->session->get("user");
+
         $rigth_arr = $admin_model->getRightOnDepartment($user['id']);
+
 
         if (count($rigth_arr)==0){
 
-            return $this->view->render("dash/wait");
+            return $this->view->render("dash/wait",array('type'=>'wait'));
 
         } else {
             $this->right = $rigth_arr;
@@ -104,18 +106,15 @@ class DashboardController extends BaseController
         $dashModel = new DashboardModel;
         $dash_array = $dashModel->startTypeDash($this->right,'brands',$month);
 
-        return $this->view->render("dash/departments", array('brands' => $dash_array,
+        return $this->view->render("dash/brands", array('brands' => $dash_array,
             'month' => $month,
             'type' => 'dashboard',
             'level' => 'brands'));
 
-
-
-
-
     }
 
     public function action_brand(){
+
         $month = $this->request->getGet('month');
         $id_b = $this->request->getGet('id_b');
         $user = $this->session->get("user");
@@ -126,7 +125,7 @@ class DashboardController extends BaseController
         } else {
             $month=false;
         }
-        $dash_array = $dashModel->getInfoBrand($id_b,$user, $month);
+        $dash_array = $dashModel->startTypeDash($this->right,'brand',$month,$id_b);
         return $this->view->render("dash/brand", array(
             'to_json' => $dash_array['to_json'],
             'all_summ' => $dash_array['all_summ'],
@@ -149,7 +148,9 @@ class DashboardController extends BaseController
             'ikon' => $dash_array['ikon'],
             'month' => $month,
             'id_b' => $id_b,
-            c));
+            'type' => 'dashboard',
+            'level' => 'brand'
+            ));
     }
 
     public function action_departments()
@@ -179,14 +180,7 @@ class DashboardController extends BaseController
         $id_d = $this->request->getGet('id_d');
         $user = $this->session->get("user");
 
-        $admin_model = new AdminModel();
-
-        $rigth = $admin_model->checkRightOnDepartment($user['id'],$id_d);
-
-        if (($rigth==false) or ($rigth['right_u']==0)){
-
-            return false;
-        }
+        $rigth = $this->checkRight($user,$id_d);
 
         if ($month=='True'){
             $month=true;
@@ -197,7 +191,7 @@ class DashboardController extends BaseController
 
 
             $dashModel = new DashboardModel;
-            $dash_array = $dashModel->startTypeDash($this->right,'department',$month);
+            $dash_array = $dashModel->startTypeDash(array($rigth),'department',$month);
             return $this->view->render("dash/department", array(
                 'to_json' => $dash_array['to_json'],
                 'all_summ' => $dash_array['all_summ'],
@@ -218,7 +212,7 @@ class DashboardController extends BaseController
                 'separator_name' => $dash_array['separator_name'],
                 'style' => $dash_array['style'],
                 'ikon' => $dash_array['ikon'],
-                'month' => True,
+                'month' => $month,
                 'id_d' => $id_d,
                  'type' => 'dashboard',
                 'level' => 'department'));

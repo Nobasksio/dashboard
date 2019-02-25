@@ -1,6 +1,6 @@
 <script src="/dash/assets/vendor/jquery/jquery-3.3.1.min.js" ></script >
 <script src="https://unpkg.com/delaunator@2.0.0/delaunator.min.js" ></script >
-
+<link rel="stylesheet" href="/dash/assets/vendor/bootstrap/css/bootstrap.min.css" >
 <style>
 	@import url(https://fonts.googleapis.com/css?family=Roboto:300);
 
@@ -107,20 +107,26 @@
 
 
 <div class="login-page">
+
 	<div class="form">
-		<form class="register-form" method="post" action="?path=auth/register">
+
+
+		<form class=" register-form" method="post" action="?path=auth/register">
 			<input type="text" placeholder="имя фамилия" name="firstname" />
 			<input type="password" placeholder="пароль" name="password"/>
 			<input type="text" placeholder="email" name="login"/>
 			<button>create</button>
 			<p class="message">Уже регистрировались? <a href="#">Войти</a></p>
 		</form>
+
 		<form class="login-form" method="post" action="?path=auth/login">
+			{% if error!='' %} <div class="alert alert-danger" role="alert">{{ error }}</div>{% endif %}
 			<input type="text" placeholder="email" name="login"/>
 			<input type="password" placeholder="пароль" name="password"/>
 			<button>Войти</button>
 			<p class="message">Не регистрировались? <a href="#">Зарегистрироваться</a></p>
 		</form>
+
 	</div>
 </div>
 

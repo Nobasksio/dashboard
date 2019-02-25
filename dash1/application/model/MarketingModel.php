@@ -10,7 +10,7 @@ namespace application\model;
 
 use \application\service\Service;
 use \application\model\BaseModel;
-use \application\model\GoodsModel;
+use \application\model\DashboardModel;
 use \application\model\BasketModel;
 
 class MarketingModel extends BaseModel
@@ -21,22 +21,38 @@ class MarketingModel extends BaseModel
         $this->today_year = date('Y');
     }
 
-    public function getCatStatistic($id_dep,$month)
+    public function getCatStatistic($id_dep,$month,$brand=false)
     {
-        $arr_name = $this->getNamesDepartmentFromId($id_dep,$month);
-        $array_account_all = array();
-        foreach($arr_name as $name){
+        $dashboard_model = new DashboardModel;
 
-            $array_account = $this->getSalesFromMysql($name);
-            $array_account_all = array_merge($array_account_all, $array_account);
-        }
+            $arr_name = $dashboard_model->getNameDepart($id_dep);
+            $search_department = $dashboard_model->ArraytoWhereMysql($arr_name, 'department_name');
+            $array_sales = $this->getSalesFromMysql($search_department, $month);
 
 
-        return $this->toBeatifullArray($array_account_all, $month);
+        return $this->toBeatifullArray($array_sales, $month);
+
+    }
+    public function getBrandMarketing($rigth_arr, $month = False, $id_brand){
+
+        $dashboard_model = new DashboardModel;
+        $rigth_arr = $dashboard_model->onlyChooseBrand($rigth_arr,$id_brand);
+
+
+        $department_name_arr = $dashboard_model->getNameDepart($rigth_arr);
+
+        $search_department = $dashboard_model->ArraytoWhereMysql($department_name_arr,'department_name');
+
+        $array_sales = $this->getSalesFromMysql($search_department,$month);
+
+        return $this->toBeatifullArray($array_sales, $month,true);
+    }
+    public function cookBrandMarketing(){
 
     }
 
-    public function getCheckStatistic($id_dep,$month){
+    public function getCheckStatistic($id_dep,$month)
+    {
         $arr_name = $this->getNamesDepartmentFromId($id_dep,$month);
         $array_account_all = array();
         foreach ($arr_name as $name) {
@@ -288,25 +304,27 @@ class MarketingModel extends BaseModel
         return $for_json_sum;
     }
 
-
-    protected function getSalesFromMysql($Department = '')
+    protected function getSalesFromMysql($Department='',$month)
     {
 
-        if ($Department != '') {
-            $where = 'Department = :Department';
+        if ($Department !='') {
+            $where = "where Department IN $Department";
         } else {
             $where = '';
+        }
+        if ($month) {
+            $table = 'sales_this_month';
+
+        } else {
+            $table = 'sales_this_year';
+
         }
 
         $statement = self::$connection->prepare(
             "SELECT * FROM 
-                          sales_this_month 
-                        where  
+                          $table   
                           $where
                           order by Department ");
-        if ($Department != '') {
-            $statement->bindValue(':Department', $Department);
-        }
         $statement->execute();
 
         return $statement->fetchAll(\PDO::FETCH_ASSOC);
@@ -314,7 +332,6 @@ class MarketingModel extends BaseModel
 
     protected function getCheckFromMysql($Department = '')
     {
-
         if ($Department != '') {
             $where = 'Department = :Department';
         } else {
