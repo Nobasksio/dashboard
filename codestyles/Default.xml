@@ -1,0 +1,8 @@
+<code_scheme name="Default" version="173">
+  <HTMLCodeStyleSettings>
+    <option name="HTML_SPACE_AFTER_TAG_NAME" value="true" />
+  </HTMLCodeStyleSettings>
+  <codeStyleSettings language="PHP">
+    <option name="KEEP_SIMPLE_METHODS_IN_ONE_LINE" value="true" />
+  </codeStyleSettings>
+</code_scheme>

@@ -1,0 +1,8 @@
+<keymap version="1" name="Default copy" parent="Mac OS X 10.5+">
+  <action id="Images.Editor.ActualSize">
+    <keyboard-shortcut first-keystroke="meta divide" />
+  </action>
+  <action id="UML.ActualSize">
+    <keyboard-shortcut first-keystroke="meta divide" />
+  </action>
+</keymap>
