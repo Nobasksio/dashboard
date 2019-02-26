@@ -26,9 +26,7 @@ class DashboardController extends BaseController
 
 
         if (count($rigth_arr)==0){
-
             return $this->view->render("dash/wait",array('type'=>'wait'));
-
         } else {
             $this->right = $rigth_arr;
         }
@@ -38,7 +36,6 @@ class DashboardController extends BaseController
 
 
     public function action_index(){
-
 
         $month = $this->request->getGet('month');
         if ($month=='True'){
@@ -125,7 +122,7 @@ class DashboardController extends BaseController
         } else {
             $month=false;
         }
-        $dash_array = $dashModel->startTypeDash($this->right,'brand',$month,$id_b);
+        $dash_array = $dashModel->startTypeDash($this->right,'brand', $month, $id_b);
         return $this->view->render("dash/brand", array(
             'to_json' => $dash_array['to_json'],
             'all_summ' => $dash_array['all_summ'],
@@ -163,6 +160,8 @@ class DashboardController extends BaseController
             $month=false;
         }
 
+
+
         $dashModel = new DashboardModel;
         $dash_array = $dashModel->startTypeDash($this->right,'departments',$month);
 
@@ -180,6 +179,7 @@ class DashboardController extends BaseController
         $id_d = $this->request->getGet('id_d');
         $user = $this->session->get("user");
 
+
         $rigth = $this->checkRight($user,$id_d);
 
         if ($month=='True'){
@@ -187,8 +187,6 @@ class DashboardController extends BaseController
         } else {
             $month=false;
         }
-
-
 
             $dashModel = new DashboardModel;
             $dash_array = $dashModel->startTypeDash(array($rigth),'department',$month);

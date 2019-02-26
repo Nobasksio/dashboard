@@ -18,4 +18,14 @@ class ProductModel extends BaseModel {
 		return $statement->fetch(\PDO::FETCH_ASSOC);
 	}
 
+    public function getAllProducts($id_dep_arr) {
+
+	    $marketing_model = new MarketingModel;
+        $marketing_model->getSalesFromMysql();
+
+        $statement = self::$connection->prepare("SELECT * FROM sales_this_month ");
+        $statement->execute();
+
+        return $statement->fetchAll(\PDO::FETCH_ASSOC);
+    }
 }

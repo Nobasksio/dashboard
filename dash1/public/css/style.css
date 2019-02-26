@@ -1939,7 +1939,7 @@ Container / Wrapper
 }
 .dashboard-main-wrapper {
     min-height: 100%;
-    padding-top: 60px;
+    padding-top: 70px;
     position: relative;
 }
 
@@ -2000,7 +2000,9 @@ Pageheader
 -------------------------*/
 
 .page-header {
-    margin-bottom: 30px;
+    padding-bottom: 9px;
+    margin: 40px 0 20px;
+    border-bottom: 1px solid #eee;
 }
 
 .page-breadcrumb {}

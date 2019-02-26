@@ -222,4 +222,84 @@ abstract class BaseModel {
         }
 
     }
+    protected function getSalesFromMysql($month,$Department='',$products='')
+    {
+        if ($Department !='') {
+            $where = "where Department IN $Department";
+        } else {
+            $where = '';
+        }
+        if ($month) {
+            $table = 'sales_this_month';
+
+        } else {
+            $table = 'sales_this_year';
+
+        }
+        $statement = self::$connection->prepare(
+            "SELECT * FROM 
+                          $table   
+                          $where
+                          order by Department");
+        $statement->execute();
+
+        return $statement->fetchAll(\PDO::FETCH_ASSOC);
+    }
+
+    protected function getAllAcounts($month,$Department = '')
+    {
+
+        if ($Department != '') {
+            $where = "and d.Department IN $Department";
+        } else {
+            $where = '';
+        }
+        if ($month) {
+            $table = 'dashboard_this_month';
+
+        } else {
+            $table = 'dashboard_this_years';
+
+        }
+
+        $statement = self::$connection->prepare(
+            "SELECT * FROM 
+                          $table d, 
+                          dashboard_type_account t 
+                        where d.AccountName = t.name 
+                          $where
+                          order by `DateTime`  ");
+        $statement->execute();
+
+        return $statement->fetchAll(\PDO::FETCH_ASSOC);
+    }
+    protected function getAcounts($month, $Department = '')
+    {
+
+        if ($Department != '') {
+            $where = "and d.Department IN $Department";
+        } else {
+            $where = '';
+        }
+        if ($month) {
+            $table = 'dashboard_this_month';
+
+        } else {
+            $table = 'dashboard_this_years';
+
+        }
+
+        $statement = self::$connection->prepare(
+            "SELECT * FROM 
+                          $table d, 
+                          dashboard_type_account t 
+                        where t.group=1 
+                          and d.AccountName = t.name 
+                          $where
+                          order by Department ");
+        $statement->execute();
+
+        return $statement->fetchAll(\PDO::FETCH_ASSOC);
+    }
+
 }

@@ -13,7 +13,8 @@ class DashboardModel extends BaseModel
     public $today_year;
     public $last_year;
 
-    public function __construct() {
+    public function __construct()
+    {
         parent::__construct();
         $this->today_year = date('Y');
         $this->last_year = $this->today_year - 1;
@@ -158,48 +159,38 @@ class DashboardModel extends BaseModel
         'Центральный Офис' => 0,
     );
 
-    public function startTypeDash($rigth_arr, $type='all',$month = False,$brand='')
+    public function startTypeDash($rigth_arr, $type = 'all', $month = False, $brand = '')
     {
 
         if ($type == 'brand') {
-            $rigth_arr = $this->onlyChooseBrand($rigth_arr,$brand);
-            $department_name_arr = $this->getNameDepart($rigth_arr);
 
-        } else {
-            $department_name_arr = $this->getNameDepart($rigth_arr);
+            $rigth_arr = $this->onlyChooseBrand($rigth_arr, $brand);
+
         }
 
-        $search_department = $this->ArraytoWhereMysql($department_name_arr,'department_name');
+        $department_name_arr = $this->getNameDepart($rigth_arr);
 
+        $search_department = $this->ArraytoWhereMysql($department_name_arr, 'department_name');
 
-        if ($type!='department' and $type!='brand') {
-            $accounts = $this->getAcounts($search_department,$month);
+        if (($type == 'all') || ($type == 'departments') || ($type == 'brands') ) {
+            $accounts = $this->getAcounts($month,$search_department);
             $array_out = $this->cookList($accounts, $type);
 
-        } elseif ($type=='department') {
-            $accounts = $this->getAllAcounts($search_department,$month);
+        } else {
 
+            $accounts = $this->getAllAcounts($month, $search_department);
             $array_out = $this->cookDepartment($accounts, $month);
-
-        } elseif ($type =='brand') {
-
-
-            $accounts = $this->getAllAcounts($search_department,$month);
-
-            $array_out = $this->cookDepartment($accounts, $month,$brand);
         }
 
         return $array_out;
 
     }
 
-    protected function cookDepartment($array_accaunts,$month,$brand='')
+    protected function cookDepartment($array_accaunts, $month, $brand = '')
     {
-        $summ=array();
-
+        $summ = array();
 
         foreach ($array_accaunts as $str) {
-
 
             if (!$month) {
                 $separator = self::clearDate($str['DateTime'], 'M');
@@ -209,7 +200,6 @@ class DashboardModel extends BaseModel
                 $separator_name = 'day';
             }
 
-
             $year = self::clearDate($str['DateTime'], 'Y');
 
             if (!$brand) {
@@ -217,12 +207,13 @@ class DashboardModel extends BaseModel
             } else {
                 $Department = $brand;
             }
+
             $group = $str['group'];
             $sum_incom = $str['Sum.Incoming'];
             $sum_out = $str['Sum.Outgoing'];
 
             //print "$Department {$str['AccountName']} $group $sum_incom $sum_out {$str['DateTime']}<br>";
-            if ($str['AccountName'] == "Такси"){
+            if ($str['AccountName'] == "Такси") {
                 $all_taxi_for_json[$separator][$year] = @$all_taxi_for_json[$separator][$year] - $sum_out + $sum_incom;
             }
             if ($group == 1) {
@@ -240,15 +231,13 @@ class DashboardModel extends BaseModel
 
         }
 
-
-
         $to_json_fot = @$this->to_json_moris($all_fot_for_json, $separator_name, $summ, true);
         $to_json_ss = @$this->to_json_moris($all_ss_for_json, $separator_name, $summ, true);
         $to_json = @$this->to_json_moris($summ, $separator_name);
 
-        $totable_fot = @$this->to_table($all_fot_for_json,$summ,true);
-        $totable_ss = @$this->to_table($all_ss_for_json,$summ,true);
-        $totable_taxi = @$this->to_table($all_taxi_for_json,$summ,true);
+        $totable_fot = @$this->to_table($all_fot_for_json, $summ, true);
+        $totable_ss = @$this->to_table($all_ss_for_json, $summ, true);
+        $totable_taxi = @$this->to_table($all_taxi_for_json, $summ, true);
 
         $delta = @round($all_summ[$this->today_year] / ($all_summ[$this->last_year] / 100) - 100, 2);
 
@@ -262,13 +251,14 @@ class DashboardModel extends BaseModel
             $style = 'text-muted';
             $ikon = '';
         }
+
         $per_ss = round($all_summ_ss[$this->today_year] / ($all_summ[$this->today_year] / 100), 2);
         $per_fot = round($all_summ_fot[$this->today_year] / ($all_summ[$this->today_year] / 100), 2);
         $return_array = array('to_json' => $to_json,
             'json_fot' => $to_json_fot,
             'json_ss' => $to_json_ss,
             'to_table_fot' => $totable_fot['summ'],
-            'to_table_fot_per' => $totable_fot['per'] ,
+            'to_table_fot_per' => $totable_fot['per'],
             'to_table_ss' => $totable_ss['summ'],
             'to_table_ss_per' => $totable_ss['per'],
             'to_table_taxi' => $totable_taxi['summ'],
@@ -285,13 +275,11 @@ class DashboardModel extends BaseModel
             'ikon' => $ikon
         );
 
-
         return $return_array;
-
 
     }
 
-    protected function cookList($accounts,$type)
+    protected function cookList($accounts, $type)
     {
         $array_prepare = $this->prepareArrayFromMysql($accounts, $type);
         $array_account = $array_prepare['arr_sum'];
@@ -338,18 +326,8 @@ class DashboardModel extends BaseModel
     }
 
 
-    protected function cookBrands($array_accaunts)
-    {
-
-    }
-
-
-
-
-
     protected function to_json_moris($array, $separator_name, $summ = [], $absolut = false)
     {
-        //@ksort($array);
 
         if ($absolut) {
             ksort($summ);
@@ -375,7 +353,6 @@ class DashboardModel extends BaseModel
                 foreach ($arr_year as $year => $summ) {
 
                     $to_json1[] = array("$year" => $summ);
-
                 }
                 $to_json[] = $to_json1;
             }
@@ -396,7 +373,7 @@ class DashboardModel extends BaseModel
             foreach ($arr_year as $year => $summ2) {
                 if ($year == $today_year) {
 
-                    $value_arr['per'][$month] = round($array[$month][$year]/($summ2/100),2);
+                    $value_arr['per'][$month] = round($array[$month][$year] / ($summ2 / 100), 2);
                     if (isset($array[$month][$year])) {
                         $value_arr['summ'][$month] = $array[$month][$year];
                     } else {
@@ -409,75 +386,12 @@ class DashboardModel extends BaseModel
     }
 
 
-
-    protected function getAcounts($Department = '',$month)
-    {
-
-        if ($Department != '') {
-            $where = "and d.Department IN $Department";
-        } else {
-            $where = '';
-        }
-        if ($month) {
-            $table = 'dashboard_this_month';
-
-        } else {
-            $table = 'dashboard_this_years';
-
-        }
-
-        $statement = self::$connection->prepare(
-            "SELECT * FROM 
-                          $table d, 
-                          dashboard_type_account t 
-                        where t.group=1 
-                          and d.AccountName = t.name 
-                          $where
-                          order by Department ");
-        $statement->execute();
-
-        return $statement->fetchAll(\PDO::FETCH_ASSOC);
-    }
-
-    protected function getAllAcounts($Department = '',$month)
-    {
-
-        if ($Department != '') {
-            $where = "and d.Department IN $Department";
-        } else {
-            $where = '';
-        }
-        if ($month) {
-            $table = 'dashboard_this_month';
-
-        } else {
-            $table = 'dashboard_this_years';
-
-        }
-
-        $statement = self::$connection->prepare(
-            "SELECT * FROM 
-                          $table d, 
-                          dashboard_type_account t 
-                        where d.AccountName = t.name 
-                          $where
-                          order by `DateTime`  ");
-        $statement->execute();
-
-        return $statement->fetchAll(\PDO::FETCH_ASSOC);
-    }
-
-
-
     protected function returnArrayTest($array)
     {
         print"тест:<br>";
         print_r($array);
         print"конец теста<br>";
     }
-
-
-
 
 
     public function prepareArrayFromMysql($array_account, $type)
@@ -487,7 +401,6 @@ class DashboardModel extends BaseModel
 
             $group_arr = $this->brand_department_ar;
             $group_id = $this->brand_id_department_ar;
-
 
         } elseif ($type == 'departments') {
             $group_arr = $this->department_ald_name_ar;
@@ -519,31 +432,34 @@ class DashboardModel extends BaseModel
         ksort($depart_id);
         $array_id = array('arr_sum' => $summ,
             'depart_id' => $depart_id);
+
         return $array_id;
     }
 
 
-
-    public function ArraytoWhereMysql($department_arr,$key){
+    public function ArraytoWhereMysql($department_arr, $key)
+    {
         $str_out = '(';
-        foreach($department_arr as $name_key=>$value){
-            $str_out .= "'$value[$key]'".",";
+        foreach ($department_arr as $name_key => $value) {
+            $str_out .= "'$value[$key]'" . ",";
         }
         $str_out = substr($str_out, 0, -1);
         $str_out .= ")";
-        //print "$str_out";
+
         return $str_out;
     }
+
 //todo написать отдельную функцию когда просишь одно подразделние
-    public function getNameDepart($depart){
+    public function getNameDepart($depart)
+    {
 
-        if (gettype($depart)=="array") {
+        if (gettype($depart) == "array") {
 
-            $search_str = $this->ArraytoWhereMysql($depart,'id_department');
+            $search_str = $this->ArraytoWhereMysql($depart, 'id_department');
 
         } else {
 
-            $search_str = '('.$depart.")";
+            $search_str = '(' . $depart . ")";
         }
 
         $department_where = "where id_department IN $search_str";
@@ -556,42 +472,39 @@ class DashboardModel extends BaseModel
         $statement2->execute();
         $depart_arr2 = $statement2->fetchAll(\PDO::FETCH_ASSOC);
 
-        if ($depart_arr2){
-            $depart_arr = array_merge($depart_arr,$depart_arr2);
+        if ($depart_arr2) {
+            $depart_arr = array_merge($depart_arr, $depart_arr2);
         }
 
         return $depart_arr;
     }
 
     //todo решить все таки показывать только те на которые права есть или все которые к бренду относятся
-    public function onlyChooseBrand($arr_right,$brand_id){
-
+    public function onlyChooseBrand($arr_right, $brand_id)
+    {
 
         $statement = self::$connection->prepare("SELECT * FROM brand_department where id_brand = $brand_id");
         $statement->execute();
         $depart_arr = $statement->fetchAll(\PDO::FETCH_ASSOC);
 
-        foreach($depart_arr as $item){
-
-            $arr_right[] = array('id_department'=>$item['id_department']);
+        foreach ($depart_arr as $item) {
+            $arr_right[] = array('id_department' => $item['id_department']);
         }
+
         return $depart_arr;
     }
 
-    public function getIdsFromBrandId($brand_id){
-        $arr_brand = array_keys($this->brand_id_department_ar,$brand_id);
-        if (count($arr_brand)==1){
-            $array_depart = array_search($arr_brand[0],$this->brand_department_ar);
+    public function getIdsFromBrandId($brand_id)
+    {
+        $arr_brand = array_keys($this->brand_id_department_ar, $brand_id);
+
+        if (count($arr_brand) == 1) {
+            $array_depart = array_search($arr_brand[0], $this->brand_department_ar);
         } else {
             return false;
         }
         return $array_depart;
     }
-
-
-
-
-
 
 
 }

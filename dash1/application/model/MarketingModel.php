@@ -21,35 +21,41 @@ class MarketingModel extends BaseModel
         $this->today_year = date('Y');
     }
 
-    public function getCatStatistic($id_dep,$month,$brand=false)
+    public function getDepartSalesInfo($rigth_arr,$month,$id_brand=false,$id_products='')
     {
         $dashboard_model = new DashboardModel;
+        $brand = false;
 
-            $arr_name = $dashboard_model->getNameDepart($id_dep);
-            $search_department = $dashboard_model->ArraytoWhereMysql($arr_name, 'department_name');
-            $array_sales = $this->getSalesFromMysql($search_department, $month);
-
-
-        return $this->toBeatifullArray($array_sales, $month);
-
-    }
-    public function getBrandMarketing($rigth_arr, $month = False, $id_brand){
-
-        $dashboard_model = new DashboardModel;
-        $rigth_arr = $dashboard_model->onlyChooseBrand($rigth_arr,$id_brand);
-
+        if ($id_brand){
+            $rigth_arr = $dashboard_model->onlyChooseBrand($rigth_arr,$id_brand);
+            $brand = true;
+        }
 
         $department_name_arr = $dashboard_model->getNameDepart($rigth_arr);
+        $search_department = $dashboard_model->ArraytoWhereMysql($department_name_arr, 'department_name');
+        $array_sales = $this->getSalesFromMysql($month,$search_department);
 
-        $search_department = $dashboard_model->ArraytoWhereMysql($department_name_arr,'department_name');
-
-        $array_sales = $this->getSalesFromMysql($search_department,$month);
-
-        return $this->toBeatifullArray($array_sales, $month,true);
-    }
-    public function cookBrandMarketing(){
+        return $this->toBeatifullArray($array_sales, $month,$brand);
 
     }
+    public function getProductInfo($rigth_arr,$month,$id_products='')
+    {
+        $dashboard_model = new DashboardModel;
+        $brand = false;
+
+        if ($id_brand){
+            $rigth_arr = $dashboard_model->onlyChooseBrand($rigth_arr,$id_brand);
+            $brand = true;
+        }
+
+        $department_name_arr = $dashboard_model->getNameDepart($rigth_arr);
+        $search_department = $dashboard_model->ArraytoWhereMysql($department_name_arr, 'department_name');
+        $array_sales = $this->getSalesFromMysql($month,$search_department);
+
+        return $this->toBeatifullArray($array_sales, $month,$brand);
+
+    }
+
 
     public function getCheckStatistic($id_dep,$month)
     {
@@ -64,11 +70,11 @@ class MarketingModel extends BaseModel
         $count_check_dept = 0;
         $count_guest_dept = 0;
         foreach ($array_account_all as $item) {
-            $dep = $item['Department'];
+
             $sum = $item['DishDiscountSumInt'];
             $guest_count = $item['GuestNum'];
             $check_count = $item['UniqOrderId'];
-            $date = $item['date'];
+
             $year = self::clearDate($item['date'], 'Y');
 
             if ($year==$today_year) {
@@ -143,7 +149,6 @@ class MarketingModel extends BaseModel
                 $group_t[] = $groupTop;
                 $price = $str['price'];
 
-
                 $kol_sale = $str['DishAmountInt'];
                 $depart_name = $str['Department'];
                 $brand_id = $this->getBrandIdfromNameDepatment($depart_name);
@@ -162,18 +167,11 @@ class MarketingModel extends BaseModel
 
         }
 
-
-
-
-
         $array_dish_sum_out = $this->getTop10($array_dish_sum,$array_dish_count,'sum');
         $array_dish_count_out = $this->getTop10($array_dish_sum,$array_dish_count,'count');
 
-
         asort($group_sum);
         asort($group_count);
-
-
 
         $return_array = array('vir_bar' => $all_vir_bar,
             'vir_kitch' => $all_vir_kitch,
@@ -239,8 +237,6 @@ class MarketingModel extends BaseModel
                 'val_ss'=>$val_ss);
         }
 
-
-
         return $arr_ss;
     }
     protected function getTopHightSs($arr_price,$arr_ss,$level_ss=0,$count_top=10){
@@ -304,31 +300,7 @@ class MarketingModel extends BaseModel
         return $for_json_sum;
     }
 
-    protected function getSalesFromMysql($Department='',$month)
-    {
 
-        if ($Department !='') {
-            $where = "where Department IN $Department";
-        } else {
-            $where = '';
-        }
-        if ($month) {
-            $table = 'sales_this_month';
-
-        } else {
-            $table = 'sales_this_year';
-
-        }
-
-        $statement = self::$connection->prepare(
-            "SELECT * FROM 
-                          $table   
-                          $where
-                          order by Department ");
-        $statement->execute();
-
-        return $statement->fetchAll(\PDO::FETCH_ASSOC);
-    }
 
     protected function getCheckFromMysql($Department = '')
     {
@@ -396,20 +368,20 @@ class MarketingModel extends BaseModel
         $array_depart = array_keys($this->brand_department_ar,$brand_name);
 
         return $array_depart;
-
     }
     public function getIdsFromBrandId($brand_id){
+
         $arr_brand = array_keys($this->brand_id_department_ar,$brand_id);
         if (count($arr_brand)==1){
             $array_depart = array_search($arr_brand[0],$this->brand_department_ar);
         } else {
             return false;
         }
+
         return $array_depart;
     }
 
     public function getTop10($array_dish_sum,$array_dish_count,$type_top){
-
 
         $output = array();
         if ($type_top=='sum'){

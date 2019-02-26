@@ -6,14 +6,14 @@ use \application\service\Service;
 use \application\controller\BaseController;
 use \application\model\CategoryModel;
 use \application\model\BasketModel;
-use \application\model\GoodsModel;
+use \application\model\ProductModel;
 
 class ProductController extends BaseController {
 
-	public function action_index() {
+	public function action_category() {
 
 		$categoryModel = new CategoryModel();
-		$categories = $categoryModel->getAllCategories();
+		$categories = $categoryModel->getAllProducts($group);
 
 		$this->view->render("product/index", [
 			"categories" => $categories

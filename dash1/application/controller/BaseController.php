@@ -17,15 +17,22 @@ class BaseController extends FrontController {
 		return true;
 	}
 
-	protected function checkRight($user,$id_d){
+	protected function checkRight($user,$id_department,$type='dep'){
         $admin_model = new AdminModel();
-        $rigth = $admin_model->checkRightOnDepartment($user['id'],$id_d);
 
-        if (($rigth==false) or ($rigth['right_u']==0)){
+        if ($type=='dep') {
+            $rigth = $admin_model->checkRightOnDepartment($user['id'], $id_department);
 
-            return false;
+            if (($rigth == false) or ($rigth['right_u'] == 0)) {
+
+                return false;
+            }
+        } else {
+
         }
         return $rigth;
 
     }
+
+
 }

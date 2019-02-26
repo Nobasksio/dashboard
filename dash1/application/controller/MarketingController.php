@@ -16,6 +16,7 @@ use \application\model\AdminModel;
 
 class MarketingController extends BaseController
 {
+    public $right;
     public function before()
     {
         if (!$this->session->get("user")) {
@@ -39,7 +40,6 @@ class MarketingController extends BaseController
 
     public function action_index()
     {
-
 
         $month = $this->request->getGet('month');
         if ($month == 'True') {
@@ -66,6 +66,8 @@ class MarketingController extends BaseController
         } else {
             $month = false;
         }
+
+        //print_r($this->right);
 
         $dashModel = new DashboardModel;
         $dash_array = $dashModel->startTypeDash($this->right, 'departments', $month);
@@ -108,8 +110,9 @@ class MarketingController extends BaseController
         }
         $rigth = $this->checkRight($user, $id_d);
 
+
         $dashModel = new MarketingModel;
-        $dash_array = $dashModel->getCatStatistic($id_d, true);
+        $dash_array = $dashModel->getDepartSalesInfo(array($rigth), true);
         $dash_array_check = $dashModel->getCheckStatistic($id_d, true);
 
         return $this->view->render("dash/marketing", array(
@@ -146,7 +149,74 @@ class MarketingController extends BaseController
 
 
         $dashModel = new MarketingModel;
-        $dash_array = $dashModel->getBrandMarketing($this->rigth, true, $id_b);
+        //$dash_array = $dashModel->getDepartSalesInfo(array($rigth), true);
+        $dash_array = $dashModel->getDepartSalesInfo(array($this->rigth), true, $id_b);
+        $dash_array_check = $dashModel->getCheckStatistic($id_b, true);
+
+        return $this->view->render("dash/marketing", array(
+            'to_json_sale' => $dash_array['to_json_sale'],
+            'sum_ar_bar' => $dash_array['sum_ar_bar'],
+            'count_ar_bar' => $dash_array['count_ar_bar'],
+            'sum_ar_kitch' => $dash_array['sum_ar_kitch'],
+            'count_ar_kitch' => $dash_array['count_ar_kitch'],
+            'vir_bar' => $dash_array['vir_bar'],
+            'vir_kitch' => $dash_array['vir_kitch'],
+            'department' => $dash_array['department'],
+            'top10sum' => $dash_array['top10sum'],
+            'top10count' => $dash_array['top10count'],
+            'top10high_ss' => $dash_array['top10high_ss'],
+            'mean_check' => $dash_array_check['mean_check'],
+            'mean_guest' => $dash_array_check['mean_guest'],
+            'month' => $month,
+            'type' => 'marketing',
+            'level' => 'brand',
+            'id_b' => $id_b
+        ));
+    }
+    public function action_products()
+    {
+        $id_b = $this->request->getGet('id_b');
+        $id_p = $this->request->getGet('id_p');
+        $id_d = $this->request->getGet('id_d');
+        $user = $this->session->get("user");
+
+        if (isset($id_b)){
+            $rigth = $this->checkRight($user, $id_d);
+        } else {
+            $rigth = $this->checkRight($user, $id_d);
+        }
+
+        $month = $this->request->getGet('month');
+        if ($month == 'True') {
+            $month = true;
+        } else {
+            $month = false;
+        }
+
+        $dashModel = new DashboardModel;
+        $dash_array = $dashModel->startTypeDash($this->right, 'brands', $month);
+
+        return $this->view->render("dash/marketing_b", array('brands' => $dash_array,
+            'month' => $month,
+            'type' => 'marketing',
+            'level' => 'departments'));
+    }
+    public function action_product()
+    {
+        $id_b = $this->request->getGet('id_b');
+        $id_p = $this->request->getGet('id_p');
+        $id_d = $this->request->getGet('id_d');
+        $user = $this->session->get("user");
+
+        if ($this->request->getGet('month') == 'True') {
+            $month = true;
+        } else {
+            $month = false;
+        }
+
+        $dashModel = new MarketingModel;
+
+        $dash_array = $dashModel->getProductInfo(array($this->rigth), true, array($id_p));
         $dash_array_check = $dashModel->getCheckStatistic($id_b, true);
 
         return $this->view->render("dash/marketing", array(
