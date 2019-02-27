@@ -173,34 +173,7 @@ class MarketingController extends BaseController
             'id_b' => $id_b
         ));
     }
-    public function action_products()
-    {
-        $id_b = $this->request->getGet('id_b');
-        $id_p = $this->request->getGet('id_p');
-        $id_d = $this->request->getGet('id_d');
-        $user = $this->session->get("user");
 
-        if (isset($id_b)){
-            $rigth = $this->checkRight($user, $id_d);
-        } else {
-            $rigth = $this->checkRight($user, $id_d);
-        }
-
-        $month = $this->request->getGet('month');
-        if ($month == 'True') {
-            $month = true;
-        } else {
-            $month = false;
-        }
-
-        $dashModel = new DashboardModel;
-        $dash_array = $dashModel->startTypeDash($this->right, 'brands', $month);
-
-        return $this->view->render("dash/marketing_b", array('brands' => $dash_array,
-            'month' => $month,
-            'type' => 'marketing',
-            'level' => 'departments'));
-    }
     public function action_product()
     {
         $id_b = $this->request->getGet('id_b');

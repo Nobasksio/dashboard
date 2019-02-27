@@ -21,6 +21,10 @@
                     {% else  %}
                         Информация о продажах
                     {% endif %}
+                {% elseif type == 'products' %}
+					{% if level == 'all' %}
+						Продажи товаров {{ department }}
+					{% endif  %}
                 {% endif %}
             </h2 >
 			<p class="pageheader-text" >Nulla euismod urna eros, sit amet scelerisque torton lectus vel

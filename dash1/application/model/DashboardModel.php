@@ -326,7 +326,7 @@ class DashboardModel extends BaseModel
     }
 
 
-    protected function to_json_moris($array, $separator_name, $summ = [], $absolut = false)
+    public function to_json_moris($array, $separator_name, $summ = [], $absolut = false)
     {
 
         if ($absolut) {
@@ -362,7 +362,7 @@ class DashboardModel extends BaseModel
         return $to_json;
     }
 
-    protected function to_table($array, $summ = [], $absolut = false)
+    public function to_table($array, $summ = [], $absolut = false)
     {
         @ksort($array);
         $today_year = date('Y');
@@ -441,6 +441,7 @@ class DashboardModel extends BaseModel
     {
         $str_out = '(';
         foreach ($department_arr as $name_key => $value) {
+
             $str_out .= "'$value[$key]'" . ",";
         }
         $str_out = substr($str_out, 0, -1);
@@ -469,6 +470,34 @@ class DashboardModel extends BaseModel
 
         $relations_where = "where relations IN $search_str";
         $statement2 = self::$connection->prepare("SELECT * FROM departments $relations_where ");
+        $statement2->execute();
+        $depart_arr2 = $statement2->fetchAll(\PDO::FETCH_ASSOC);
+
+        if ($depart_arr2) {
+            $depart_arr = array_merge($depart_arr, $depart_arr2);
+        }
+
+        return $depart_arr;
+    }
+    public function getNameProduct($depart)
+    {
+
+        if (gettype($depart) == "array") {
+
+            $search_str = $this->ArraytoWhereMysql($depart, 'product');
+
+        } else {
+
+            $search_str = '(' . $depart . ")";
+        }
+
+        $department_where = "where id_dish IN $search_str";
+        $statement = self::$connection->prepare("SELECT * FROM dishs $department_where ");
+        $statement->execute();
+        $depart_arr = $statement->fetchAll(\PDO::FETCH_ASSOC);
+
+        $relations_where = "where relations IN $search_str";
+        $statement2 = self::$connection->prepare("SELECT * FROM dishs $relations_where ");
         $statement2->execute();
         $depart_arr2 = $statement2->fetchAll(\PDO::FETCH_ASSOC);
 

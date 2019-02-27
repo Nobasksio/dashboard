@@ -224,22 +224,26 @@ abstract class BaseModel {
     }
     protected function getSalesFromMysql($month,$Department='',$products='')
     {
+        $where  = '';
+        $where2 = '';
         if ($Department !='') {
-            $where = "where Department IN $Department";
-        } else {
-            $where = '';
+            $where = "where Department IN $Department ";
         }
         if ($month) {
             $table = 'sales_this_month';
-
         } else {
             $table = 'sales_this_year';
-
         }
+
+        if ($products!=''){
+            $where2 = " and DishName IN $products";
+        }
+
         $statement = self::$connection->prepare(
             "SELECT * FROM 
                           $table   
                           $where
+                          $where2
                           order by Department");
         $statement->execute();
 

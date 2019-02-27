@@ -167,8 +167,8 @@ class MarketingModel extends BaseModel
 
         }
 
-        $array_dish_sum_out = $this->getTop10($array_dish_sum,$array_dish_count,'sum');
-        $array_dish_count_out = $this->getTop10($array_dish_sum,$array_dish_count,'count');
+        $array_dish_sum_out = $this->getTopX($array_dish_sum,$array_dish_count,'sum',10);
+        $array_dish_count_out = $this->getTopX($array_dish_sum,$array_dish_count,'count',10);
 
         asort($group_sum);
         asort($group_count);
@@ -189,7 +189,7 @@ class MarketingModel extends BaseModel
         return $return_array;
     }
 
-    protected function getMaxPrice($array_sales){
+    public function getMaxPrice($array_sales){
         $arr_price = array();
         foreach ($array_sales as $item) {
             $name = $item['DishName'];
@@ -210,7 +210,7 @@ class MarketingModel extends BaseModel
         return $arr_price;
     }
 
-    protected function getMeanSs($array_sales){
+    public function getMeanSs($array_sales){
         $arr_ss = array();
         $arr_val_ss = array();
         $arr_count_ss = array();
@@ -239,7 +239,7 @@ class MarketingModel extends BaseModel
 
         return $arr_ss;
     }
-    protected function getTopHightSs($arr_price,$arr_ss,$level_ss=0,$count_top=10){
+    public function getTopHightSs($arr_price,$arr_ss,$level_ss=0,$count_top=10){
         $ss_per = array();
         $ss_return = array();
 
@@ -262,7 +262,7 @@ class MarketingModel extends BaseModel
         arsort($ss_per_order);
         $i=0;
         foreach($ss_per_order as $name=>$ss_item){
-            if (($ss_per[$name]['ss']/$arr_price[$name])>0.33) {
+            if (($ss_per[$name]['ss']/$arr_price[$name])>$level_ss) {
                 $ss_return[$name] = array('ss_per' => $ss_per[$name]['ss'] / $arr_price[$name],
                     'ss' => $ss_per[$name]['ss'],
                     'val_ss' => $ss_per[$name]['val_ss'],
@@ -280,7 +280,7 @@ class MarketingModel extends BaseModel
 
         return $ss_return;
     }
-    protected function getValSs($ss_arr){
+    public function getValSs($ss_arr){
         $all_val_ss = 0;
         foreach($ss_arr as $item){
 
@@ -290,7 +290,7 @@ class MarketingModel extends BaseModel
         return $all_val_ss;
     }
 
-    protected function toJsonC3($array_group, $vir){
+    public function toJsonC3($array_group, $vir){
         $for_json_sum = '';
         foreach ($array_group as $group => $summ) {
             $per = round($summ / ($vir / 100), 1);
@@ -300,9 +300,7 @@ class MarketingModel extends BaseModel
         return $for_json_sum;
     }
 
-
-
-    protected function getCheckFromMysql($Department = '')
+    public function getCheckFromMysql($Department = '')
     {
         if ($Department != '') {
             $where = 'Department = :Department';
@@ -381,15 +379,15 @@ class MarketingModel extends BaseModel
         return $array_depart;
     }
 
-    public function getTop10($array_dish_sum,$array_dish_count,$type_top){
+    public function getTopX($array_dish_sum,$array_dish_count,$type_top,$x=500){
 
         $output = array();
         if ($type_top=='sum'){
             arsort($array_dish_sum);
-            $prepare = array_slice($array_dish_sum, 0, 10);
+            $prepare = array_slice($array_dish_sum, 0, $x);
         } else {
             arsort($array_dish_count);
-            $prepare = array_slice($array_dish_count, 0, 10);
+            $prepare = array_slice($array_dish_count, 0, $x);
         }
 
         foreach ($prepare as $name => $value){

@@ -34,7 +34,6 @@ class DashboardController extends BaseController
         return true;
     }
 
-
     public function action_index(){
 
         $month = $this->request->getGet('month');
@@ -188,9 +187,9 @@ class DashboardController extends BaseController
             $month=false;
         }
 
-            $dashModel = new DashboardModel;
-            $dash_array = $dashModel->startTypeDash(array($rigth),'department',$month);
-            return $this->view->render("dash/department", array(
+        $dashModel = new DashboardModel;
+        $dash_array = $dashModel->startTypeDash(array($rigth),'department',$month);
+        return $this->view->render("dash/department", array(
                 'to_json' => $dash_array['to_json'],
                 'all_summ' => $dash_array['all_summ'],
                 'all_summ_ss' => $dash_array['all_summ_ss'],
@@ -214,9 +213,6 @@ class DashboardController extends BaseController
                 'id_d' => $id_d,
                  'type' => 'dashboard',
                 'level' => 'department'));
-
-
-
 
     }
 
