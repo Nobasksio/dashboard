@@ -437,12 +437,18 @@ class DashboardModel extends BaseModel
     }
 
 
-    public function ArraytoWhereMysql($department_arr, $key)
+    public static function ArraytoWhereMysql($department_arr, $key='')
     {
         $str_out = '(';
+
         foreach ($department_arr as $name_key => $value) {
 
-            $str_out .= "'$value[$key]'" . ",";
+            if ($key !='') {
+                $str_out .= "'$value[$key]'" . ",";
+            } else {
+                $str_out .= "$value" . ",";
+
+            }
         }
         $str_out = substr($str_out, 0, -1);
         $str_out .= ")";
@@ -488,7 +494,7 @@ class DashboardModel extends BaseModel
 
         } else {
 
-            $search_str = '(' . $depart . ")";
+            $search_str = $depart;
         }
 
         $department_where = "where id_dish IN $search_str";

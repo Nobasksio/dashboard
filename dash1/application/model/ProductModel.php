@@ -42,7 +42,7 @@ class ProductModel extends BaseModel {
 
         $search_department = $dashboard_model->ArraytoWhereMysql($department_name_arr, 'department_name');
 
-        $department_name_arr = $dashboard_model->getNameProduct($id_p);
+        $department_name_arr = $dashboard_model->getNameProduct("($id_p)");
 
         $search_product = $dashboard_model->ArraytoWhereMysql($department_name_arr, 'dish_name');
 
@@ -50,6 +50,50 @@ class ProductModel extends BaseModel {
 
         return $this->productToBeatifullArray($array_sales, $month);
 
+    }
+
+    public function getRelations($id_d,$id_p,$month){
+
+        $dashboard_model = new DashboardModel;
+        //$search_department = $dashboard_model->ArraytoWhereMysql($id_d, 'Department_id');
+
+        $array_sales = $this->getOrdersFromMysql($month,$id_d,$id_p);
+        $array_order = array();
+        $array_rel = array();
+
+        foreach ($array_sales as $item) {
+            $DishAmountInt = $item['DishAmountInt'];
+            $OpenTime = $item['OpenTime'];
+            $OrderNum = $item['OrderNum'];
+
+            $DishName_id = $item['DishName_id'];
+            if ($id_p==$DishName_id) continue;
+            $date = self::clearDate($OpenTime, 'd');
+            $order_num_prep = $OrderNum.$date;
+
+            $array_order[] = $order_num_prep;
+
+            $array_id[] = $DishName_id;
+            $array_rel[$DishName_id]++;
+
+        }
+        //print_r($array_order);
+        $all = count(array_unique($array_order));
+        $attay_id_uniq = array_unique($array_id);
+
+        $search_department = $dashboard_model->ArraytoWhereMysql($attay_id_uniq);
+        $name_arr = $dashboard_model->getNameProduct($search_department);
+        //print_r($all);
+
+        foreach ($name_arr as $key=>$item) {
+            $id_dish = $item['id_dish'];
+            $kol = $array_rel[$id_dish];
+            $name_arr[$key]['count_rel'] = $kol;
+        }
+        $return_arr = array('count_order'=>$all,
+            'name_arr'=>$name_arr);
+        //print_r($name_arr);
+        return $return_arr;
     }
     protected function productToBeatifullArray($array_account, $month, $brand=false)
     {
@@ -59,6 +103,7 @@ class ProductModel extends BaseModel {
 
         foreach ($array_account as $str) {
 
+            /*
             if (!$month) {
                 $separator = self::clearDate($str['date'], 'M');
                 $separator_name = 'month';
@@ -67,6 +112,9 @@ class ProductModel extends BaseModel {
                 $separator_name = 'day';
             }
 
+*/          $separator = self::clearDate($str['date'], 'd');
+            $separator_name = 'day';
+
             $year = self::clearDate($str['date'], 'Y');
 
             if (!$brand) {
@@ -74,14 +122,15 @@ class ProductModel extends BaseModel {
             } else {
                 $Department = $brand;
             }
-
             $DishAmountInt = $str['DishAmountInt'];
+            $DishName = $str['DishName'];
             $price = $str['price'];
             $ss = $str['ss'];
 
             $all_ss[$separator][$year] = $ss;
             $all_price[$separator][$year] = $price;
             $all_count[$separator][$year] = $DishAmountInt;
+
 
         }
 
@@ -104,6 +153,7 @@ class ProductModel extends BaseModel {
         }
 
         $return_array = array('ss' => $to_json_ss,
+            'product_name' => $DishName,
             'price' => $to_json_price,
             'count' => $to_json_count,
             'department' => $Department,
@@ -157,14 +207,14 @@ class ProductModel extends BaseModel {
                 $ss = $str['ss'];
 
                 $DishName = $str['DishName'];
+                $id_dish = $str['id_dish'];
+                $id_arr[$DishName] = $id_dish;
                 $DishAmountInt = $str['DishAmountInt'];
                 $price = $arr_price[$DishName];
 
                 $array_dish[$DishName]['summ'] += $price * $DishAmountInt;
 
-                if ($price != 0) {
-                    $array_dish[$DishName]['count'] += $DishAmountInt;
-                }
+                $array_dish[$DishName]['count'] += $DishAmountInt;
                 $groupTop = $str['groupTop'];
                 if ($group == null) {
                     $group = $str['group0'];;
@@ -192,6 +242,7 @@ class ProductModel extends BaseModel {
         }
 
         $array_dish = $this->add_in_arr($array_dish, $arr_price,'price');
+        $array_dish = $this->add_in_arr($array_dish, $id_arr,'id_product');
 
 
         $array_dish = $this->add_in_arr($array_dish, $top_high_ss,'ss');
@@ -229,10 +280,10 @@ class ProductModel extends BaseModel {
     }
 
     public function delta($array){
-        print_r($array);
+
         $min_value = array_shift(min($array));
         $max_value = array_shift(max($array));
-        print_r($min_value);
+
         if ($min_value!=0) {
             $delta_per = ($max_value - $min_value) / ($min_value / 100);
             $delta_rub = $max_value - $min_value;

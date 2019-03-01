@@ -122,6 +122,7 @@ class MarketingModel extends BaseModel
             $year = self::clearDate($str['date'], 'Y');
 
             if ($year==$today_year) {
+
                 if (!$brand) {
                     $Department = $str['Department'];
                 } else {
@@ -131,8 +132,9 @@ class MarketingModel extends BaseModel
 
                 $ss = $str['ss'];
 
-
                 $DishName = $str['DishName'];
+                $id_dish = $str['id_dish'];
+                $id_arr[$DishName] = $id_dish;
                 $DishAmountInt = $str['DishAmountInt'];
                 $price = $arr_price[$DishName];
 
@@ -163,12 +165,13 @@ class MarketingModel extends BaseModel
                 }
                 $group_sum[$type_menu_str][$group] += $kol_sale * $price;
                 $group_count[$type_menu_str][$group] += $kol_sale;
+
             }
 
         }
 
-        $array_dish_sum_out = $this->getTopX($array_dish_sum,$array_dish_count,'sum',10);
-        $array_dish_count_out = $this->getTopX($array_dish_sum,$array_dish_count,'count',10);
+        $array_dish_sum_out = $this->getTopX($array_dish_sum,$array_dish_count,$id_arr,'sum',10);
+        $array_dish_count_out = $this->getTopX($array_dish_sum,$array_dish_count,$id_arr,'count',10);
 
         asort($group_sum);
         asort($group_count);
@@ -379,7 +382,7 @@ class MarketingModel extends BaseModel
         return $array_depart;
     }
 
-    public function getTopX($array_dish_sum,$array_dish_count,$type_top,$x=500){
+    public function getTopX($array_dish_sum,$array_dish_count,$id_arr,$type_top,$x=500){
 
         $output = array();
         if ($type_top=='sum'){
@@ -394,6 +397,7 @@ class MarketingModel extends BaseModel
             $output[] = array('name'=>$name,
                 'sum'=>$array_dish_sum[$name],
                 'count'=>$array_dish_count[$name],
+                'id_product'=>$id_arr[$name]
                 );
         }
 

@@ -33,16 +33,16 @@ class ProductController extends BaseController {
         }
 
         $productModel = new ProductModel;
-        $dash_array = $productModel->getAllProducts(array($id_d), $month);
+        $dash_array = $productModel->getAllProducts($id_d, $month);
 
-        return $this->view->render("product/index", array('products' => $dash_array['products'],
+        return $this->view->render("product/all", array('products' => $dash_array['products'],
+            'id_d' =>$id_d,
             'month' => $month,
             'type' => 'products',
             'level' => 'all'));
     }
     public function action_one()
     {
-
         $admin_model = new adminmodel();
         $admin_model->makeDishList();
 
@@ -66,17 +66,23 @@ class ProductController extends BaseController {
 
         $productModel = new ProductModel;
 
-
         $dash_array = $productModel->getOneProduct($id_d,$id_p, $month);
 
-        return $this->view->render("product/index", array('ss' => $dash_array['ss'],
+        $dash_array2 = $productModel->getRelations($id_d,$id_p, $month);
+
+
+        return $this->view->render("product/one", array('ss' => $dash_array['ss'],
             'price' => $dash_array['price'],
             'separator_name' => $dash_array['separator_name'],
             'count' => $dash_array['count'],
+            'count_order' => $dash_array2['count_order'],
             'delta_ss' => $dash_array['delta_ss'],
+            'relations'=>$dash_array2['name_arr'],
+            'department' => $dash_array['department'],
+            'product_name' => $dash_array['product_name'],
             'month' => $month,
             'type' => 'products',
-            'level' => 'all'));
+            'level' => 'one'));
     }
 	public function action_category() {
 

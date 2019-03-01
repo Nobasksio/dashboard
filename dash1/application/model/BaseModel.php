@@ -4,6 +4,8 @@ namespace application\model;
 
 use \application\service\Service;
 
+use \application\model\DashboardModel;
+
 abstract class BaseModel {
 
     public $brand_department_ar = array(
@@ -227,21 +229,22 @@ abstract class BaseModel {
         $where  = '';
         $where2 = '';
         if ($Department !='') {
-            $where = "where Department IN $Department ";
+            $where = "where s.Department IN $Department ";
         }
         if ($month) {
             $table = 'sales_this_month';
         } else {
-            $table = 'sales_this_year';
+            $table = 'sales_this_month';
         }
 
         if ($products!=''){
-            $where2 = " and DishName IN $products";
+            $where2 = " and s.DishName IN $products";
         }
 
         $statement = self::$connection->prepare(
             "SELECT * FROM 
-                          $table   
+                          $table s
+                          LEFT JOIN dishs d ON s.DishName=dish_name
                           $where
                           $where2
                           order by Department");
@@ -304,6 +307,33 @@ abstract class BaseModel {
         $statement->execute();
 
         return $statement->fetchAll(\PDO::FETCH_ASSOC);
+    }
+    protected function getOrdersFromMysql($month, $Department = '',$produts)
+    {
+        $statement = self::$connection->prepare(
+            "SELECT DISTINCT OrderNum 
+                         FROM orders
+                        where Department_id=$Department
+                          and DishName_id = $produts
+                           ");
+        $statement->execute();
+
+        $arr_number = $statement->fetchAll(\PDO::FETCH_ASSOC);
+
+
+
+        $where_order_num = DashboardModel::ArraytoWhereMysql($arr_number,'OrderNum');
+
+        $statement = self::$connection->prepare(
+            "SELECT * 
+                         FROM orders
+                        where OrderNum IN $where_order_num
+                          and Department_id = $Department
+                           ");
+        $statement->execute();
+        $order_arr = $statement->fetchAll(\PDO::FETCH_ASSOC);
+
+        return $order_arr;
     }
 
 }

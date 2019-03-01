@@ -123,7 +123,7 @@
                                             </thead >
                                             <tbody >
                                             {% for dish_item in top10sum%}
-                                                <tr class='link-inline' return false">
+                                                <tr class='link-inline' onclick="window.location.href='?path=product/one&month={% if month == False %}False{% else %}True{% endif %}&id_d={{ id_d }}&id_p={{ dish_item.id_product }}'; return false">
 
                                                     <td > {{ loop.index }}</td >
                                                     <td >
@@ -135,12 +135,13 @@
                                                     </a>
                                                 </tr >
                                             {% endfor %}
-                                            <tr >
-                                                <td colspan="9" ><a href="#" class="btn btn-outline-light float-right" >View
-                                                        Details</a ></td >
-                                            </tr >
+
                                             </tbody >
                                         </table >
+                                        <div class="container">
+                                            <a href="?path=product/all&month=True&id_d={{ id_d }}" class="btn btn-outline-light float-right mb-3 " >View
+                                                Details</a >
+                                        </div>
                                     </div >
                                 </div >
                             </div >
@@ -163,7 +164,7 @@
                                             </thead >
                                             <tbody >
                                             {% for dish_item in top10count%}
-                                                <tr class='link-inline' return false">
+                                                <tr class='link-inline' onclick="window.location.href='?path=product/one&month={% if month == False %}False{% else %}True{% endif %}&id_d={{ id_d }}&id_p={{ dish_item.id_product }}'; return false">
 
                                                 <td > {{ loop.index }}</td >
                                                 <td >
@@ -175,12 +176,13 @@
                                                 </a>
                                                 </tr >
                                             {% endfor %}
-                                            <tr >
-                                                <td colspan="9" ><a href="#" class="btn btn-outline-light float-right" >View
-                                                        Details</a ></td >
-                                            </tr >
+
                                             </tbody >
                                         </table >
+                                        <div class="container">
+                                            <a href="?path=product/all&month=True&id_d={{ id_d }}" class="btn btn-outline-light float-right mb-3 " >View
+                                                Details</a >
+                                        </div>
                                     </div >
                                 </div >
                             </div >
@@ -203,7 +205,7 @@
                                             </thead >
                                             <tbody >
                                             {% for name, item in top10high_ss %}
-                                                <tr class='link-inline' return false">
+                                                <tr class='link-inline' onclick="window.location.href='?path=product/one&month={% if month == False %}False{% else %}True{% endif %}&id_d={{ id_d }}&id_p={{ dish_item.id_product }}'; return false">
 
                                                 <td > {{ loop.index }}</td >
                                                 <td >

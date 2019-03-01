@@ -94,7 +94,7 @@ class MarketingController extends BaseController
         return $this->view->render("dash/marketing_b", array('brands' => $dash_array,
             'month' => $month,
             'type' => 'marketing',
-            'level' => 'departments'));
+            'level' => 'brands'));
     }
 
 

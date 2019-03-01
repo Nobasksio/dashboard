@@ -24,6 +24,8 @@
                 {% elseif type == 'products' %}
 					{% if level == 'all' %}
 						Продажи товаров {{ department }}
+                    {% elseif level =='one' %}
+						Товар {{ product_name }} в {{ department }}
 					{% endif  %}
                 {% endif %}
             </h2 >

@@ -1,0 +1,158 @@
+<!doctype html>
+
+
+    <!-- ============================================================== -->
+    <!-- navbar -->
+    <!-- ============================================================== -->
+
+                        {% include 'templates/menu.tmpl' %}
+
+    <!-- ============================================================== -->
+    <div class="dashboard-wrapper" >
+        <div class="dashboard-ecommerce" >
+            <div class="container-fluid dashboard-content " >
+                <!-- ============================================================== -->
+                <!-- pageheader  -->
+                <!-- ============================================================== -->
+
+                {% include 'templates/header2.tmpl' %}
+                <div class="row">
+                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 pb-5" >
+
+                        <ul class="nav nav-pills">
+                            <li role="presentation"
+                                    {% if level == 'all' %}
+                                    class="active"
+                                    {% endif %} >
+                                    <a href="?path={{ type }}/{{ level }}&month=False&
+                                    {% if level =='department' %}id_d={{ id_d }}
+                                    {% elseif level =='brand' %}id_b={{ id_b }}
+                                    {% endif %}">Всё вместе</a>
+                            </li>
+                            <li role="presentation"
+                                    {% if level == 'cat' %} class="active"
+                                    {% endif %} ><a href="?path={{ type }}/{{ level }}&month=True&
+                                    {% if level =='department' %}id_d={{ id_d }}
+                                    {% elseif level =='brand' %}id_b={{ id_b }}
+                                    {% endif %}">По категориям</a>
+                            </li>
+                        </ul>
+
+                    </div>
+                </div>
+                <!-- ============================================================== -->
+                <!-- end pageheader  -->
+                <!-- ============================================================== -->
+                <div class="ecommerce-widget" >
+
+                        <div class="col-xl-12 col-lg-12 col-md-6 col-sm-12 col-12" >
+                            <div class="card" >
+                                <h5 class="card-header" >Все блюда</h5 >
+                                <div class="card-body p-0" >
+                                    <div class="table-responsive" >
+                                        <table class="table" >
+                                            <thead class="bg-light" >
+                                            <tr class="border-0" >
+                                                <th class="border-0" >#</th >
+                                                <th class="border-0" >Блюдо</th >
+                                                <th class="border-0" ><strong>Количество</strong></th >
+                                                <th class="border-0" >Сумма </th >
+                                                <th class="border-0" >Цена </th >
+                                                <th class="border-0" >СС руб </th >
+                                                <th class="border-0" >СС %</th >
+                                                <th class="border-0" >вес сс</th >
+
+                                            </tr >
+                                            </thead >
+                                            <tbody >
+                                            {% for name,dish_item in products%}
+                                                <tr class='link-inline' onclick="window.location.href='?path=product/one&month={% if month == False %}False{% else %}True{% endif %}&id_d={{ id_d }}&id_p={{ dish_item.id_product }}'; return false">
+
+                                                <td > {{ loop.index }}</td >
+                                                <td >
+                                                    {{ name }}
+                                                </td >
+
+                                                <td data-sort-value="{{ dish_item.count }}" >{{ dish_item.count|number_format(0, ' ', ' ')  }}</td >
+                                                <td data-sort-value="{{ dish_item.summ }}">{{ dish_item.summ|number_format(0, ' ', ' ')  }}</td >
+                                                <td data-sort-value="{{ dish_item.price }}">{{ dish_item.price|number_format(0, ' ', ' ')  }}</td >
+                                                <td data-sort-value="{{ dish_item.ss.ss }}">{{ dish_item.ss.ss|number_format(0, ' ', ' ')  }}</td >
+                                                <td data-sort-value="{{ dish_item.ss.ss_per }}">{{ dish_item.ss.ss_per|number_format(2, ',', ' ')  }}</td >
+                                                <td data-sort-value="{{ dish_item.ss.ves_ss }}">{{ dish_item.ss.ves_ss|number_format(2, ',', ' ')  }}</td >
+
+                                                </tr >
+                                            {% endfor %}
+
+                                            </tbody >
+                                        </table >
+                                    </div >
+                                </div >
+                            </div >
+                        </div >
+
+                    </div >
+                </div >
+            </div >
+            <!-- ============================================================== -->
+            <!-- footer -->
+            <!-- ============================================================== -->
+            <div class="footer" >
+                <div class="container-fluid" >
+                    <div class="row" >
+                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12" >
+                            Copyright © 2018 Concept. All rights reserved. Dashboard by <a href="https://colorlib.com/wp/" >Colorlib</a >.
+                        </div >
+                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12" >
+                            <div class="text-md-right footer-links d-none d-sm-block" >
+                                <a href="javascript: void(0);" >About</a >
+                                <a href="javascript: void(0);" >Support</a >
+                                <a href="javascript: void(0);" >Contact Us</a >
+                            </div >
+                        </div >
+                    </div >
+                </div >
+            </div >
+            <!-- ============================================================== -->
+            <!-- end footer -->
+            <!-- ============================================================== -->
+        </div >
+        <!-- ============================================================== -->
+        <!-- end wrapper  -->
+        <!-- ============================================================== -->
+    </div >
+    <!-- ============================================================== -->
+    <!-- end main wrapper  -->
+    <!-- ============================================================== -->
+    <!-- Optional JavaScript -->
+    <!-- jquery 3.3.1 -->
+
+    <!-- bootstap bundle js -->
+    <script src="/dash/assets/vendor/bootstrap/js/bootstrap.bundle.js" ></script >
+    <!-- slimscroll js -->
+    <script src="/dash/assets/vendor/slimscroll/jquery.slimscroll.js" ></script >
+    <!-- main js -->
+    <script src="/dash/assets/libs/js/main-js.js" ></script >
+    <!-- chart chartist js -->
+    <script src="/dash/assets/vendor/charts/chartist-bundle/chartist.min.js" ></script >
+    <!-- sparkline js -->
+    <script src="/dash/assets/vendor/charts/sparkline/jquery.sparkline.js" ></script >
+    <!-- morris js -->
+    <script src="/dash/assets/vendor/charts/morris-bundle/raphael.min.js" ></script >
+    <script src="/dash/assets/vendor/charts/morris-bundle/morris.js" ></script >
+    <!-- chart c3 js -->
+    <script src="/dash/assets/vendor/charts/c3charts/c3.min.js" ></script >
+    <script src="/dash/assets/vendor/charts/c3charts/d3-5.4.0.min.js" ></script >
+    <script src="/dash/assets/vendor/charts/c3charts/C3chartjs.js" ></script >
+    <script src="/dash/assets/libs/js/dashboard-ecommerce.js" ></script >
+    <script src="js/jquery-tablesort-master/jquery.tablesort.js" ></script >
+    <script type="application/javascript" >
+
+
+
+
+        $('table').tablesort();
+
+    </script >
+</body >
+
+</html >

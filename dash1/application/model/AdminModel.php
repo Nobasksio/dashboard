@@ -104,8 +104,8 @@ class AdminModel extends BaseModel
         $dish_departments = $statement->fetchAll(\PDO::FETCH_ASSOC);
         $statement2 = self::$connection->prepare("CREATE TABLE IF NOT EXISTS dishs (
               id_dish INT AUTO_INCREMENT PRIMARY KEY,
-              dish_name VARCHAR(30) NOT NULL UNIQUE,
-              alias_name VARCHAR(30) NOT NULL,
+              dish_name VARCHAR(60) NOT NULL UNIQUE,
+              alias_name VARCHAR(60) NOT NULL,
               relations INT(20) 
           ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin
           AUTO_INCREMENT=1;
