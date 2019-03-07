@@ -236,7 +236,7 @@
             <configuration_option name="session.use_only_cookies" value="1" />
             <configuration_option name="session.use_strict_mode" value="0" />
             <configuration_option name="session.use_trans_sid" value="0" />
-            <configuration_option name="short_open_tag" value="" />
+            <configuration_option name="short_open_tag" value="1" />
             <configuration_option name="smtp_port" value="25" />
             <configuration_option name="soap.wsdl_cache" value="1" />
             <configuration_option name="soap.wsdl_cache_dir" value="/tmp" />
@@ -287,7 +287,7 @@
             <configuration_option name="xdebug.gc_stats_output_dir" value="/var/tmp/" />
             <configuration_option name="xdebug.gc_stats_output_name" value="gcstats.%p" />
             <configuration_option name="xdebug.halt_level" value="0" />
-            <configuration_option name="xdebug.idekey" value="" />
+            <configuration_option name="xdebug.idekey" value="PHPSTORM" />
             <configuration_option name="xdebug.max_nesting_level" value="256" />
             <configuration_option name="xdebug.max_stack_frames" value="-1" />
             <configuration_option name="xdebug.overload_var_dump" value="2" />
@@ -299,15 +299,15 @@
             <configuration_option name="xdebug.profiler_output_dir" value="/var/tmp/" />
             <configuration_option name="xdebug.profiler_output_name" value="cachegrind.out.%p" />
             <configuration_option name="xdebug.remote_addr_header" value="" />
-            <configuration_option name="xdebug.remote_autostart" value="0" />
-            <configuration_option name="xdebug.remote_connect_back" value="0" />
+            <configuration_option name="xdebug.remote_autostart" value="1" />
+            <configuration_option name="xdebug.remote_connect_back" value="1" />
             <configuration_option name="xdebug.remote_cookie_expire_time" value="3600" />
             <configuration_option name="xdebug.remote_enable" value="0" />
             <configuration_option name="xdebug.remote_handler" value="dbgp" />
             <configuration_option name="xdebug.remote_host" value="localhost" />
-            <configuration_option name="xdebug.remote_log" value="" />
+            <configuration_option name="xdebug.remote_log" value="$USER_HOME$/logxde.log" />
             <configuration_option name="xdebug.remote_mode" value="req" />
-            <configuration_option name="xdebug.remote_port" value="9000" />
+            <configuration_option name="xdebug.remote_port" value="9001" />
             <configuration_option name="xdebug.remote_timeout" value="200" />
             <configuration_option name="xdebug.scream" value="0" />
             <configuration_option name="xdebug.show_error_trace" value="0" />
