@@ -3,7 +3,9 @@
     <data-views>
       <sort-values>true</sort-values>
     </data-views>
-    <general />
+    <general>
+      <unmute-on-stop>true</unmute-on-stop>
+    </general>
     <debuggers>
       <debugger id="javascript">
         <configuration>
