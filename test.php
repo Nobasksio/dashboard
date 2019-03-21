@@ -1,8 +1,6 @@
 <?php
-phpinfo();
-
-$a = 4;
-xdebug_break();
-
-$d = 4;
+$a = 1;
+$b = 2;
+$c = $a + $b;
+echo $c;
 ?>

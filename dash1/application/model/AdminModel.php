@@ -122,6 +122,30 @@ class AdminModel extends BaseModel
 
         return $statement;
     }
+    public function makeWaitersList(){
+        $statement = self::$connection->prepare("SELECT DISTINCT Waiter FROM checks");
+        $statement->execute();
+        $dish_departments = $statement->fetchAll(\PDO::FETCH_ASSOC);
+        $statement2 = self::$connection->prepare("CREATE TABLE IF NOT EXISTS waiters (
+              id_waiter INT AUTO_INCREMENT PRIMARY KEY,
+              waiter_name VARCHAR(60) NOT NULL UNIQUE,
+              alias_name VARCHAR(60) NOT NULL,
+              relations INT(20) 
+          ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin
+          AUTO_INCREMENT=1;
+        ");
+        $statement2->execute();
+
+        foreach ($dish_departments as $dish){
+            $Waiter = $dish['Waiter'];
+
+            $statement = self::$connection->prepare("INSERT IGNORE INTO waiters (waiter_name) VALUE(:waiter_name)");
+            $statement->bindValue(':waiter_name', $Waiter);
+            $statement->execute();
+        }
+
+        return $statement;
+    }
 
     public function action_giveright($id_dep,$user_id,$right) {
         if ($right == 'true'){

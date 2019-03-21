@@ -34,7 +34,7 @@
                                             </thead >
                                             <tbody >
                                            {% for brand_item in brands%}
-                                            <tr class='link-inline'' onclick="window.location.href='?path=dashboard/brand&month={% if month == False %}False{% else %}True{% endif %}&id_b={{ brand_item.id_d }}'; return false">
+                                            <tr class='link-inline'' onclick="window.location.href='?path=dashboard/brand&month={% if month == False %}False{% else %}True{% endif %}&id_b={{ brand_item.id_d }}&date_start={{ date_start }}&date_finish={{ date_finish }}'; return false">
                                                 <td > {{ loop.index }}</td >
                                                 <td >
                                                     {{ brand_item.brand }}

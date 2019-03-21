@@ -49,10 +49,12 @@ class MarketingController extends BaseController
         }
 
         $dashModel = new DashboardModel;
-        $dash_array = $dashModel->startTypeDash($this->right, 'departments', $month);
+        $dash_array = $dashModel->startTypeDash($this->right, 'departments', $this->date_start, $this->date_finish,$month);
 
         return $this->view->render("dash/marketing_d", array('brands' => $dash_array,
             'month' => $month,
+            'date_start' => $this->date_start,
+            'date_finish' => $this->date_finish,
             'type' => 'marketing',
             'level' => 'departments'));
     }
@@ -70,10 +72,12 @@ class MarketingController extends BaseController
         //print_r($this->right);
 
         $dashModel = new DashboardModel;
-        $dash_array = $dashModel->startTypeDash($this->right, 'departments', $month);
+        $dash_array = $dashModel->startTypeDash($this->right, 'departments', $this->date_start, $this->date_finish,$month);
 
         return $this->view->render("dash/marketing_d", array('brands' => $dash_array,
             'month' => $month,
+            'date_start' => $this->date_start,
+            'date_finish' => $this->date_finish,
             'type' => 'marketing',
             'level' => 'departments'));
     }
@@ -89,10 +93,12 @@ class MarketingController extends BaseController
         }
 
         $dashModel = new DashboardModel;
-        $dash_array = $dashModel->startTypeDash($this->right, 'brands', $month);
+        $dash_array = $dashModel->startTypeDash($this->right, 'brands', $this->date_start, $this->date_finish,$month);
 
         return $this->view->render("dash/marketing_b", array('brands' => $dash_array,
             'month' => $month,
+            'date_start' => $this->date_start,
+            'date_finish' => $this->date_finish,
             'type' => 'marketing',
             'level' => 'brands'));
     }
@@ -112,11 +118,11 @@ class MarketingController extends BaseController
 
 
         $dashModel = new MarketingModel;
-        $dash_array = $dashModel->getDepartSalesInfo(array($rigth), true);
-        $dash_array_check = $dashModel->getCheckStatistic($id_d, true);
+        $dash_array = $dashModel->getDepartSalesInfo(array($rigth), true,$this->date_start, $this->date_finish);
+        $dash_array_check = $dashModel->getCheckStatistic($id_d, true,$this->date_start, $this->date_finish);
 
         return $this->view->render("dash/marketing", array(
-            'to_json_sale' => $dash_array['to_json_sale'],
+
             'sum_ar_bar' => $dash_array['sum_ar_bar'],
             'count_ar_bar' => $dash_array['count_ar_bar'],
             'sum_ar_kitch' => $dash_array['sum_ar_kitch'],
@@ -130,6 +136,8 @@ class MarketingController extends BaseController
             'mean_check' => $dash_array_check['mean_check'],
             'mean_guest' => $dash_array_check['mean_guest'],
             'month' => $month,
+            'date_start' => $this->date_start,
+            'date_finish' => $this->date_finish,
             'type' => 'marketing',
             'level' => 'department',
             'id_d' => $id_d
@@ -150,11 +158,10 @@ class MarketingController extends BaseController
 
         $dashModel = new MarketingModel;
         //$dash_array = $dashModel->getDepartSalesInfo(array($rigth), true);
-        $dash_array = $dashModel->getDepartSalesInfo(array($this->rigth), true, $id_b);
+        $dash_array = $dashModel->getDepartSalesInfo($this->right, true,$this->date_start, $this->date_finish, $id_b);
         $dash_array_check = $dashModel->getCheckStatistic($id_b, true);
 
         return $this->view->render("dash/marketing", array(
-            'to_json_sale' => $dash_array['to_json_sale'],
             'sum_ar_bar' => $dash_array['sum_ar_bar'],
             'count_ar_bar' => $dash_array['count_ar_bar'],
             'sum_ar_kitch' => $dash_array['sum_ar_kitch'],
@@ -168,6 +175,8 @@ class MarketingController extends BaseController
             'mean_check' => $dash_array_check['mean_check'],
             'mean_guest' => $dash_array_check['mean_guest'],
             'month' => $month,
+            'date_start' => $this->date_start,
+            'date_finish' => $this->date_finish,
             'type' => 'marketing',
             'level' => 'brand',
             'id_b' => $id_b
@@ -189,7 +198,7 @@ class MarketingController extends BaseController
 
         $dashModel = new MarketingModel;
 
-        $dash_array = $dashModel->getProductInfo(array($this->rigth), true, array($id_p));
+        $dash_array = $dashModel->getProductInfo(array($this->rigth), true, $this->date_start, $this->date_finish,array($id_p));
         $dash_array_check = $dashModel->getCheckStatistic($id_b, true);
 
         return $this->view->render("dash/marketing", array(
@@ -206,6 +215,8 @@ class MarketingController extends BaseController
             'top10high_ss' => $dash_array['top10high_ss'],
             'mean_check' => $dash_array_check['mean_check'],
             'mean_guest' => $dash_array_check['mean_guest'],
+            'date_start' => $this->date_start,
+            'date_finish' => $this->date_finish,
             'month' => $month,
             'type' => 'marketing',
             'level' => 'brand',

@@ -20,166 +20,29 @@ class DashboardModel extends BaseModel
         $this->last_year = $this->today_year - 1;
     }
 
-    public $brand_department_ar = array(
-        'Антрекот Ангарск' => 'Антрекот',
-        'Антрекот КМ' => 'Антрекот',
-        'Антрекот МК' => 'Антрекот',
-        'Антрекот СМ' => 'Антрекот',
-        'Доставка Култукская (не раб)' => 'Sushi Studio Доставка',
-        'Доставка Култукская Иоффе' => 'Sushi Studio Доставка',
-        'Доставка Ново-Ленино (не раб)' => 'Sushi Studio Доставка',
-        'Доставка Ново-Ленино Никулина' => 'Sushi Studio Доставка',
-        'Доставка Сигма (не раб)' => 'Sushi Studio Доставка',
-        'Доставка Сигма Никулина' => 'Sushi Studio Доставка',
-        'Доставка Солнечный (не раб)' => 'Sushi Studio Доставка',
-        'Доставка Солнечный Иоффе' => 'Sushi Studio Доставка',
-        'Рассольник' => 'Другое',
-        'Контакт-центр' => 'Другое',
-        'СБ 130квартал РНГ' => 'Sushi Studio Бары',
-        'СБ Карла Маркса (не раб)' => 'Sushi Studio Бары',
-        'СБ Карла Маркса РНГ' => 'Sushi Studio Бары',
-        'СБ Партизанская (не раб)' => 'Sushi Studio Бары',
-        'СБ Партизанская РНГ' => 'Sushi Studio Бары',
-        'СБ Советская' => 'Sushi Studio Бары',
-        'СБ Юбилейный' => 'Sushi Studio Бары',
-        'СМ Снегирь' => 'СушиТочка',
-        'СМ Фортуна' => 'СушиТочка',
-        'СТ Фортуна' => 'СушиТочка',
-        'СТ Абсолют' => 'СушиТочка',
-        'СТ Ангара' => 'СушиТочка',
-        'СТ Европарк' => 'СушиТочка',
-        'СТ Комсомолл' => 'СушиТочка',
-        'СТ Лермонтов' => 'СушиТочка',
-        'СТ Модный квартал' => 'СушиТочка',
-        'СТ Сильвермолл' => 'СушиТочка',
-        'СТ ЦП Байкальская' => 'СушиТочка',
-        'ТОТО МК' => 'Другое',
-        'Фабрика Багаутдинова' => 'Другое',
-        'Фабрика ИП Димаков' => 'Другое',
-        'Фо Ми' => 'Phome',
-        'Фуд Корт Лермонтов (не раб)' => 'Sushi Studio Фудкорты',
-        'Фуд Корт МК' => 'Sushi Studio Фудкорты',
-        'Фуд Корт Новый' => 'Sushi Studio Фудкорты',
-        'Центральный Офис' => 'Другое',
-    );
-    public $brand_id_department_ar = array(
-        'Антрекот' => 4,
-        'Sushi Studio Доставка' => 1,
-        'Другое' => 0,
-        'Sushi Studio Бары' => 2,
-        'СушиТочка' => 5,
-        'Sushi Studio Фудкорты' => 3,
-        'Phome' => 6
-    );
 
-    public $department_ald_name_ar = array(
-        'Антрекот Ангарск' => 'Антрекот Ангарск',
-        'Антрекот КМ' => 'Антрекот КМ',
-        'Антрекот МК' => 'Антрекот МК',
-        'Антрекот СМ' => 'Антрекот СМ',
-        'Доставка Култукская (не раб)' => 'SS Доставка Култукская',
-        'Доставка Култукская Иоффе' => 'SS Доставка Култукская',
-        'Доставка Ново-Ленино (не раб)' => 'SS Доставка Ново-Ленино',
-        'Доставка Ново-Ленино Никулина' => 'SS Доставка Ново-Ленино',
-        'Доставка Сигма (не раб)' => 'SS Доставка Сигма',
-        'Доставка Сигма Никулина' => 'SS Доставка Сигма',
-        'Доставка Солнечный (не раб)' => 'SS Доставка Солнечный',
-        'Доставка Солнечный Иоффе' => 'SS Доставка Солнечный',
-        'Рассольник' => 'Рассольник',
-        'Контакт-центр' => 'Контакт-центр',
-        'СБ 130квартал РНГ' => 'SS СБ 130квартал РНГ',
-        'СБ Карла Маркса (не раб)' => 'SS СБ Карла Маркса',
-        'СБ Карла Маркса РНГ' => 'SS СБ Карла Маркса',
-        'СБ Партизанская (не раб)' => 'SS СБ Партизанская',
-        'СБ Партизанская РНГ' => 'SS СБ Партизанская',
-        'СБ Советская' => 'SS СБ Советская',
-        'СБ Юбилейный' => 'SS СБ Юбилейный',
-        'Фуд Корт Лермонтов (не раб)' => 'SS Фуд Корт Лермонтов',
-        'Фуд Корт МК' => 'SS Фуд Корт МК',
-        'Фуд Корт Новый' => 'SS Фуд Корт Новый',
-        'СМ Снегирь' => 'СТ Снегирь',
-        'СМ Фортуна' => 'СТ Фортуна',
-        'СТ Фортуна' => 'СТ Фортуна',
-        'СТ Абсолют' => 'СТ Абсолют',
-        'СТ Ангара' => 'СТ Ангара',
-        'СТ Европарк' => 'СТ Европарк',
-        'СТ Комсомолл' => 'СТ Комсомолл',
-        'СТ Лермонтов' => 'СТ Лермонтов',
-        'СТ Модный квартал' => 'СТ Модный квартал',
-        'СТ Сильвермолл' => 'СТ Сильвермолл',
-        'СТ ЦП Байкальская' => 'СТ ЦП Байкальская',
-        'ТОТО МК' => 'ТОТО МК',
-        'Фабрика Багаутдинова' => 'Фабрика',
-        'Фабрика ИП Димаков' => 'Фабрика',
-        'Фо Ми' => 'Phome',
 
-        'Центральный Офис' => 'Центральный Офис',
-    );
-
-    public $department_id_ar = array(
-        'Антрекот Ангарск' => 1,
-        'Антрекот КМ' => 2,
-        'Антрекот МК' => 3,
-        'Антрекот СМ' => 4,
-        'Доставка Култукская (не раб)' => 5,
-        'Доставка Култукская Иоффе' => 5,
-        'Доставка Ново-Ленино (не раб)' => 6,
-        'Доставка Ново-Ленино Никулина' => 6,
-        'Доставка Сигма (не раб)' => 7,
-        'Доставка Сигма Никулина' => 7,
-        'Доставка Солнечный (не раб)' => 8,
-        'Доставка Солнечный Иоффе' => 8,
-        'Рассольник' => 0,
-        'Контакт-центр' => 0,
-        'СБ 130квартал РНГ' => 9,
-        'СБ Карла Маркса (не раб)' => 10,
-        'СБ Карла Маркса РНГ' => 10,
-        'СБ Партизанская (не раб)' => 11,
-        'СБ Партизанская РНГ' => 11,
-        'СБ Советская' => 12,
-        'СБ Юбилейный' => 13,
-        'Фуд Корт Лермонтов (не раб)' => 0,
-        'Фуд Корт МК' => 14,
-        'Фуд Корт Новый' => 15,
-        'СМ Снегирь' => 16,
-        'СТ Фортуна' => 16,
-        'СМ Фортуна' => 17,
-        'СТ Абсолют' => 18,
-        'СТ Ангара' => 19,
-        'СТ Европарк' => 20,
-        'СТ Комсомолл' => 21,
-        'СТ Лермонтов' => 22,
-        'СТ Модный квартал' => 23,
-        'СТ Сильвермолл' => 24,
-        'СТ ЦП Байкальская' => 25,
-        'ТОТО МК' => 0,
-        'Фабрика Багаутдинова' => 0,
-        'Фабрика ИП Димаков' => 0,
-        'Фо Ми' => 26,
-        'Центральный Офис' => 0,
-    );
-
-    public function startTypeDash($rigth_arr, $type = 'all', $month = False, $brand = '')
+    public function startTypeDash($rigth_arr, $type = 'all', $date_start, $date_finish, $month = False, $brand = '')
     {
-
+        $brand_name = '';
         if ($type == 'brand') {
 
             $rigth_arr = $this->onlyChooseBrand($rigth_arr, $brand);
-
+            $brand_name = $key = array_search($brand, $this->brand_id_department_ar);
         }
 
-        $department_name_arr = $this->getNameDepart($rigth_arr);
 
+        $department_name_arr = $this->getNameDepart($rigth_arr);
         $search_department = $this->ArraytoWhereMysql($department_name_arr, 'department_name');
 
         if (($type == 'all') || ($type == 'departments') || ($type == 'brands') ) {
-            $accounts = $this->getAcounts($month,$search_department);
+            $accounts = $this->getAcounts($month,$search_department,$date_start,$date_finish);
             $array_out = $this->cookList($accounts, $type);
 
         } else {
 
-            $accounts = $this->getAllAcounts($month, $search_department);
-            $array_out = $this->cookDepartment($accounts, $month);
+            $accounts = $this->getAllAcounts($month, $search_department,$date_start,$date_finish);
+            $array_out = $this->cookDepartment($accounts, $month,$brand_name);
         }
 
         return $array_out;
@@ -196,7 +59,7 @@ class DashboardModel extends BaseModel
                 $separator = self::clearDate($str['DateTime'], 'M');
                 $separator_name = 'month';
             } else {
-                $separator = self::clearDate($str['DateTime'], 'd');
+                $separator = self::clearDate($str['DateTime'], 'M.d');
                 $separator_name = 'day';
             }
 
@@ -282,8 +145,11 @@ class DashboardModel extends BaseModel
     protected function cookList($accounts, $type)
     {
         $array_prepare = $this->prepareArrayFromMysql($accounts, $type);
+
         $array_account = $array_prepare['arr_sum'];
         $depart_id = $array_prepare['depart_id'];
+
+        $this->today_year;
         foreach ($array_account as $brand => $array_month) {
 
             $sum_department = array();
@@ -328,7 +194,7 @@ class DashboardModel extends BaseModel
 
     public function to_json_moris($array, $separator_name, $summ = [], $absolut = false)
     {
-
+        krsort($array,SORT_STRING);
         if ($absolut) {
             ksort($summ);
 
@@ -345,6 +211,7 @@ class DashboardModel extends BaseModel
                 $to_json[] = $to_json1;
             }
         } else {
+            ksort($array,SORT_STRING);
             foreach ($array as $month => $arr_year) {
 
                 $to_json1 = array();
@@ -403,9 +270,13 @@ class DashboardModel extends BaseModel
             $group_id = $this->brand_id_department_ar;
 
         } elseif ($type == 'departments') {
+
             $group_arr = $this->department_ald_name_ar;
             $group_id = $this->department_id_ar;
+
         }
+
+
 
 
         foreach ($array_account as $str) {
@@ -457,6 +328,34 @@ class DashboardModel extends BaseModel
     }
 
 //todo написать отдельную функцию когда просишь одно подразделние
+    public function getNameWaiters($id_waiters)
+    {
+
+        if (gettype($id_waiters) == "array") {
+
+            $search_str = $this->ArraytoWhereMysql($id_waiters);
+
+        } else {
+
+            $search_str = '(' . $id_waiters . ")";
+        }
+
+        $waiter_where = "where id_waiter IN $search_str";
+        $statement = self::$connection->prepare("SELECT * FROM waiters $waiter_where ");
+        $statement->execute();
+        $depart_arr = $statement->fetchAll(\PDO::FETCH_ASSOC);
+
+        $relations_where = "where relations IN $search_str";
+        $statement2 = self::$connection->prepare("SELECT * FROM waiters $waiter_where ");
+        $statement2->execute();
+        $depart_arr2 = $statement2->fetchAll(\PDO::FETCH_ASSOC);
+
+        if ($depart_arr2) {
+            $depart_arr = array_merge($depart_arr, $depart_arr2);
+        }
+
+        return $depart_arr;
+    }
     public function getNameDepart($depart)
     {
 

@@ -42,7 +42,7 @@
                                             </thead >
                                             <tbody >
                                            {% for brand_item in brands%}
-                                            <tr class='link-inline' onclick="window.location.href='?path=marketing/department&month={% if month == False %}False{% else %}True{% endif %}&id_d={{ brand_item.id_d }}'; return false">
+                                            <tr class='link-inline' onclick="window.location.href='?path=marketing/department&month={% if month == False %}False{% else %}True{% endif %}&id_d={{ brand_item.id_d }}&date_start={{ date_start }}&date_finish={{ date_finish }}'; return false">
 
                                                 <td > {{ loop.index }}</td >
                                                 <td >
@@ -128,7 +128,7 @@
 <script src="/dash/assets/vendor/charts/c3charts/d3-5.4.0.min.js" ></script >
 <script src="/dash/assets/vendor/charts/c3charts/C3chartjs.js" ></script >
 <script src="/dash/assets/libs/js/dashboard-ecommerce.js" ></script >
-
+                        <script src="js/myscript.js" ></script >
 <script type="application/javascript" >
 
 

@@ -8,7 +8,7 @@
                     {% elseif level =='brands' %}
                         Выручка по брендам
                     {% elseif level =='brand' %}
-                        Выручка бренда
+                        Выручка бренда {{ department }}
                     {% elseif level =='departments' %}
                         Выручка по подразделениями
                     {% elseif level =='department' %}
@@ -19,9 +19,9 @@
                     {% if level == 'department' %}
                     Информация о продажах {{ department }}
                     {% else  %}
-                        Информация о продажах
+                        Информация о продажах {{ department }}
                     {% endif %}
-                {% elseif type == 'products' %}
+                {% elseif type == 'product' %}
 					{% if level == 'all' %}
 						Продажи товаров {{ department }}
                     {% elseif level =='one' %}
@@ -35,7 +35,14 @@
 			<div class="page-breadcrumb" >
 				<nav aria-label="breadcrumb" >
 					<ol class="breadcrumb" >
-						<li class="breadcrumb-item active" aria-current="page" >Данные за период с 01.{% if month == False %}01{% else %}{{ "now"|date("m") }}{% endif %}.{{ "now"|date("Y") }} до {{ "now"|date("d.m.Y") }} включительно
+						<li class="breadcrumb-item active" aria-current="page" >
+							Данные за период
+							<input type="text" data-toggle-selected="false" data-range="true" value="{{ date_start }} - {{ date_finish }}"
+								   data-multiple-dates-separator=" - "
+								   class="datepicker-here"/>
+							<a class="btn btn-default"
+							   onclick="refresh_date('?path={{ type }}/{{ level }}&month={% if month == False %}False{% else %}True{% endif %}{% if level =='department' %}&id_d={{ id_d }}{% elseif level =='brand' %}&id_b={{ id_b }}{% elseif type =='product' %}{% if id_d %}&id_d={{ id_d }}{% endif %}{% if id_b %}&id_b={{ id_b }}{% endif %}{% if id_p %}&id_p={{ id_p }}{% endif %}{% endif %}')" role="button">Обновить</a>
+							<!--01.{% if month == False %}01{% else %}{{ "now"|date("m") }}{% endif %}.{{ "now"|date("Y") }} до {{ "now"|date("d.m.Y") }} включительно-->
 							<!--(обновлено в <?=$time_update?>)-->
 						</li >
 					</ol >
@@ -52,8 +59,8 @@
 	<div class="col-xl-2 col-lg-6 col-md-6 col-sm-12 col-12 pb-5" >
 
 		<ul class="nav nav-pills">
-			<li role="presentation" {% if month == False %} class="active" {% endif %} ><a href="?path={{ type }}/{{ level }}&month=False&{% if level =='department' %}id_d={{ id_d }}{% elseif level =='brand' %}id_b={{ id_b }}{% endif %}">Год</a></li>
-			<li role="presentation" {% if month == TRUE %} class="active" {% endif %} ><a href="?path={{ type }}/{{ level }}&month=True&{% if level =='department' %}id_d={{ id_d }}{% elseif level =='brand' %}id_b={{ id_b }}{% endif %}">Месяц</a></li>
+			<li role="presentation" {% if month == False %} class="active" {% endif %} ><a href="?path={{ type }}/{{ level }}&month=False{% if level =='department' %}&id_d={{ id_d }}{% elseif level =='brand' %}&id_b={{ id_b }}{% elseif type =='product' %}{% if id_d %}&id_d={{ id_d }}{% endif %}{% if id_b %}&id_b={{ id_b }}{% endif %}{% if id_p %}&id_p={{ id_p }}{% endif %}{% endif %}&date_start={{ "first day of january this year"| date("d.m.Y") }}&date_finish={{ "now"| date("d.m.Y") }}">Год</a></li>
+			<li role="presentation" {% if month == TRUE %} class="active" {% endif %} ><a href="?path={{ type }}/{{ level }}&month=True{% if level =='department' %}&id_d={{ id_d }}{% elseif level =='brand' %}&id_b={{ id_b }}{% elseif type =='product' %}{% if id_d %}&id_d={{ id_d }}{% endif %}{% if id_b %}&id_b={{ id_b }}{% endif %}{% if id_p %}&id_p={{ id_p }}{% endif %}{% endif %}&date_start={{ "first day of this month"| date("d.m.Y") }}&date_finish={{ "now"| date("d.m.Y") }}">Месяц</a></li>
 		</ul>
 
 	</div>
@@ -61,8 +68,8 @@
 
 		<ul class="nav nav-pills">
 			<!--<li role="presentation" class="{% if level == "index" %}active{% endif %}"><a href="?path={{ type }}/chain&month={% if month == False %}False{% else %}True{% endif %}">Сеть</a></li>-->
-            <li role="presentation" class="{% if level == "brands" %}active{% endif %}" ><a href="?path={{ type }}/brands&month={% if month == False %}False{% else %}True{% endif %}">Бренды</a></li>
-			<li role="presentation" class="{% if level == "departments" %}active{% endif %}"><a href="?path={{ type }}/departments&month={% if month == False %}False{% else %}True{% endif %}">Подразделения</a></li>
+            <li role="presentation" class="{% if level == "brands" %}active{% endif %}" ><a href="?path={% if type != 'product' %}{{ type }}{% else %}marketing{% endif %}/brands&month={% if month == False %}False{% else %}True{% endif %}&date_start={{ date_start }}&date_finish={{ date_finish }}">Бренды</a></li>
+			<li role="presentation" class="{% if level == "departments" %}active{% endif %}"><a href="?path={{ type }}/departments&month={% if month == False %}False{% else %}True{% endif %}&date_start={{ date_start }}&date_finish={{ date_finish }}">Подразделения</a></li>
 		</ul>
 
 	</div>

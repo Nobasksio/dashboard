@@ -30,6 +30,7 @@ abstract class BaseModel {
         'СБ Партизанская РНГ' => 'Sushi Studio Бары',
         'СБ Советская' => 'Sushi Studio Бары',
         'СБ Юбилейный' => 'Sushi Studio Бары',
+        'СБ Юбилейный РНГ' => 'Sushi Studio Бары',
         'СМ Снегирь' => 'СушиТочка',
         'СМ Фортуна' => 'СушиТочка',
         'СТ Фортуна' => 'СушиТочка',
@@ -41,6 +42,7 @@ abstract class BaseModel {
         'СТ Модный квартал' => 'СушиТочка',
         'СТ Сильвермолл' => 'СушиТочка',
         'СТ ЦП Байкальская' => 'СушиТочка',
+        'СТ ЦП Дзержинского' => 'СушиТочка',
         'ТОТО МК' => 'Другое',
         'Фабрика Багаутдинова' => 'Другое',
         'Фабрика ИП Димаков' => 'Другое',
@@ -49,6 +51,7 @@ abstract class BaseModel {
         'Фуд Корт МК' => 'Sushi Studio Фудкорты',
         'Фуд Корт Новый' => 'Sushi Studio Фудкорты',
         'Центральный Офис' => 'Другое',
+
     );
     public $brand_id_department_ar = array(
         'Антрекот' => 4,
@@ -96,10 +99,12 @@ abstract class BaseModel {
         'СТ Модный квартал' => 'СТ Модный квартал',
         'СТ Сильвермолл' => 'СТ Сильвермолл',
         'СТ ЦП Байкальская' => 'СТ ЦП Байкальская',
+        'СТ ЦП Дзержинского'=> 'СТ ЦП Дзержинского',
         'ТОТО МК' => 'ТОТО МК',
         'Фабрика Багаутдинова' => 'Фабрика',
         'Фабрика ИП Димаков' => 'Фабрика',
         'Фо Ми' => 'Phome',
+        'СБ Юбилейный РНГ'=>'SS СБ Юбилейный',
         'Центральный Офис' => 'Центральный Офис',
     );
 
@@ -125,25 +130,27 @@ abstract class BaseModel {
         'СБ Партизанская РНГ' => 11,
         'СБ Советская' => 12,
         'СБ Юбилейный' => 13,
+        'СБ Юбилейный РНГ'=>13,
         'Фуд Корт Лермонтов (не раб)' => 0,
-        'Фуд Корт МК' => 14,
-        'Фуд Корт Новый' => 15,
-        'СМ Снегирь' => 16,
-        'СТ Фортуна' => 16,
-        'СМ Фортуна' => 17,
-        'СТ Абсолют' => 18,
-        'СТ Ангара' => 19,
-        'СТ Европарк' => 20,
-        'СТ Комсомолл' => 21,
-        'СТ Лермонтов' => 22,
-        'СТ Модный квартал' => 23,
-        'СТ Сильвермолл' => 24,
-        'СТ ЦП Байкальская' => 25,
+        'Фуд Корт МК' => 27,
+        'Фуд Корт Новый' => 28,
+        'СМ Снегирь' => 14,
+        'СТ Фортуна' => 22,
+        'СМ Фортуна' => 22,
+        'СТ Абсолют' => 15,
+        'СТ Ангара' => 16,
+        'СТ Европарк' => 17,
+        'СТ Комсомолл' => 18,
+        'СТ Лермонтов' => 19,
+        'СТ Модный квартал' => 20,
+        'СТ Сильвермолл' => 21,
+        'СТ ЦП Байкальская' => 23,
         'ТОТО МК' => 0,
         'Фабрика Багаутдинова' => 0,
         'Фабрика ИП Димаков' => 0,
         'Фо Ми' => 26,
         'Центральный Офис' => 0,
+        'СТ ЦП Дзержинского'=>1124
     );
     public $type_menu = array(
         1 =>array(
@@ -224,18 +231,25 @@ abstract class BaseModel {
         }
 
     }
-    protected function getSalesFromMysql($month,$Department='',$products='')
+    protected function getSalesFromMysql($month,$date_start, $date_finish,$Department='',$products='')
     {
         $where  = '';
         $where2 = '';
         if ($Department !='') {
             $where = "where s.Department IN $Department ";
         }
-        if ($month) {
-            $table = 'sales_this_month';
-        } else {
-            $table = 'sales_this_month';
-        }
+        $date_start_arr = explode(".", $date_start);
+        $date_finish_arr = explode(".", $date_finish);
+        $month_start = $date_start[1];
+        $day_start = $date_start[0];
+
+        $month_finish = $date_finish[1];
+        $day_finish = $date_finish[0];
+
+        $date_start = $date_start_arr[2]."-".$date_start_arr[1]."-".$date_start_arr[0];
+        $date_finish = $date_finish_arr[2]."-".$date_finish_arr[1]."-".$date_finish_arr[0];
+
+        $date_where = "and DATE(s.date) BETWEEN '$date_start' AND '$date_finish'";
 
         if ($products!=''){
             $where2 = " and s.DishName IN $products";
@@ -243,44 +257,67 @@ abstract class BaseModel {
 
         $statement = self::$connection->prepare(
             "SELECT * FROM 
-                          $table s
+                          sales s
                           LEFT JOIN dishs d ON s.DishName=dish_name
-                          $where
+                          $where $date_where
                           $where2
-                          order by Department");
+                          order by s.Department");
         $statement->execute();
 
         return $statement->fetchAll(\PDO::FETCH_ASSOC);
     }
 
-    protected function getAllAcounts($month,$Department = '')
+    protected function getAllAcounts($month,$Department = '',$date_start,$date_finish)
     {
-
         if ($Department != '') {
             $where = "and d.Department IN $Department";
         } else {
             $where = '';
         }
-        if ($month) {
-            $table = 'dashboard_this_month';
+        $date_start_arr = explode(".", $date_start);
+        $date_finish_arr = explode(".", $date_finish);
+        $month_start = $date_start[1];
+        $day_start = $date_start[0];
 
-        } else {
-            $table = 'dashboard_this_years';
+        $month_finish = $date_finish[1];
+        $day_finish = $date_finish[0];
 
-        }
+        $date_start = $date_start_arr[2]."-".$date_start_arr[1]."-".$date_start_arr[0];
+        $date_finish = $date_finish_arr[2]."-".$date_finish_arr[1]."-".$date_finish_arr[0];
+
+        $date_where = "and DATE(d.DateTime) BETWEEN '$date_start' AND '$date_finish'";
+
 
         $statement = self::$connection->prepare(
             "SELECT * FROM 
-                          $table d, 
+                          dashboard_this_years_test d, 
                           dashboard_type_account t 
                         where d.AccountName = t.name 
-                          $where
-                          order by `DateTime`  ");
+                          $where $date_where
+                          order by d.DateTime ");
         $statement->execute();
 
-        return $statement->fetchAll(\PDO::FETCH_ASSOC);
+
+        $arr_accounts = $statement->fetchAll(\PDO::FETCH_ASSOC);
+
+        $date_start = ($date_start_arr[2]-1)."-".$date_start_arr[1]."-".$date_start_arr[0];
+        $date_finish = ($date_finish_arr[2]-1)."-".$date_finish_arr[1]."-".$date_finish_arr[0];
+
+        $date_where2 = "and DATE(d.DateTime) BETWEEN '$date_start' AND '$date_finish'";
+        $statement2 = self::$connection->prepare(
+            "SELECT * FROM 
+                          dashboard_this_years_test d, 
+                          dashboard_type_account t 
+                        where  d.AccountName = t.name 
+                          $where $date_where2
+                          order by d.DateTime");
+        $statement2->execute();
+
+        $arr_accounts = array_merge($arr_accounts,$statement2->fetchAll(\PDO::FETCH_ASSOC));
+
+        return $arr_accounts;
     }
-    protected function getAcounts($month, $Department = '')
+    protected function getAcounts($month, $Department = '',$date_start,$date_finish)
     {
 
         if ($Department != '') {
@@ -288,52 +325,125 @@ abstract class BaseModel {
         } else {
             $where = '';
         }
-        if ($month) {
-            $table = 'dashboard_this_month';
 
-        } else {
-            $table = 'dashboard_this_years';
+        $date_start_arr = explode(".", $date_start);
+        $date_finish_arr = explode(".", $date_finish);
+        $month_start = $date_start[1];
+        $day_start = $date_start[0];
 
-        }
+        $month_finish = $date_finish[1];
+        $day_finish = $date_finish[0];
+
+        $date_start = $date_start_arr[2]."-".$date_start_arr[1]."-".$date_start_arr[0];
+        $date_finish = $date_finish_arr[2]."-".$date_finish_arr[1]."-".$date_finish_arr[0];
+
+        $date_where = "and DATE(d.DateTime) BETWEEN '$date_start' AND '$date_finish'";
+
 
         $statement = self::$connection->prepare(
             "SELECT * FROM 
-                          $table d, 
+                          dashboard_this_years_test d, 
                           dashboard_type_account t 
                         where t.group=1 
                           and d.AccountName = t.name 
-                          $where
-                          order by Department ");
+                          $where $date_where
+                          order by d.DateTime  ");
         $statement->execute();
 
-        return $statement->fetchAll(\PDO::FETCH_ASSOC);
+        $arr_accounts = $statement->fetchAll(\PDO::FETCH_ASSOC);
+
+        $date_start = ($date_start_arr[2]-1)."-".$date_start_arr[1]."-".$date_start_arr[0];
+        $date_finish = ($date_finish_arr[2]-1)."-".$date_finish_arr[1]."-".$date_finish_arr[0];
+
+        $date_where2 = "and DATE(d.DateTime) BETWEEN '$date_start' AND '$date_finish'";
+        $statement = self::$connection->prepare(
+            "SELECT * FROM 
+                          dashboard_this_years_test d, 
+                          dashboard_type_account t 
+                        where t.group=1 
+                          and d.AccountName = t.name 
+                          $where $date_where2
+                          order by d.DateTime DESC");
+        $statement->execute();
+
+       $arr_accounts = array_merge($arr_accounts,$statement->fetchAll(\PDO::FETCH_ASSOC));
+
+        return $arr_accounts;
     }
-    protected function getOrdersFromMysql($month, $Department = '',$produts)
+
+    protected function getOrdersFromMysql($month, $Department = '',$produts,$date_start,$date_finish)
     {
+        $date_start_arr = explode(".", $date_start);
+        $date_finish_arr = explode(".", $date_finish);
+        $date_start = ($date_start_arr[2])."-".$date_start_arr[1]."-".$date_start_arr[0];
+        $date_finish = ($date_finish_arr[2])."-".$date_finish_arr[1]."-".$date_finish_arr[0];
+        $date_where = " and DATE(OpenTime) BETWEEN '$date_start' AND '$date_finish'";
         $statement = self::$connection->prepare(
             "SELECT DISTINCT OrderNum 
                          FROM orders
                         where Department_id=$Department
-                          and DishName_id = $produts
+                          and DishName_id=$produts
+                          $date_where
                            ");
         $statement->execute();
 
         $arr_number = $statement->fetchAll(\PDO::FETCH_ASSOC);
 
+        if (count($arr_number)>0) {
 
+            $where_order_num = DashboardModel::ArraytoWhereMysql($arr_number, 'OrderNum');
 
-        $where_order_num = DashboardModel::ArraytoWhereMysql($arr_number,'OrderNum');
-
-        $statement = self::$connection->prepare(
-            "SELECT * 
+            $statement = self::$connection->prepare(
+                "SELECT * 
                          FROM orders
                         where OrderNum IN $where_order_num
                           and Department_id = $Department
                            ");
-        $statement->execute();
-        $order_arr = $statement->fetchAll(\PDO::FETCH_ASSOC);
+            $statement->execute();
+            $order_arr = $statement->fetchAll(\PDO::FETCH_ASSOC);
+        } else {
+            $order_arr=array();
+        }
 
         return $order_arr;
+    }
+    public function getCheckFromMysql($Department = '',$date_start,$date_finish,$search_waiter='')
+    {
+        if ($Department != '') {
+            $where = " and s.Department IN $Department ";
+
+        } else {
+            $where = '';
+        }
+
+        if ($search_waiter != '') {
+            $where_waiters = " and s.Waiter IN $search_waiter ";
+
+        } else {
+            $where_waiters = '';
+        }
+        $date_start_arr = explode(".", $date_start);
+        $date_finish_arr = explode(".", $date_finish);
+
+        $date_start = $date_start_arr[2]."-".$date_start_arr[1]."-".$date_start_arr[0];
+        $date_finish = $date_finish_arr[2]."-".$date_finish_arr[1]."-".$date_finish_arr[0];
+        $date_where = " and DATE(s.date) BETWEEN '$date_start' AND '$date_finish'";
+
+        $statement = self::$connection->prepare(
+            "SELECT * FROM 
+                          checks s,
+                          waiters w
+                        where 
+                          s.Waiter = w.waiter_name
+                          $where $where_waiters
+                          $date_where
+                          order by s.Department ");
+        if ($Department != '') {
+            $statement->bindValue(':Department', $Department);
+        }
+        $statement->execute();
+
+        return $statement->fetchAll(\PDO::FETCH_ASSOC);
     }
 
 }

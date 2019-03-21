@@ -125,13 +125,13 @@
                                             {% for dish_item in top10sum%}
                                                 <tr class='link-inline' onclick="window.location.href='?path=product/one&month={% if month == False %}False{% else %}True{% endif %}{% if id_d %}&id_d={{ id_d }}{% endif %}{% if id_b %}&id_b={{ id_b }}{% endif %}&id_p={{ dish_item.id_product }}&date_start={{ date_start }}&date_finish={{ date_finish }}'; return false">
 
-                                                    <td > {{ loop.index }}</td >
-                                                    <td >
+                                                    <td data-sort-value="{{ loop.index  }}" > {{ loop.index }}</td >
+                                                    <td data-sort-value="{{ dish_item.name }}" >
                                                         {{ dish_item.name }}
                                                     </td >
 
-                                                    <td >{{ dish_item.count|number_format(0, ' ', ' ')  }}</td >
-                                                    <td >{{ dish_item.sum|number_format(0, ' ', ' ')  }}</td >
+                                                    <td data-sort-value="{{ dish_item.name }}">{{ dish_item.count|number_format(0, ' ', ' ')  }}</td >
+                                                    <td data-sort-value="{{ dish_item.name }}">{{ dish_item.sum|number_format(0, ' ', ' ')  }}</td >
                                                     </a>
                                                 </tr >
                                             {% endfor %}

@@ -46,7 +46,7 @@
                                             </thead >
                                             <tbody >
                                            {% for brand_item in brands%}
-                                            <tr class='link-inline' onclick="window.location.href='?path=dashboard/department&month={% if month == False %}False{% else %}True{% endif %}&id_d={{ brand_item.id_d }}'; return false">
+                                            <tr class='link-inline' onclick="window.location.href='?path=dashboard/department&month={% if month == False %}False{% else %}True{% endif %}&id_d={{ brand_item.id_d }}&date_start={{ date_start }}&date_finish={{ date_finish }}'; return false">
 
                                                 <td > {{ loop.index }}</td >
                                                 <td >
@@ -118,6 +118,7 @@
 <script src="/dash/assets/vendor/bootstrap/js/bootstrap.bundle.js" ></script >
 <!-- slimscroll js -->
 <script src="/dash/assets/vendor/slimscroll/jquery.slimscroll.js" ></script >
+    <script src="js/myscript.js" ></script >
 <!-- main js -->
 <script src="/dash/assets/libs/js/main-js.js" ></script >
 <!-- chart chartist js -->
@@ -135,35 +136,6 @@
 
 <script type="application/javascript" >
 
-
-        new Morris.Line({
-            // ID of the element in which to draw the chart.
-            element: 'myfirstchartK',
-            // Chart data records -- each entry in this array corresponds to a point on
-            // the chart.
-            data: [
-                {% for one_month in to_json %}
-                    {
-                        {% for str in one_month %}
-                            {% for key, info_year in str %}
-                                '{{ key }}':"{{ info_year }}",
-                            {% endfor%}
-                        {% endfor%}
-                    },
-                {% endfor%}]
-            ,
-            lineColors:['#a2b3bf','#5969ff', '#64b764'],
-            trendLineColors:['#a2b3bf','#5969ff', '#64b764'],
-            // The name of the data record attribute that contains x-values.
-            xkey: 'month',
-            // A list of names of data record attributes that contain y-values.
-            ykeys: ['2018', '2019'],
-            // Labels for the ykeys -- will be displayed when you hover over the
-            // chart.
-            labels: ['2018', '2019'],
-            parseTime: false
-
-    })
 
 
 

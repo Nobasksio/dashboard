@@ -21,21 +21,23 @@ class MarketingModel extends BaseModel
         $this->today_year = date('Y');
     }
 
-    public function getDepartSalesInfo($rigth_arr,$month,$id_brand=false,$id_products='')
+    public function getDepartSalesInfo($rigth_arr,$month,$date_start, $date_finish, $id_brand='',$id_products='')
     {
         $dashboard_model = new DashboardModel;
         $brand = false;
+        $brand_name = '';
 
         if ($id_brand){
             $rigth_arr = $dashboard_model->onlyChooseBrand($rigth_arr,$id_brand);
             $brand = true;
+            $brand_name = $key = array_search($id_brand, $this->brand_id_department_ar);
         }
 
         $department_name_arr = $dashboard_model->getNameDepart($rigth_arr);
         $search_department = $dashboard_model->ArraytoWhereMysql($department_name_arr, 'department_name');
-        $array_sales = $this->getSalesFromMysql($month,$search_department);
+        $array_sales = $this->getSalesFromMysql($month,$date_start, $date_finish,$search_department);
 
-        return $this->toBeatifullArray($array_sales, $month,$brand);
+        return $this->toBeatifullArray($array_sales, $month,$brand_name);
 
     }
     public function getProductInfo($rigth_arr,$month,$id_products='')
@@ -57,14 +59,20 @@ class MarketingModel extends BaseModel
     }
 
 
-    public function getCheckStatistic($id_dep,$month)
+    public function getCheckStatistic($id_dep,$month,$date_start,$date_finish)
     {
-        $arr_name = $this->getNamesDepartmentFromId($id_dep,$month);
+
+        $dashboard_model = new DashboardModel;
+
+        $department_name_arr = $dashboard_model->getNameDepart($id_dep);
+        $search_department = $dashboard_model->ArraytoWhereMysql($department_name_arr, 'department_name');
+
         $array_account_all = array();
-        foreach ($arr_name as $name) {
-            $array_account = $this->getCheckFromMysql($name);
-            $array_account_all = array_merge($array_account_all, $array_account);
-        }
+
+
+        $array_account = $this->getCheckFromMysql($search_department,$date_start,$date_finish);
+        $array_account_all = array_merge($array_account_all, $array_account);
+
         $today_year = date('Y');
         $sum_dept = 0;
         $count_check_dept = 0;
@@ -99,6 +107,9 @@ class MarketingModel extends BaseModel
         $today_year = date('Y');
         $last_year = $today_year - 1;
 
+        $all_vir_bar = 0;
+        $all_vir_kitch = 0;
+
         $group_sum = array();
         $group_count = array();
         $all_vir = 0;
@@ -109,7 +120,7 @@ class MarketingModel extends BaseModel
         $arr_price = $this->getMaxPrice($array_account);
 
         $arr_ss = $this->getMeanSs($array_account);
-        $top_high_ss = $this->getTopHightSs($arr_price,$arr_ss,0,10);
+        $top_high_ss = $this->getTopHightSs($arr_price,$arr_ss,$array_account,0,10);
 
         foreach ($array_account as $str) {
             if (!$month) {
@@ -136,12 +147,12 @@ class MarketingModel extends BaseModel
                 $id_dish = $str['id_dish'];
                 $id_arr[$DishName] = $id_dish;
                 $DishAmountInt = $str['DishAmountInt'];
-                $price = $arr_price[$DishName];
+                $price = $arr_price[$DishName]['price'];
 
-                $array_dish_sum[$DishName] += $price * $DishAmountInt;
+                @$array_dish_sum[$DishName] += $price * $DishAmountInt;
 
                 if ($price != 0) {
-                    $array_dish_count[$DishName] += $DishAmountInt;
+                    @$array_dish_count[$DishName] += $DishAmountInt;
                 }
                 $groupTop = $str['groupTop'];
                 if ($group == null) {
@@ -155,7 +166,7 @@ class MarketingModel extends BaseModel
                 $depart_name = $str['Department'];
                 $brand_id = $this->getBrandIdfromNameDepatment($depart_name);
                 $type_menu_arr = $this->type_menu[$brand_id];
-                $type_menu_str = $type_menu_arr[$groupTop];
+                $type_menu_str = @$type_menu_arr[$groupTop];
 
 
                 if ($type_menu_str == 'bar') {
@@ -163,8 +174,8 @@ class MarketingModel extends BaseModel
                 } elseif ($type_menu_str == 'kitchen') {
                     $all_vir_kitch += $kol_sale * $price;
                 }
-                $group_sum[$type_menu_str][$group] += $kol_sale * $price;
-                $group_count[$type_menu_str][$group] += $kol_sale;
+                @$group_sum[$type_menu_str][$group] += $kol_sale * $price;
+                @$group_count[$type_menu_str][$group] += $kol_sale;
 
             }
 
@@ -197,15 +208,18 @@ class MarketingModel extends BaseModel
         foreach ($array_sales as $item) {
             $name = $item['DishName'];
             $price = $item['price'];
+            $id_dish = $item['id_dish'];
             $year = self::clearDate($item['date'], 'Y');
             if ($year==$this->today_year) {
                 if (isset($arr_price[$name])) {
                     if ($price > $arr_price[$name]) {
-                        $arr_price[$name] = $price;
+                        $arr_price[$name] = array('price'=>$price,
+                            'id_dish'=>$id_dish);
                     }
 
                 } else {
-                    $arr_price[$name] = $price;
+                    $arr_price[$name] = array('price'=>$price,
+                        'id_dish'=>$id_dish);
                 }
             }
         }
@@ -242,15 +256,15 @@ class MarketingModel extends BaseModel
 
         return $arr_ss;
     }
-    public function getTopHightSs($arr_price,$arr_ss,$level_ss=0,$count_top=10){
+    public function getTopHightSs($arr_price,$arr_ss,$array_account,$level_ss=0,$count_top=10){
         $ss_per = array();
         $ss_return = array();
 
         $all_vall_ss = $this->getValSs($arr_ss);
 
         foreach($arr_ss as $name=>$ss_item){
-            if ($arr_price[$name]!=0) {
-                $per = $ss_item['ss'] / $arr_price[$name];
+            if ($arr_price[$name]['price']!=0) {
+                $per = $ss_item['ss'] / $arr_price[$name]['price'];
             } else {
                 continue;
             }
@@ -258,6 +272,7 @@ class MarketingModel extends BaseModel
 
             $ss_per[$name] = array('ss_per'=>$per,
                 'ss'=>$ss_item['ss'],
+                'id_dish'=>$arr_price[$name]['id_dish'],
                 'val_ss'=>$ss_item['val_ss'],
                 'ves_ss'=>$ss_item['val_ss']/($all_vall_ss/100)
                 );
@@ -265,9 +280,10 @@ class MarketingModel extends BaseModel
         arsort($ss_per_order);
         $i=0;
         foreach($ss_per_order as $name=>$ss_item){
-            if (($ss_per[$name]['ss']/$arr_price[$name])>$level_ss) {
-                $ss_return[$name] = array('ss_per' => $ss_per[$name]['ss'] / $arr_price[$name],
+            if (($ss_per[$name]['ss']/$arr_price[$name]['price'])>$level_ss) {
+                $ss_return[$name] = array('ss_per' => $ss_per[$name]['ss'] / $arr_price[$name]['price'],
                     'ss' => $ss_per[$name]['ss'],
+                    'id_dish'=>$arr_price[$name]['id_dish'],
                     'val_ss' => $ss_per[$name]['val_ss'],
                     'ves_ss' => $ss_per[$name]['ves_ss'],
                 );
@@ -303,27 +319,7 @@ class MarketingModel extends BaseModel
         return $for_json_sum;
     }
 
-    public function getCheckFromMysql($Department = '')
-    {
-        if ($Department != '') {
-            $where = 'Department = :Department';
-        } else {
-            $where = '';
-        }
 
-        $statement = self::$connection->prepare(
-            "SELECT * FROM 
-                          check_this_month 
-                        where  
-                          $where
-                          order by Department ");
-        if ($Department != '') {
-            $statement->bindValue(':Department', $Department);
-        }
-        $statement->execute();
-
-        return $statement->fetchAll(\PDO::FETCH_ASSOC);
-    }
 
     protected function getNamesDepartmentFromId($id_dep)
     {

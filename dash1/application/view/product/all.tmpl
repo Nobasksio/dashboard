@@ -66,7 +66,7 @@
                                             </thead >
                                             <tbody >
                                             {% for name,dish_item in products%}
-                                                <tr class='link-inline' onclick="window.location.href='?path=product/one&month={% if month == False %}False{% else %}True{% endif %}&id_d={{ id_d }}&id_p={{ dish_item.id_product }}'; return false">
+                                                <tr class='link-inline' onclick="window.location.href='?path=product/one&month={% if month == False %}False{% else %}True{% endif %}&id_d={{ id_d }}&id_p={{ dish_item.id_product }}&date_start={{ date_start }}&date_finish={{ date_finish }}'; return false">
 
                                                 <td > {{ loop.index }}</td >
                                                 <td >
@@ -75,7 +75,7 @@
 
                                                 <td data-sort-value="{{ dish_item.count }}" >{{ dish_item.count|number_format(0, ' ', ' ')  }}</td >
                                                 <td data-sort-value="{{ dish_item.summ }}">{{ dish_item.summ|number_format(0, ' ', ' ')  }}</td >
-                                                <td data-sort-value="{{ dish_item.price }}">{{ dish_item.price|number_format(0, ' ', ' ')  }}</td >
+                                                <td data-sort-value="{{ dish_item.price.price }}">{{ dish_item.price.price|number_format(0, ' ', ' ')  }}</td >
                                                 <td data-sort-value="{{ dish_item.ss.ss }}">{{ dish_item.ss.ss|number_format(0, ' ', ' ')  }}</td >
                                                 <td data-sort-value="{{ dish_item.ss.ss_per }}">{{ dish_item.ss.ss_per|number_format(2, ',', ' ')  }}</td >
                                                 <td data-sort-value="{{ dish_item.ss.ves_ss }}">{{ dish_item.ss.ves_ss|number_format(2, ',', ' ')  }}</td >
@@ -145,6 +145,7 @@
     <script src="/dash/assets/vendor/charts/c3charts/C3chartjs.js" ></script >
     <script src="/dash/assets/libs/js/dashboard-ecommerce.js" ></script >
     <script src="js/jquery-tablesort-master/jquery.tablesort.js" ></script >
+<script src="js/myscript.js" ></script >
     <script type="application/javascript" >
 
 
