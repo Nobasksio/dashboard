@@ -159,7 +159,7 @@ class MarketingController extends BaseController
         $dashModel = new MarketingModel;
         //$dash_array = $dashModel->getDepartSalesInfo(array($rigth), true);
         $dash_array = $dashModel->getDepartSalesInfo($this->right, true,$this->date_start, $this->date_finish, $id_b);
-        $dash_array_check = $dashModel->getCheckStatistic($id_b, true);
+        $dash_array_check = $dashModel->getCheckStatistic($id_b, true,$this->date_start, $this->date_finish);
 
         return $this->view->render("dash/marketing", array(
             'sum_ar_bar' => $dash_array['sum_ar_bar'],

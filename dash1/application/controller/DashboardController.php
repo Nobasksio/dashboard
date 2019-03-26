@@ -23,7 +23,8 @@ class DashboardController extends BaseController
         parent::before();
 
         $admin_model = new AdminModel();
-        //$admin_model->makeDepartmentList();
+
+        $admin_model->makeWaitersList();
         $user = $this->session->get("user");
 
         $rigth_arr = $admin_model->getRightOnDepartment($user['id']);

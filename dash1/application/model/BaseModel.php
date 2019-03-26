@@ -259,8 +259,12 @@ abstract class BaseModel {
             "SELECT * FROM 
                           sales s
                           LEFT JOIN dishs d ON s.DishName=dish_name
+                          LEFT JOIN departments dep ON s.Department=dep.department_name
+                          LEFT JOIN category c ON s.group=c.category_name
+                          LEFT JOIN category_for_department cfd ON c.id_category=cfd.category_id and dep.id_department=cfd.department_id
                           $where $date_where
                           $where2
+                          and cfd.status=1
                           order by s.Department");
         $statement->execute();
 
@@ -444,6 +448,49 @@ abstract class BaseModel {
         $statement->execute();
 
         return $statement->fetchAll(\PDO::FETCH_ASSOC);
+    }
+
+    public function getCategoryMysql($rigth_arr){
+        $statement = self::$connection->prepare(
+            "SELECT *, cfd.status statusm  FROM 
+                          category_for_department cfd
+                          LEFT JOIN category c ON cfd.category_id=c.id_category
+                        where 
+                          cfd.department_id = :dep_id ");
+        $statement->bindValue(':dep_id', $rigth_arr);
+        $statement->execute();
+        return $statement->fetchAll(\PDO::FETCH_ASSOC);
+    }
+    public static function normaDate($date){
+
+        $date_arr = explode(".", $date);
+        $date_return = $date_arr[2]."-".$date_arr[1]."-".$date_arr[0];
+
+        return $date_return;
+    }
+
+    public static function addAllDate($arr_value,$arr_date,$type_separator='day'){
+        foreach ($arr_date as $date) {
+            $separator = self::clearDate($date, 'm.d');
+            $year = self::clearDate($date, 'Y');
+            if (!isset($arr_value[$separator])){
+                $arr_value[$separator][$year] = 0;
+            }
+	    }
+	    return $arr_value;
+    }
+
+    public static function arrIntervalDate($date_start,$date_finish){
+        $from = new \DateTime($date_start);
+        $to   = new \DateTime($date_finish);
+
+        $period = new \DatePeriod($from, new \DateInterval('P1D'), $to);
+
+        $arrayOfDates = array_map(
+            function($item){return $item->format('Y-m-d H:i:s');},
+            iterator_to_array($period)
+        );
+        return $arrayOfDates;
     }
 
 }

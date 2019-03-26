@@ -49,17 +49,16 @@ class FrontController {
 
 		if (!class_exists($class)) {
             print"$class";
-			return $this->view->render("error500");
+			return $this->view->render("error500",array('mass'=>'1'));
 		}
 
 		$controller = new $class;
 
 		if (!method_exists($controller, "action_".$action)) {
-			return $this->view->render("error500");
-		}
+			return $this->view->render("error500",array('mass'=>'2'));}
 
 		if (!$controller->before()){
-			return $this->view->render("error500");
+			return $this->view->render("error500",array('mass'=>'3'));
 		}
 
 		$result = $controller->{"action_".$action}();

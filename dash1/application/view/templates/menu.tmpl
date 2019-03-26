@@ -74,6 +74,7 @@
                         </div >
                         {% if user.id_role==1 %}
                         <a class="dropdown-item" href="?path=admin/users" ><i class="fas fa-user mr-2" ></i >Пользователи</a >
+                            <a class="dropdown-item" href="?path=admin/departments" ><i class="fas fa-user mr-2" ></i >Подразделения</a >
                         {% endif %}
                         <!--<a class="dropdown-item" href="#" ><i class="fas fa-cog mr-2" ></i >Setting</a >-->
                         <a class="dropdown-item" href="?path=auth/logout" ><i class="fas fa-power-off mr-2" ></i >Logout</a >
@@ -110,14 +111,21 @@
                         <a class="nav-link active"
                            href="/dash1/public/?path=dashboard/index&month={% if month == False %}False{% else %}True{% endif %}&date_start={{ date_start }}&date_finish={{ date_finish }}"
                            aria-controls="submenu-1" ><i
-                                    class="fa fa-fw fa-user-circle" ></i >Общая информация <span
+                                    class="fa fa-fw  fa-briefcase" ></i >Общая информация <span
                                     class="badge badge-success" >6</span ></a >
                     </li >
                     <li class="nav-item " >
                         <a class="nav-link active"
                            href="/dash1/public/?path=marketing/index&month={% if month == False %}False{% else %}True{% endif %}&date_start={{ date_start }}&date_finish={{ date_finish }}"
                            aria-controls="submenu-1" ><i
-                                    class="fa fa-fw fa-user-circle" ></i >Маркетинг <span
+                                    class="fa fa-fw fa-shopping-basket mon" ></i >Маркетинг <span
+                                    class="badge badge-success" >6</span ></a >
+                    </li >
+                    <li class="nav-item " >
+                        <a class="nav-link active"
+                           href="/dash1/public/?path=waiters/departments&month={% if month == False %}False{% else %}True{% endif %}&date_start={{ date_start }}&date_finish={{ date_finish }}"
+                           aria-controls="submenu-1" ><i
+                                    class="fa fa-fw fa-user-circle" ></i >Официанты <span
                                     class="badge badge-success" >6</span ></a >
                     </li >
                 </ul >

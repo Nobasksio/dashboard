@@ -81,13 +81,13 @@ class MarketingModel extends BaseModel
 
             $sum = $item['DishDiscountSumInt'];
             $guest_count = $item['GuestNum'];
-            $check_count = $item['UniqOrderId'];
+            $check_count = $item['OrderNum'];
 
             $year = self::clearDate($item['date'], 'Y');
 
             if ($year==$today_year) {
                 $sum_dept += $sum;
-                $count_check_dept += $check_count;
+                $count_check_dept++;
                 $count_guest_dept += $guest_count;
 
             }
@@ -95,8 +95,8 @@ class MarketingModel extends BaseModel
         }
 
         return array(
-            'mean_check' => round($sum_dept/$count_check_dept,2),
-            'mean_guest' => round($sum_dept/$count_guest_dept,2)
+            'mean_check' => @round($sum_dept/$count_check_dept,2),
+            'mean_guest' => @round($sum_dept/$count_guest_dept,2)
         );
 
     }

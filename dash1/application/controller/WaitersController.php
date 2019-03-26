@@ -16,6 +16,8 @@ use \application\model\WaitersModel;
 
 class WaitersController extends BaseController
 {
+    public $right;
+
     public function before()
     {
 
@@ -40,6 +42,26 @@ class WaitersController extends BaseController
         }
 
         return true;
+    }
+    public function action_departments()
+    {
+
+        $month = $this->request->getGet('month');
+        if ($month == 'True') {
+            $month = true;
+        } else {
+            $month = false;
+        }
+
+        $dashModel = new DashboardModel;
+        $dash_array = $dashModel->startTypeDash($this->right, 'departments', $this->date_start, $this->date_finish,$month);
+
+        return $this->view->render("waiters/index", array('brands' => $dash_array,
+            'month' => $month,
+            'date_start' => $this->date_start,
+            'date_finish' => $this->date_finish,
+            'type' => 'waiters',
+            'level' => 'departments'));
     }
     public function action_all()
     {
@@ -81,13 +103,24 @@ class WaitersController extends BaseController
 
         return $this->view->render("waiters/one", array('waiter_arr' => $dash_array['waiter_arr'],
             'department'=> $dash_array['department'],
+            'json_num'=> $dash_array['json_num'],
+            'json_sum'=> $dash_array['json_sum'],
+            'json_mean_check' => $dash_array['json_mean_check'],
+            'json_mean_guest' => $dash_array['json_mean_guest'],
+            'separator_name'=> $dash_array['separator_name'],
+            'mean_check' => $dash_array['mean_check'],
+            'num_check' => $dash_array['num_check'],
+            'num_guest' => $dash_array['num_guest'],
+            'all_summ' => $dash_array['all_summ'],
             'month' => $month,
+            'waiter_name' =>$dash_array['waiter_name'],
+            'id_waiter' =>$id_waiter,
             'type' => 'waiters',
             'id_d' => $id_d,
 
             'date_start' => $this->date_start,
             'date_finish' => $this->date_finish,
-            'level' => 'all'));
+            'level' => 'one'));
     }
 
 }

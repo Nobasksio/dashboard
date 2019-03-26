@@ -192,7 +192,7 @@ class DashboardModel extends BaseModel
     }
 
 
-    public function to_json_moris($array, $separator_name, $summ = [], $absolut = false)
+    public static function to_json_moris($array, $separator_name, $summ = [], $absolut = false)
     {
         krsort($array,SORT_STRING);
         if ($absolut) {

@@ -43,7 +43,6 @@ class AdminModel extends BaseModel
             $deparments_arr[$key]['right'] = $right;
         }
 
-
         return $deparments_arr;
     }
     //todo изменить название на depatrments
@@ -76,6 +75,15 @@ class AdminModel extends BaseModel
         return $statement->fetchAll(\PDO::FETCH_ASSOC);
     }
 
+    public function getAllDepartments() {
+        $statement = self::$connection->prepare(
+            "SELECT * FROM departments
+        ");
+        $statement->execute();
+
+        return $statement->fetchAll(\PDO::FETCH_ASSOC);
+    }
+
     public function makeDepartmentList(){
         $statement = self::$connection->prepare("SELECT DISTINCT Department FROM dashboard_this_month");
         $statement->execute();
@@ -98,8 +106,74 @@ class AdminModel extends BaseModel
 
         return $statement;
     }
+
+
+    public function makeCategoryList(){
+        $statement = self::$connection->prepare("SELECT DISTINCT `group` FROM sales");
+        $statement->execute();
+        $dish_departments = $statement->fetchAll(\PDO::FETCH_ASSOC);
+        $statement2 = self::$connection->prepare("CREATE TABLE IF NOT EXISTS category (
+              id_category INT AUTO_INCREMENT PRIMARY KEY,
+              category_name VARCHAR(60) NOT NULL UNIQUE,
+              alias_name VARCHAR(60) NOT NULL,
+              status tinyint(1) default 1,
+              relations INT(20) 
+          ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin
+          AUTO_INCREMENT=1;
+        ");
+        $statement2->execute();
+
+        foreach ($dish_departments as $category){
+            $category_name = $category['group'];
+
+            $statement = self::$connection->prepare("INSERT IGNORE INTO category (category_name) VALUE(:category_name)");
+            $statement->bindValue(':category_name', $category_name);
+            $statement->execute();
+        }
+
+        return $statement;
+    }
+
+    public function makeDepartmentsCategoryRelations(){
+        $statement = self::$connection->prepare("
+            SELECT DISTINCT 
+                s.group, c.id_category, d.department_name,
+                d.id_department
+            FROM 
+                sales s
+            LEFT JOIN category c ON s.group=c.category_name
+            LEFT JOIN departments d ON s.Department=d.department_name
+            ");
+        $statement->execute();
+        $Categoty = $statement->fetchAll(\PDO::FETCH_ASSOC);
+
+
+        $statement2 = self::$connection->prepare("CREATE TABLE IF NOT EXISTS category_for_department (
+              id INT AUTO_INCREMENT PRIMARY KEY,
+              category_id INT NOT NULL,
+              department_id INT NOT NULL,
+              status tinyint(1) default 1,
+              UNIQUE KEY `combined` (`category_id`,`department_id`) 
+          ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin
+          AUTO_INCREMENT=1;
+        ");
+        $statement2->execute();
+
+        foreach ($Categoty as $category){
+            $category_id = $category['id_category'];
+            $id_department = $category['id_department'];
+
+            $statement = self::$connection->prepare("INSERT IGNORE INTO category_for_department (category_id,department_id) VALUE(:category_id,:department_id)");
+            $statement->bindValue(':category_id', $category_id);
+            $statement->bindValue(':department_id', $id_department);
+            $statement->execute();
+        }
+
+        return $statement;
+    }
+
     public function makeDishList(){
-        $statement = self::$connection->prepare("SELECT DISTINCT DishName FROM sales_this_month");
+        $statement = self::$connection->prepare("SELECT DISTINCT DishName FROM sales");
         $statement->execute();
         $dish_departments = $statement->fetchAll(\PDO::FETCH_ASSOC);
         $statement2 = self::$connection->prepare("CREATE TABLE IF NOT EXISTS dishs (
@@ -172,6 +246,27 @@ class AdminModel extends BaseModel
         $statement2->bindValue(':user_id', $user_id);
         $statement2->bindValue(':right_u', (bool)$right,\PDO::PARAM_BOOL);
         $statement2->execute();
+
+        return  $statement2->execute();
+    }
+
+    public function SetViewGroup($id_dep,$id_category,$status) {
+        if ($status == 'true'){
+            $status = true;
+        } else {
+            $status = false;
+        }
+
+
+        $statement2 = self::$connection->prepare(
+            "INSERT INTO category_for_department (category_id, department_id) 
+                        values (:category_id,:id_dep) 
+                        ON DUPLICATE KEY UPDATE `status` = :status
+        ");
+        $statement2->bindValue(':id_dep', $id_dep);
+        $statement2->bindValue(':category_id', $id_category);
+        $statement2->bindValue(':status', (bool)$status,\PDO::PARAM_BOOL);
+
 
         return  $statement2->execute();
     }

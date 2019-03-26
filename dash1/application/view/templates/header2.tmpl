@@ -21,6 +21,16 @@
                     {% else  %}
                         Информация о продажах {{ department }}
                     {% endif %}
+                {% elseif type == 'waiters' %}
+					{% if level == 'all' %}
+						Информация по официантам {{ department }}
+                	{% elseif level =='one' %}
+						Официант {{ product_name }} в {{ department }}
+                    {% elseif level =='departments' %}
+						Информация по официантам по подразделениям
+                    {% elseif level =='brands' %}
+						Информация по официантам по брендам
+                    {% endif  %}
                 {% elseif type == 'product' %}
 					{% if level == 'all' %}
 						Продажи товаров {{ department }}
@@ -40,9 +50,13 @@
 							<input type="text" data-toggle-selected="false" data-range="true" value="{{ date_start }} - {{ date_finish }}"
 								   data-multiple-dates-separator=" - "
 								   class="datepicker-here"/>
-							<a class="btn btn-default"
-							   onclick="refresh_date('?path={{ type }}/{{ level }}&month={% if month == False %}False{% else %}True{% endif %}{% if level =='department' %}&id_d={{ id_d }}{% elseif level =='brand' %}&id_b={{ id_b }}{% elseif type =='product' %}{% if id_d %}&id_d={{ id_d }}{% endif %}{% if id_b %}&id_b={{ id_b }}{% endif %}{% if id_p %}&id_p={{ id_p }}{% endif %}{% endif %}')" role="button">Обновить</a>
-							<!--01.{% if month == False %}01{% else %}{{ "now"|date("m") }}{% endif %}.{{ "now"|date("Y") }} до {{ "now"|date("d.m.Y") }} включительно-->
+                            {% block linkrefresh  %}
+
+							    <a class="btn btn-default"
+							        onclick="refresh_date('?path={{ type }}/{{ level }}&month={% if month == False %}False{% else %}True{% endif %}{% if level =='department'  %}&id_d={{ id_d }}{% elseif level =='brand'  %}&id_b={{ id_b }}{% elseif type =='product' %}{% if id_d %}&id_d={{ id_d }}{% endif %}{% if id_b %}&id_b={{ id_b }}{% endif %}{% if id_p %}&id_p={{ id_p }}{% endif %}{% endif %}')" role="button">Обновить</a>
+
+                            {% endblock  %}
+                            <!--01.{% if month == False %}01{% else %}{{ "now"|date("m") }}{% endif %}.{{ "now"|date("Y") }} до {{ "now"|date("d.m.Y") }} включительно-->
 							<!--(обновлено в <?=$time_update?>)-->
 						</li >
 					</ol >

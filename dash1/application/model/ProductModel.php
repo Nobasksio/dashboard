@@ -12,21 +12,25 @@ class ProductModel extends BaseModel {
 	const STATUS_INACTIVE = 20;
 
 	public function getById($id) {
+
 		$statement = self::$connection->prepare("SELECT * FROM goods WHERE id = :id");
 		$statement->bindValue(':id', $id, \PDO::PARAM_INT);
 		$statement->execute();
 
 		return $statement->fetch(\PDO::FETCH_ASSOC);
+
 	}
 
-    public function getAllProducts($rigth_arr, $date_start,$date_finish,$month,$id_b=false) {
+    public function getAllProducts($rigth_arr, $date_start,$date_finish,$month=true,$id_b=false) {
 
         $dashboard_model = new DashboardModel;
         $brand = false;
         if ($id_b){
+
             $rigth_arr = $dashboard_model->onlyChooseBrand($rigth_arr,$id_b);
             $brand = true;
-            $brand_name = $key = array_search($id_brand, $this->brand_id_department_ar);
+            $brand_name = $key = array_search($id_b, $this->brand_id_department_ar);
+
         }
 
 
@@ -37,6 +41,25 @@ class ProductModel extends BaseModel {
         $array_sales = $this->getSalesFromMysql($month,$date_start,$date_finish,$search_department);
         //rint_r($array_sales);
         return $this->productsToBeatifullArray($array_sales, $month);
+
+    }
+
+    public function getAllCategory($rigth_arr, $date_start,$date_finish,$month=true,$id_b=false) {
+
+        $dashboard_model = new DashboardModel;
+        $brand = false;
+        if ($id_b){
+
+            $rigth_arr = $dashboard_model->onlyChooseBrand($rigth_arr,$id_b);
+            $brand = true;
+            $brand_name = $key = array_search($id_b, $this->brand_id_department_ar);
+
+        }
+
+
+        $array_category = $this->getCategoryMysql($rigth_arr);
+        //rint_r($array_sales);
+        return $array_category;
 
     }
     public function getOneProduct($rigth_arr,$id_p, $date_start,$date_finish,$month) {
@@ -141,13 +164,11 @@ class ProductModel extends BaseModel {
             $all_price[$separator][$year] = $price;
             $all_count[$separator][$year] = $DishAmountInt;
 
-
         }
 
         $to_json_ss = $dashboardModel->to_json_moris($all_ss, $separator_name,0);
         $to_json_price = $dashboardModel->to_json_moris($all_price, $separator_name, 0);
         $to_json_count = $dashboardModel->to_json_moris($all_count, $separator_name);
-
 
         $delta_ss = $this->delta($all_ss);
 
@@ -174,6 +195,17 @@ class ProductModel extends BaseModel {
         );
 
         return $return_array;
+    }
+    protected function categoryToBeatifullArray($array_account, $month, $brand=false)
+    {
+        $array_category = [];
+        foreach ($array_account as $str) {
+            $array_category[] = $str['group'];
+
+        }
+       $array_unique = array_unique($array_category);
+
+        return $array_unique;
     }
     protected function productsToBeatifullArray($array_account, $month, $brand=false)
     {
@@ -224,6 +256,7 @@ class ProductModel extends BaseModel {
                 $price = $arr_price[$DishName]['price'];
 
                 @$array_dish[$DishName]['summ'] += $price * $DishAmountInt;
+                @$array_dish[$DishName]['group'] = $group;
 
                 @$array_dish[$DishName]['count'] += $DishAmountInt;
                 $groupTop = $str['groupTop'];

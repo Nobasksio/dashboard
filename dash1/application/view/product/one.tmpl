@@ -1,48 +1,16 @@
-<!doctype html>
+{% extends '/templates/index.tmpl' %}
 
+{% block title %}
 
-    <!-- ============================================================== -->
-    <!-- navbar -->
-    <!-- ============================================================== -->
+{% endblock %}
 
-                        {% include 'templates/menu.tmpl' %}
+{% block linkrefresh  %}
 
-    <!-- ============================================================== -->
-    <div class="dashboard-wrapper" >
-        <div class="dashboard-ecommerce" >
-            <div class="container-fluid dashboard-content " >
-                <!-- ============================================================== -->
-                <!-- pageheader  -->
-                <!-- ============================================================== -->
+    <a class="btn btn-default"
+       onclick="refresh_date('?path={{ type }}/{{ level }}&month={% if month == False %}False{% else %}True{% endif %}{% if id_d %}&id_d={{ id_d }}{% endif %}{% if id_b %}&id_b={{ id_b }}{% endif %}{% if id_p %}&id_p={{ id_p }}{% endif %}')" role="button">Обновить</a>
 
-                {% include 'templates/header2.tmpl' %}
-                <div class="row">
-                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 pb-5" >
-
-                        <ul class="nav nav-pills">
-                            <li role="presentation"
-                                    {% if level == 'all' %}
-                                    class="active"
-                                    {% endif %} >
-                                    <a href="?path={{ type }}/{{ level }}&month=False&
-                                    {% if level =='department' %}id_d={{ id_d }}
-                                    {% elseif level =='brand' %}id_b={{ id_b }}
-                                    {% endif %}">Всё вместе</a>
-                            </li>
-                            <li role="presentation"
-                                    {% if level == 'cat' %} class="active"
-                                    {% endif %} ><a href="?path={{ type }}/{{ level }}&month=True&
-                                    {% if level =='department' %}id_d={{ id_d }}
-                                    {% elseif level =='brand' %}id_b={{ id_b }}
-                                    {% endif %}">По категориям</a>
-                            </li>
-                        </ul>
-
-                    </div>
-                </div>
-                <!-- ============================================================== -->
-                <!-- end pageheader  -->
-                <!-- ============================================================== -->
+{% endblock  %}
+                {% block body %}
                 <div class="ecommerce-widget" >
 
 
@@ -138,66 +106,11 @@
                                     </div >
                                 </div >
                             </div >
-
-
-
-
-                </div >
-            </div >
-
-            <!-- ============================================================== -->
-            <!-- footer -->
-            <!-- ============================================================== -->
-            <div class="footer" >
-                <div class="container-fluid" >
-                    <div class="row" >
-                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12" >
-                            Copyright © 2018 Concept. All rights reserved. Dashboard by <a href="https://colorlib.com/wp/" >Colorlib</a >.
-                        </div >
-                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12" >
-                            <div class="text-md-right footer-links d-none d-sm-block" >
-                                <a href="javascript: void(0);" >About</a >
-                                <a href="javascript: void(0);" >Support</a >
-                                <a href="javascript: void(0);" >Contact Us</a >
                             </div >
-                        </div >
                     </div >
                 </div >
-            </div >
-            <!-- ============================================================== -->
-            <!-- end footer -->
-            <!-- ============================================================== -->
-        </div >
-        <!-- ============================================================== -->
-        <!-- end wrapper  -->
-        <!-- ============================================================== -->
-    </div >
-    <!-- ============================================================== -->
-    <!-- end main wrapper  -->
-    <!-- ============================================================== -->
-    <!-- Optional JavaScript -->
-    <!-- jquery 3.3.1 -->
-
-    <!-- bootstap bundle js -->
-    <script src="/dash/assets/vendor/bootstrap/js/bootstrap.bundle.js" ></script >
-    <!-- slimscroll js -->
-    <script src="/dash/assets/vendor/slimscroll/jquery.slimscroll.js" ></script >
-    <!-- main js -->
-    <script src="/dash/assets/libs/js/main-js.js" ></script >
-    <!-- chart chartist js -->
-    <script src="/dash/assets/vendor/charts/chartist-bundle/chartist.min.js" ></script >
-    <!-- sparkline js -->
-    <script src="/dash/assets/vendor/charts/sparkline/jquery.sparkline.js" ></script >
-    <!-- morris js -->
-    <script src="/dash/assets/vendor/charts/morris-bundle/raphael.min.js" ></script >
-    <script src="/dash/assets/vendor/charts/morris-bundle/morris.js" ></script >
-    <!-- chart c3 js -->
-    <script src="/dash/assets/vendor/charts/c3charts/c3.min.js" ></script >
-    <script src="/dash/assets/vendor/charts/c3charts/d3-5.4.0.min.js" ></script >
-    <script src="/dash/assets/vendor/charts/c3charts/C3chartjs.js" ></script >
-    <script src="/dash/assets/libs/js/dashboard-ecommerce.js" ></script >
-    <script src="js/jquery-tablesort-master/jquery.tablesort.js" ></script >
-    <script src="js/myscript.js" ></script >
+                {% endblock %}
+{% block js_inlline  %}
     <script type="application/javascript" >
 
         new Morris.Line({
@@ -261,6 +174,4 @@
         $('table').tablesort();
 
     </script >
-</body >
-
-</html >
+{% endblock %}
