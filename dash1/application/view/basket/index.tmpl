@@ -1,0 +1,45 @@
+{% include 'templates/header.tmpl' %}
+
+<script>
+	$(document).ready(function() {
+		$(".amount").change(function() {
+			var link = $(this).closest("tr").find("a.order");
+			var original = link.attr("data-href");
+			link.attr("href", original + '&amount=' + $(this).val());
+		});
+	});
+</script>
+
+<div class="container">
+	<h4>Basket</h4>
+	<table class="table table-striped text-left">
+		<tr>
+			<th>Id</th>
+			<th>Name</th>
+			<th>Price</th>
+			<th>Amount</th>
+			<th>Remove</th>
+			<th>Buy</th>
+		</tr>
+		{% for item in items %}
+		<tr>
+			<td>{{item.id}}</td>
+			<td>{{item.name}}</td>
+			<td>{{item.price}}</td>
+			<td><input type="text" class="amount" /></td>
+			<td>
+				<a href="/?path=basket/delete&id={{item.basket_id}}" class="btn btn-success btn-small" style="display:inline;">
+					Remove
+				</a>
+			</td>
+			<td>
+				<a data-href="/?path=basket/order&id={{item.id}}" href="/?path=basket/order&id={{item.id}}" class="order btn btn-success btn-small" style="display:inline;">
+					Order
+				</a>
+			</td>
+		</tr>
+		{% endfor %}
+	</table>
+</div>
+
+{% include 'templates/footer.tmpl' %}

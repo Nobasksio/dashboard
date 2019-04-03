@@ -1,0 +1,104 @@
+{% extends '/templates/index.tmpl' %}
+
+{% block title %}
+
+{% endblock %}
+{% block linkrefresh  %}
+
+    <a class="btn btn-default"
+       onclick="refresh_date('?path={{ type }}/{{ level }}&month={% if month == False %}False{% else %}True{% endif %}')" role="button">Обновить</a>
+
+{% endblock  %}
+{% block body %}
+                <div class="ecommerce-widget" >
+
+                    <div class="row" >
+                        <div class="col-xl-9 col-lg-12 col-md-6 col-sm-12 col-12" >
+                            <div class="card" >
+                                <h5 class="card-header" >Выручка</h5 >
+                                <div class="card-body p-0" >
+                                    <div class="table-responsive" >
+                                        <table class="table table-hover" >
+                                            <thead class="bg-light" >
+                                            <tr class="border-0" >
+                                                <th class="border-0" >#</th >
+                                                <th class="border-0" >Бренд</th >
+                                                <th class="border-0" >Выручка</th >
+                                                <th class="border-0" >Выручка {{ "now"|date("Y")-1 }}</th >
+                                                <th class="border-0" >Динамика %</th >
+                                            </tr >
+                                            </thead >
+                                            <tbody >
+                                           {% for brand_item in brands%}
+                                            <tr class='link-inline' onclick="window.location.href='?path=marketing/brand&month={% if month == False %}False{% else %}True{% endif %}&id_b={{ brand_item.id_d }}&date_start={{ date_start }}&date_finish={{ date_finish }}'; return false">
+
+                                                <td > {{ loop.index }}</td >
+                                                <td >
+                                                    {{ brand_item.brand }}
+                                                </td >
+                                                <td >{{ brand_item.vir|number_format(0, ' ', ' ')  }}</td >
+                                                <td >{{ brand_item.last_year_vir|number_format(0, ' ', ' ')  }}</td >
+                                                <td class="{{ brand_item.style }}"><i class="fa fa-fw {{ brand_item.ikon }}" ></i>{{ brand_item.delta }}</td >
+                                                </a>
+                                            </tr >
+                                           {% endfor %}
+
+                                            </tbody >
+                                        </table >
+                                    </div >
+                                </div >
+                            </div >
+                        </div >
+
+                     </div >
+                     <div class="row" >
+                         <!-- ============================================================== -->
+
+                        <!-- ============================================================== -->
+
+                        <!-- recent orders  -->
+                        <!-- ============================================================== -->
+
+
+                    </div >
+
+                </div >
+{% endblock  %}
+{% block js_inlline  %}
+<script type="application/javascript" >
+
+
+        new Morris.Line({
+            // ID of the element in which to draw the chart.
+            element: 'myfirstchartK',
+            // Chart data records -- each entry in this array corresponds to a point on
+            // the chart.
+            data: [
+                {% for one_month in to_json %}
+                    {
+                        {% for str in one_month %}
+                            {% for key, info_year in str %}
+                                '{{ key }}':"{{ info_year }}",
+                            {% endfor%}
+                        {% endfor%}
+                    },
+                {% endfor%}]
+            ,
+            lineColors:['#a2b3bf','#5969ff', '#64b764'],
+            trendLineColors:['#a2b3bf','#5969ff', '#64b764'],
+            // The name of the data record attribute that contains x-values.
+            xkey: 'month',
+            // A list of names of data record attributes that contain y-values.
+            ykeys: ['2018', '2019'],
+            // Labels for the ykeys -- will be displayed when you hover over the
+            // chart.
+            labels: ['2018', '2019'],
+            parseTime: false
+
+    })
+
+
+
+
+</script >
+{% endblock  %}

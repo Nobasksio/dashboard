@@ -1,0 +1,353 @@
+<!doctype html>
+
+<head >
+    <!-- Required meta tags -->
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" >
+    <!-- Bootstrap CSS -->
+    <!-- Последняя компиляция и сжатый CSS -->
+
+    {% block mycss %}
+        <link rel="stylesheet" href="/dash/assets/vendor/bootstrap/css/bootstrap.min.css" >
+
+
+        <link href="/dash1/public/assets/air-datepicker-master/dist/css/datepicker.min.css" rel="stylesheet" type="text/css">
+
+        <link href="/dash/assets/vendor/fonts/circular-std/style.css" rel="stylesheet" >
+        <link rel="stylesheet" href="/dash1/public/css/style.css" >
+
+
+        <link rel="stylesheet" href="/dash/assets/vendor/fonts/fontawesome/css/fontawesome-all.css" >
+        <link rel="stylesheet" href="/dash/assets/vendor/charts/chartist-bundle/chartist.css" >
+        <link rel="stylesheet" href="/dash/assets/vendor/charts/morris-bundle/morris.css" >
+        <link rel="stylesheet" href="/dash/assets/vendor/fonts/material-design-iconic-font/css/materialdesignicons.min.css" >
+        <link rel="stylesheet" href="/dash/assets/vendor/charts/c3charts/c3.css" >
+        <link rel="stylesheet" href="/dash/assets/vendor/fonts/flag-icon-css/flag-icon.min.css" >
+
+    {% endblock %}
+    {% block javascript_head %}
+
+        <script src="/dash/assets/vendor/jquery/jquery-3.3.1.min.js" ></script >
+        <script src="/dash1/public/assets/air-datepicker-master/dist/js/datepicker.min.js"></script>
+
+
+    {% endblock %}
+    <!-- Дополнение к теме -->
+    <!-- Последняя компиляция и сжатый JavaScript -->
+
+
+
+     <title >{% block title %}  {{ department }} {% endblock %}</title >
+</head >
+
+<body >
+<!-- ============================================================== -->
+<!-- main wrapper -->
+<!-- ============================================================== -->
+
+
+    <!-- Yandex.Metrika counter -->
+    <script type="text/javascript" >
+        (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+            m[i].l=1*new Date();k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})
+        (window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
+
+        ym(52863175, "init", {
+            clickmap:true,
+            trackLinks:true,
+            accurateTrackBounce:true,
+            webvisor:true
+        });
+    </script>
+    <noscript><div><img src="https://mc.yandex.ru/watch/52863175" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+    <!-- /Yandex.Metrika counter -->
+    <!-- ============================================================== -->
+    <!-- main wrapper -->
+    <!-- ============================================================== -->
+    <div class="dashboard-main-wrapper" >
+
+        <div class="dashboard-header" >
+            <nav class="navbar navbar-expand-lg bg-white fixed-top" >
+                <a class="navbar-brand" href="?path=dashboard/index" >Dashboard</a >
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+                        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation" >
+                    <span class="navbar-toggler-icon" ></span >
+                </button >
+                <div class="collapse navbar-collapse " id="navbarSupportedContent" >
+                    <ul class="navbar-nav ml-auto navbar-right-top" >
+                        <li class="nav-item dropdown nav-user" >
+                            <a class="nav-link nav-user-img" href="#" id="navbarDropdownMenuLink2" data-toggle="dropdown"
+                               aria-haspopup="true" aria-expanded="false" ><img src="/dash1/public/assets/images/avatar-1.jpg"
+                                                                                alt=""
+                                                                                class="user-avatar-md rounded-circle" ></a >
+                            <div class="dropdown-menu dropdown-menu-right nav-user-dropdown"
+                                 aria-labelledby="navbarDropdownMenuLink2" >
+                                <div class="nav-user-info" >
+                                    <h5 class="mb-0 text-white nav-user-name" >
+                                        {{ user.name }}</h5 >
+                                    <!--<span class="status" ></span ><span class="ml-2" >Available</span >-->
+                                </div >
+                                {% if user.id_role==1 %}
+                                    <a class="dropdown-item" href="?path=admin/dowload" ><i class="fas fa-user mr-2" ></i >Управление выгрузкой</a >
+                                    <a class="dropdown-item" href="?path=admin/users" ><i class="fas fa-user mr-2" ></i >Пользователи</a >
+                                    <a class="dropdown-item" href="?path=admin/departments" ><i class="fas fa-user mr-2" ></i >Подразделения</a >
+                                {% endif %}
+                                <!--<a class="dropdown-item" href="#" ><i class="fas fa-cog mr-2" ></i >Setting</a >-->
+                                <a class="dropdown-item" href="?path=auth/logout" ><i class="fas fa-power-off mr-2" ></i >Logout</a >
+                            </div >
+                        </li >
+                    </ul >
+                </div >
+
+            </nav >
+
+        </div >
+        <!-- ============================================================== -->
+        <!-- end navbar -->
+        <!-- ============================================================== -->
+        <!-- ============================================================== -->
+        <!-- left sidebar -->
+        <!-- ============================================================== -->
+
+        <div class="nav-left-sidebar sidebar-dark" >
+            <div class="menu-list" >
+                <nav class="navbar navbar-expand-lg navbar-light" >
+                    <a class="d-xl-none d-lg-none" href="#" >Dashboard</a >
+                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+                            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation" >
+                        <span class="navbar-toggler-icon" ></span >
+                    </button >
+                    <div class="collapse navbar-collapse" id="navbarNav" >
+                        <ul class="navbar-nav flex-column" >
+                            <li class="nav-divider" >
+                                Меню
+                            </li >
+                            <li class="nav-item " >
+
+                                <a class="nav-link active"
+                                   href="/dash1/public/?path=dashboard/index&month={% if month == False %}False{% else %}True{% endif %}&date_start={{ date_start }}&date_finish={{ date_finish }}"
+                                   aria-controls="submenu-1" ><i
+                                            class="fa fa-fw  fa-briefcase" ></i >Общая информация <span
+                                            class="badge badge-success" >6</span ></a >
+                            </li >
+                            <li class="nav-item " >
+                                <a class="nav-link active"
+                                   href="/dash1/public/?path=marketing/index&month={% if month == False %}False{% else %}True{% endif %}&date_start={{ date_start }}&date_finish={{ date_finish }}"
+                                   aria-controls="submenu-1" ><i
+                                            class="fa fa-fw fa-shopping-basket mon" ></i >Маркетинг <span
+                                            class="badge badge-success" >6</span ></a >
+                            </li >
+                            <li class="nav-item " >
+                                <a class="nav-link active"
+                                   href="/dash1/public/?path=waiters/departments&month={% if month == False %}False{% else %}True{% endif %}&date_start={{ date_start }}&date_finish={{ date_finish }}"
+                                   aria-controls="submenu-1" ><i
+                                            class="fa fa-fw fa-user-circle" ></i >Официанты <span
+                                            class="badge badge-success" >6</span ></a >
+                            </li >
+                        </ul >
+                    </div >
+                </nav >
+            </div >
+        </div >
+
+
+    <!-- ============================================================== -->
+    <!-- end left sidebar -->
+    <!-- ============================================================== -->
+    <!-- ============================================================== -->
+    <!-- wrapper  -->
+    <!-- ============================================================== -->
+    <div class="dashboard-wrapper" >
+        <div class="dashboard-ecommerce" >
+            <div class="container-fluid dashboard-content " >
+
+
+
+
+                <div class="row" >
+                    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12" >
+                        <div class="page-header" >
+                            <h2 class="pageheader-title" >
+                                {% if type =='dashboard'%}
+                                    {% if level == 'index' %}
+                                        Пульс
+                                    {% elseif level =='brands' %}
+                                        Выручка по брендам
+                                    {% elseif level =='brand' %}
+                                        Выручка бренда {{ department }}
+                                    {% elseif level =='departments' %}
+                                        Выручка по подразделениями
+                                    {% elseif level =='department' %}
+                                        Основные показатели {{ department }}
+                                    {% elseif level =='departments' %}
+                                    {% endif %}
+                                {% elseif type == 'marketing' %}
+                                    {% if level == 'department' %}
+                                        Информация о продажах {{ department }}
+                                    {% else  %}
+                                        Информация о продажах {{ department }}
+                                    {% endif %}
+                                {% elseif type == 'waiters' %}
+                                    {% if level == 'all' %}
+                                        Информация по официантам {{ department }}
+                                    {% elseif level =='one' %}
+                                        Официант {{ waiter_name }} {{ product_name }} в {{ department }}
+                                    {% elseif level =='departments' %}
+                                        Информация по официантам по подразделениям
+                                    {% elseif level =='brands' %}
+                                        Информация по официантам по брендам
+                                    {% endif  %}
+                                {% elseif type == 'product' %}
+                                    {% if level == 'all' %}
+                                        Продажи товаров {{ department }}
+                                    {% elseif level =='one' %}
+                                        Товар {{ product_name }} в {{ department }}
+                                    {% endif  %}
+                                {% endif %}
+                            </h2 >
+                            <p class="pageheader-text" >Nulla euismod urna eros, sit amet scelerisque torton lectus vel
+                                mauris facilisis faucibus at enim quis massa lobortis rutrum.</p >
+                            {% if type !='wait'%}
+                                <div class="page-breadcrumb" >
+                                    <nav aria-label="breadcrumb" >
+                                        <ol class="breadcrumb" >
+                                            <li class="breadcrumb-item active" aria-current="page" >
+                                                Данные за период
+                                                <input type="text" data-toggle-selected="false" data-range="true" value="{{ date_start }} - {{ date_finish }}"
+                                                       data-multiple-dates-separator=" - "
+                                                       class="datepicker-here"/>
+                                                {% block linkrefresh %}
+
+                                                    <a class="btn btn-default"
+                                                       onclick="refresh_date('?path={{ type }}/{{ level }}&month={% if month == False %}False{% else %}True{% endif %}{% if level =='department'  %}&id_d={{ id_d }}{% elseif level =='brand'  %}&id_b={{ id_b }}{% elseif type =='product' %}{% if id_d %}&id_d={{ id_d }}{% endif %}{% if id_b %}&id_b={{ id_b }}{% endif %}{% if id_p %}&id_p={{ id_p }}{% endif %}{% endif %}')" role="button">Обновить</a>
+
+                                                {% endblock %}
+                                                <!--01.{% if month == False %}01{% else %}{{ "now"|date("m") }}{% endif %}.{{ "now"|date("Y") }} до {{ "now"|date("d.m.Y") }} включительно-->
+                                                <!--(обновлено в <?=$time_update?>)-->
+                                            </li >
+                                        </ol >
+                                    </nav >
+                                </div >
+                            {% endif %}
+
+                        </div >
+
+                    </div >
+                </div >
+                {% if type !='wait'%}
+                    <div class="row">
+                        {% block button %}
+
+                        <div class="col-xl-2 col-lg-6 col-md-6 col-sm-12 col-12 pb-5" >
+
+                            <ul class="nav nav-pills">
+                                <li role="presentation" {% if month == False %} class="active" {% endif %} ><a href="?path={{ type }}/{{ level }}&month=False{% if level =='department' %}&id_d={{ id_d }}{% elseif level =='brand' %}&id_b={{ id_b }}{% elseif type =='product' %}{% if id_d %}&id_d={{ id_d }}{% endif %}{% if id_b %}&id_b={{ id_b }}{% endif %}{% if id_p %}&id_p={{ id_p }}{% endif %}{% endif %}&date_start={{ "first day of january this year"| date("d.m.Y") }}&date_finish={{ "now"| date("d.m.Y") }}">Год</a></li>
+                                <li role="presentation" {% if month == TRUE %} class="active" {% endif %} ><a href="?path={{ type }}/{{ level }}&month=True{% if level =='department' %}&id_d={{ id_d }}{% elseif level =='brand' %}&id_b={{ id_b }}{% elseif type =='product' %}{% if id_d %}&id_d={{ id_d }}{% endif %}{% if id_b %}&id_b={{ id_b }}{% endif %}{% if id_p %}&id_p={{ id_p }}{% endif %}{% endif %}&date_start={{ "first day of this month"| date("d.m.Y") }}&date_finish={{ "now"| date("d.m.Y") }}">Месяц</a></li>
+                            </ul>
+
+                        </div>
+                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 pb-5" >
+
+                            <ul class="nav nav-pills">
+                                <!--<li role="presentation" class="{% if level == "index" %}active{% endif %}"><a href="?path={{ type }}/chain&month={% if month == False %}False{% else %}True{% endif %}">Сеть</a></li>-->
+                                <li role="presentation" class="{% if level == "brands" %}active{% endif %}" ><a href="?path={% if type != 'product' %}{{ type }}{% else %}marketing{% endif %}/brands&month={% if month == False %}False{% else %}True{% endif %}&date_start={{ date_start }}&date_finish={{ date_finish }}">Бренды</a></li>
+                                <li role="presentation" class="{% if level == "departments" %}active{% endif %}"><a href="?path={{ type }}/departments&month={% if month == False %}False{% else %}True{% endif %}&date_start={{ date_start }}&date_finish={{ date_finish }}">Подразделения</a></li>
+                            </ul>
+
+                        </div>
+
+                        {% endblock %}
+
+                    </div>
+                {% endif %}
+
+
+
+
+
+
+
+
+
+                 {% block body %}
+
+
+                <div class="ecommerce-widget" >
+
+                    Пока здесь пусто. Потому что вам не назначены права на просмотр каких-либо подразделений. Но скоро всё изменится)
+
+
+                </div >
+
+                </div >
+                {% endblock %}
+            </div >
+        </div >
+        <!-- ============================================================== -->
+        <!-- footer -->
+        <!-- ============================================================== -->
+        <div class="footer" >
+            <div class="container-fluid" >
+                <div class="row" >
+                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12" >
+                        <!--Copyright © 2018 Concept. All rights reserved. Dashboard by <a href="https://colorlib.com/wp/" >Colorlib</a >.-->
+                    </div >
+                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12" >
+                        <div class="text-md-right footer-links d-none d-sm-block" >
+                            <!--
+                            <a href="javascript: void(0);" >About</a >
+                            <a href="javascript: void(0);" >Support</a >
+                            <a href="javascript: void(0);" >Contact Us</a >
+                            -->
+                        </div >
+                    </div >
+                </div >
+            </div >
+        </div >
+        <!-- ============================================================== -->
+        <!-- end footer -->
+        <!-- ============================================================== -->
+    </div >
+    <!-- ============================================================== -->
+    <!-- end wrapper  -->
+    <!-- ============================================================== -->
+</div >
+<!-- ============================================================== -->
+<!-- end main wrapper  -->
+<!-- ============================================================== -->
+<!-- Optional JavaScript -->
+<!-- jquery 3.3.1 -->
+
+<!-- bootstap bundle js -->
+
+{% block js_footer %}
+<script src="/dash/assets/vendor/bootstrap/js/bootstrap.bundle.js" ></script >
+<!-- slimscroll js -->
+<script src="/dash/assets/vendor/slimscroll/jquery.slimscroll.js" ></script >
+<!-- main js -->
+<script src="/dash/assets/libs/js/main-js.js" ></script >
+<!-- chart chartist js -->
+<script src="/dash/assets/vendor/charts/chartist-bundle/chartist.min.js" ></script >
+<!-- sparkline js -->
+<script src="/dash/assets/vendor/charts/sparkline/jquery.sparkline.js" ></script >
+<!-- morris js -->
+<script src="/dash/assets/vendor/charts/morris-bundle/raphael.min.js" ></script >
+<script src="/dash/assets/vendor/charts/morris-bundle/morris.js" ></script >
+<!-- chart c3 js -->
+<script src="/dash/assets/vendor/charts/c3charts/c3.min.js" ></script >
+<script src="/dash/assets/vendor/charts/c3charts/d3-5.4.0.min.js" ></script >
+<script src="/dash/assets/vendor/charts/c3charts/C3chartjs.js" ></script >
+<script src="/dash/assets/libs/js/dashboard-ecommerce.js" ></script >
+    <script src="js/myscript.js" ></script >
+    <script src="js/jquery-tablesort-master/jquery.tablesort.js" ></script >
+{% endblock %}
+{% block js_inlline %}
+<script type="application/javascript" >
+
+
+
+</script >
+{% endblock %}
+</body >
+
+</html >

@@ -1,0 +1,98 @@
+{% extends '/templates/index.tmpl' %}
+
+{% block title %}
+
+{% endblock %}
+
+{% block linkrefresh  %}
+
+    <a class="btn btn-default"
+       onclick="refresh_date('?path={{ type }}/{{ level }}&month={% if month == False %}False{% else %}True{% endif %}{% if id_d %}&id_d={{ id_d }}{% endif %}{% if id_b %}&id_b={{ id_b }}{% endif %}')" role="button">Обновить</a>
+
+{% endblock  %}
+{% block button %}
+
+    <div class="col-xl-2 col-lg-6 col-md-6 col-sm-12 col-12 pb-5" >
+
+        <ul class="nav nav-pills">
+            <li role="presentation" {% if month == False %} class="active" {% endif %} ><a href="?path={{ type }}/{{ level }}&month=False{% if id_d %}&id_d={{ id_d }}{% endif %}{% if id_b %}&id_b={{ id_b }}{% endif %}&date_start={{ "first day of january this year"| date("d.m.Y") }}&date_finish={{ "now"| date("d.m.Y") }}">Год</a></li>
+            <li role="presentation" {% if month == TRUE %} class="active" {% endif %} ><a href="?path={{ type }}/{{ level }}&month=True{% if id_d %}&id_d={{ id_d }}{% endif %}{% if id_b %}&id_b={{ id_b }}{% endif %}&date_start={{ "first day of this month"| date("d.m.Y") }}&date_finish={{ "now"| date("d.m.Y") }}">Месяц</a></li>
+        </ul>
+
+    </div>
+    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 pb-5" >
+
+        <ul class="nav nav-pills">
+            <!--<li role="presentation" class="{% if level == "index" %}active{% endif %}"><a href="?path={{ type }}/chain&month={% if month == False %}False{% else %}True{% endif %}">Сеть</a></li>-->
+            <!--<li role="presentation" class="{% if level == "brands" %}active{% endif %}" ><a href="?path={{ type }}/brands&month={% if month == False %}False{% else %}True{% endif %}{% if id_d %}&id_d={{ id_d }}{% endif %}{% if id_b %}&id_b={{ id_b }}{% endif %}&date_start={{ date_start }}&date_finish={{ date_finish }}">Бренды</a></li>-->
+            <li role="presentation" class="{% if level == "departments" %}active{% endif %}"><a href="?path={{ type }}/departments&month={% if month == False %}False{% else %}True{% endif %}{% if id_d %}&id_d={{ id_d }}{% endif %}{% if id_b %}&id_b={{ id_b }}{% endif %}&date_start={{ date_start }}&date_finish={{ date_finish }}">Подразделения</a></li>
+        </ul>
+
+    </div>
+
+{% endblock %}
+                {% block body %}
+                <div class="ecommerce-widget" >
+
+                    <div class="row" >
+                        <!-- ============================================================== -->
+
+                        <!-- ============================================================== -->
+
+                        <!-- recent orders  -->
+                        <!-- ============================================================== -->
+                        <div class="col-xl-6 col-lg-12 col-md-6 col-sm-12 col-12" >
+                            <div class="card" >
+                                <h5 class="card-header" >Официанты</h5 >
+                                <div class="card-body p-0" >
+                                    <div class="table-responsive" >
+                                        <table class="table" >
+                                            <thead class="bg-light" >
+                                            <tr class="border-0" >
+                                                <th class="border-0" >#</th >
+                                                <th class="border-0" >Официант</th >
+                                                <th class="border-0" >Средний чек</th >
+                                                <th class="border-0" >Сумма</th >
+                                                <th class="border-0" >Чеков</th >
+
+                                            </tr >
+                                            </thead >
+                                            <tbody >
+                                            {% for waiter,item in waiter_arr%}
+                                                <tr class='link-inline' onclick="window.location.href='?path=waiters/one&month={% if month == False %}False{% else %}True{% endif %}{% if id_d %}&id_d={{ id_d }}{% endif %}{% if id_b %}&id_b={{ id_b }}{% endif %}&id_waiter={{ item.id }}&date_start={{ date_start }}&date_finish={{ date_finish }}'; return false">
+
+                                                    <td data-sort-value="{{ loop.index }}"> {{ loop.index }}</td >
+                                                    <td data-sort-value="{{ waiter }}">
+                                                        {{ waiter }}
+                                                    </td >
+
+                                                    <td data-sort-value="{{ (item.sum/item.num) }}">{{ (item.sum/item.num)|number_format(0, ' ', ' ')  }}</td >
+                                                    <td data-sort-value="{{ item.sum }}">{{ item.sum|number_format(0, ' ', ' ')  }}</td >
+                                                    <td data-sort-value="{{ item.num }}" >{{ item.num|number_format(0, ' ', ' ')  }}</td >
+                                                    </a>
+                                                </tr >
+                                            {% endfor %}
+
+                                            </tbody >
+                                        </table >
+                                        <div class="container">
+                                            <a href="?path=product/all&month=True{% if id_d %}&id_d={{ id_d }}{% endif %}{% if id_b %}&id_b={{ id_b }}{% endif %}&date_start={{ date_start }}&date_finish={{ date_finish }}" class="btn btn-outline-light float-right mb-3 " >View
+                                                Details</a >
+                                        </div>
+                                    </div >
+                                </div >
+                            </div >
+                        </div >
+
+
+
+                    </div >
+
+                </div >
+                {% endblock %}
+{% block js_inlline  %}
+<script type="application/javascript" >
+    $('table').tablesort();
+
+</script >
+{% endblock %}

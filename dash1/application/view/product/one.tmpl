@@ -1,0 +1,177 @@
+{% extends '/templates/index.tmpl' %}
+
+{% block title %}
+
+{% endblock %}
+
+{% block linkrefresh  %}
+
+    <a class="btn btn-default"
+       onclick="refresh_date('?path={{ type }}/{{ level }}&month={% if month == False %}False{% else %}True{% endif %}{% if id_d %}&id_d={{ id_d }}{% endif %}{% if id_b %}&id_b={{ id_b }}{% endif %}{% if id_p %}&id_p={{ id_p }}{% endif %}')" role="button">Обновить</a>
+
+{% endblock  %}
+                {% block body %}
+                <div class="ecommerce-widget" >
+
+
+
+                    <div class="row">
+                        <div class="col-xl-3 col-lg-6 col-md-6 col-sm-12 col-12" >
+                            <div class="card" >
+                                <div class="card-body" >
+                                    <h5 class="text-muted" >
+                                        Колебания себестоимости {% if month == TRUE %}в этом месяце {% else %}В этому году{% endif %}</h5 >
+                                    <div class="metric-value d-inline-block" >
+                                        <h1 class="mb-1" >{{ delta_ss.delta_per|number_format(2, ',', ' ') }} %</h1 >
+                                    </div >
+                                    <div class="metric-label d-inline-block float-right font-weight-bold" >
+                                        <span ><i class="fa fa-fw " ></i ></span ><span >{{ delta_ss.delta_rub|number_format(2, ',', ' ') }} р</span >
+                                    </div >
+                                </div >
+                                <!-- <div id="sparkline-revenue" ></div >-->
+                            </div >
+                        </div >
+                    </div>
+                        <div class="row">
+                        <div class="col-xl-6  col-lg-7 col-md-12 col-sm-12 col-12" >
+                            <div class="card" >
+                                <h5 class="card-header" > Cc по {% if month == TRUE %}дням{% else %}месяцам{% endif %}
+                                    %</h5 >
+                                <div class="card-body" >
+                                    <div id="ssm" ></div >
+                                </div >
+                                <div class="card-footer" >
+                                    <p class="display-7 font-weight-bold" > <!-- <span
+                                                class="text-primary d-inline-block" >{{ fot|number_format(0, ' ', ' ') }}
+                                            руб</span >
+                                        <!-- <span class="metric-label d-inline-block float-right {% if per_fot < 20 %}text-success{% else %}text-danger{% endif %} font-weight-bold" >
+                                        <span ><i class="fa fa-fw " ></i ></span ><span >{{ per_fot }}%</span >-->
+                                    </span ></p >
+                                </div >
+                            </div >
+                        </div >
+                        <div class="col-xl-6  col-lg-7 col-md-12 col-sm-12 col-12" >
+                            <div class="card" >
+                                <h5 class="card-header" > Продажи по {% if month == TRUE %}дням{% else %}месяцам{% endif %}
+                                    %</h5 >
+                                <div class="card-body" >
+                                    <div id="sale" ></div >
+                                </div >
+                                <div class="card-footer" >
+                                    <p class="display-7 font-weight-bold" > <!-- <span
+                                                class="text-primary d-inline-block" >{{ fot|number_format(0, ' ', ' ') }}
+                                            руб</span >
+                                      <span class="metric-label d-inline-block float-right {% if per_fot < 20 %}text-success{% else %}text-danger{% endif %} font-weight-bold" >
+                                        <span ><i class="fa fa-fw " ></i ></span ><span >{{ per_fot }}%</span >-->
+                                    </span ></p >
+                                </div >
+                            </div >
+                        </div >
+                        </div >
+                            <div class="row">
+                            <div class="col-xl-12 col-lg-12 col-md-6 col-sm-12 col-12" >
+                                <div class="card" >
+                                    <h5 class="card-header" >Совместимость блюд</h5 >
+                                    <div class="card-body p-0" >
+                                        <div class="table-responsive" >
+                                            <table class="table" >
+                                                <thead class="bg-light" >
+                                                <tr class="border-0" >
+                                                    <th class="border-0" >#</th >
+                                                    <th class="border-0" >Блюдо</th >
+                                                    <th class="border-0" ><strong>Количество</strong></th >
+                                                    <th class="border-0" >Вероятность </th >
+
+                                                </tr >
+                                                </thead >
+                                                <tbody >
+                                                {% for dish_item in relations %}
+
+                                                    <tr class='link-inline' >
+
+                                                        <td > {{ loop.index }}</td >
+                                                        <td >
+                                                            {{ dish_item.dish_name }}
+                                                        </td >
+
+                                                        <td data-sort-value="{{ dish_item.count_rel }}" >{{ dish_item.count_rel|number_format(0, ',', ' ')  }}</td >
+                                                        <td data-sort-value="{{ (dish_item.count_rel/(count_order/100)) }}" >{{ (dish_item.count_rel/(count_order/100))|number_format(0, ',', ' ')  }}</td >
+
+                                                    </tr >
+                                                {% endfor %}
+
+                                                </tbody >
+                                            </table >
+                                        </div >
+                                    </div >
+                                </div >
+                            </div >
+                            </div >
+                    </div >
+                </div >
+                {% endblock %}
+{% block js_inlline  %}
+    <script type="application/javascript" >
+
+        new Morris.Line({
+            // ID of the element in which to draw the chart.
+            element: 'ssm',
+            // Chart data records -- each entry in this array corresponds to a point on
+            // the chart.
+            data: [
+                {% for one_month in ss %}
+                {
+                    {% for str in one_month %}
+                    {% for key, info_year in str %}
+                    '{{ key }}': "{{ info_year }}",
+                    {% endfor %}
+                    {% endfor %}
+                },
+                {% endfor %}]
+            ,
+            lineColors: ['#a2b3bf', '#5969ff', '#64b764'],
+            trendLineColors: ['#a2b3bf', '#5969ff', '#64b764'],
+            // The name of the data record attribute that contains x-values.
+            xkey: '{{ separator_name }}',
+            // A list of names of data record attributes that contain y-values.
+            ykeys: ['2018', '2019'],
+            // Labels for the ykeys -- will be displayed when you hover over the
+            // chart.
+            labels: ['2018', '2019'],
+            parseTime: false
+
+        });
+        new Morris.Line({
+            // ID of the element in which to draw the chart.
+            element: 'sale',
+            // Chart data records -- each entry in this array corresponds to a point on
+            // the chart.
+            data: [
+                {% for one_month in count %}
+                {
+                    {% for str in one_month %}
+                    {% for key, info_year in str %}
+                    '{{ key }}': "{{ info_year }}",
+                    {% endfor %}
+                    {% endfor %}
+                },
+                {% endfor %}]
+            ,
+            lineColors: ['#a2b3bf', '#5969ff', '#64b764'],
+            trendLineColors: ['#a2b3bf', '#5969ff', '#64b764'],
+            // The name of the data record attribute that contains x-values.
+            xkey: '{{ separator_name }}',
+            // A list of names of data record attributes that contain y-values.
+            ykeys: ['2018', '2019'],
+            // Labels for the ykeys -- will be displayed when you hover over the
+            // chart.
+            labels: ['2018', '2019'],
+            parseTime: false
+
+        })
+
+
+        $('table').tablesort();
+
+    </script >
+{% endblock %}

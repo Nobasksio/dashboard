@@ -1,0 +1,106 @@
+{% extends '/templates/index.tmpl' %}
+{% block linkrefresh  %}
+
+
+{% endblock  %}
+{% block title %} Управление выгрузкой {% endblock %}
+
+{% block body %}
+                <div class="ecommerce-widget" >
+
+                    <div class="row" >
+                        <div class="col-xl-9 col-lg-12 col-md-6 col-sm-12 col-12" >
+                            <div class="card" >
+
+                                <div class="card-body p-0" >
+                                    <div class="table-responsive" >
+                                        <table class="table table-hover" >
+                                            <thead class="bg-light" >
+                                            <tr class="border-0" >
+                                                <th class="border-0" >#</th >
+                                                <th class="border-0" >Login</th >
+                                                <th class="border-0" >Name</th >
+                                                <th class="border-0" >Роль</th >
+                                            </tr >
+                                            </thead >
+                                            <tbody >
+                                           {% for department_name, dep_arr in users%}
+
+                                                {% for dep in dep_arr %}
+                                                <tr class='link-inline' >
+
+                                                    <td >
+
+                                                    </td >
+                                                    <td >{{ dep.user_name }}</td >
+                                                    <td > {{ department_name }}</td >
+                                                    <td >{{ dep.modul }}</td >
+                                                    <td >{{ dep.last_activ }}</td >
+
+                                                </tr >
+                                                {% endfor %}
+                                            </tr >
+                                           {% endfor %}
+
+                                            </tbody >
+                                        </table >
+                                    </div >
+                                </div >
+                            </div >
+                        </div >
+
+                     </div >
+{% endblock %}
+{% block js_footer %}
+{% endblock %}
+{% block js_inlline %}
+
+
+<script type="application/javascript" >
+
+
+    function setViewGroup(status,id_dep,id_category) {
+        $.ajax({
+            type: 'GET',
+            url: '?path=admin/setviewgroup',
+            data: {"status": status,
+                'id_dep':id_dep,
+                'id_category':id_category
+            },
+            success: function(result) {
+                if (status==true){
+                    status = false;
+                } else {
+                    status = true;
+                }
+                $('#check'+id_category).attr('onClick','setRight('+status+','+id_dep+','+id_category+')')
+            }
+        });
+
+    }
+    function setAlias(id_dep,id_category) {
+        let alias = $('#alias'+id_category).val();
+
+        $.ajax({
+            type: 'GET',
+            url: '?path=admin/setaliasCategory',
+            data: {"alias": alias,
+                'id_dep':id_dep,
+                'id_category':id_category
+            },
+            success: function(result) {
+                if (status==true){
+                    status = false;
+                } else {
+                    status = true;
+                }
+                $('#tr'+id_category).addClass('good');
+
+
+                $('#tr'+id_category).removeClass('good', 1000);
+            }
+        });
+    }
+
+</script >
+{% endblock %}

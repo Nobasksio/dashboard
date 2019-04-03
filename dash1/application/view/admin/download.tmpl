@@ -1,0 +1,65 @@
+{% extends '/templates/index.tmpl' %}
+{% block linkrefresh  %}
+
+
+{% endblock  %}
+{% block title %} Управление выгрузкой {% endblock %}
+
+{% block body %}
+                <div class="ecommerce-widget" >
+
+                </div >
+{% endblock %}
+{% block js_footer %}
+{% endblock %}
+{% block js_inlline %}
+
+
+<script type="application/javascript" >
+
+
+    function setViewGroup(status,id_dep,id_category) {
+        $.ajax({
+            type: 'GET',
+            url: '?path=admin/setviewgroup',
+            data: {"status": status,
+                'id_dep':id_dep,
+                'id_category':id_category
+            },
+            success: function(result) {
+                if (status==true){
+                    status = false;
+                } else {
+                    status = true;
+                }
+                $('#check'+id_category).attr('onClick','setRight('+status+','+id_dep+','+id_category+')')
+            }
+        });
+
+    }
+    function setAlias(id_dep,id_category) {
+        let alias = $('#alias'+id_category).val();
+
+        $.ajax({
+            type: 'GET',
+            url: '?path=admin/setaliasCategory',
+            data: {"alias": alias,
+                'id_dep':id_dep,
+                'id_category':id_category
+            },
+            success: function(result) {
+                if (status==true){
+                    status = false;
+                } else {
+                    status = true;
+                }
+                $('#tr'+id_category).addClass('good');
+
+
+                $('#tr'+id_category).removeClass('good', 1000);
+            }
+        });
+    }
+
+</script >
+{% endblock %}

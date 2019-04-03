@@ -1,0 +1,192 @@
+{% extends '/templates/index.tmpl' %}
+{% block linkrefresh  %}
+
+
+{% endblock  %}
+{% block title %} Управление подразделением {% endblock %}
+{% block javascript_head %}
+
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script src="/dash1/public/assets/air-datepicker-master/dist/js/datepicker.min.js"></script>
+
+
+{% endblock %}
+{% block body %}
+                <div class="ecommerce-widget" >
+
+                     <div class="row" >
+                         <div class="col-xl-3 col-lg-12 col-md-12 col-sm-12 col-12" >
+
+                             <div class="form-group">
+                                 <label for="Алиас" class="col-form-label">Алиас</label>
+                                 <input id="inputText3" type="text" class="form-control" value="{{ department.alias }}">
+                             </div>
+                             <h4>Брэнд</h4>
+                             <div class="form-group">
+                                 <select class="form-control form-control-sm">
+                                     <option>{{ department.name }}</option>
+                                 </select>
+                             </div>
+                         </div>
+
+                    </div >
+                    <div class="row" >
+                        <div class="col-xl-9 col-lg-12 col-md-6 col-sm-12 col-12" >
+                            <h4>Категории</h4>
+                            <div class="card" >
+
+                                <div class="card-body p-0" >
+                                    <div class="table-responsive" >
+                                        <table class="table " >
+                                            <thead class="bg-light" >
+                                            <tr class="border-0" >
+                                                <th class="border-0" >#</th >
+                                                <th class="border-0" >Продукты</th >
+                                                <th class="border-0" >Алиас</th >
+
+                                                <th class="border-0" >Следить</th >
+                                            </tr >
+                                            </thead >
+                                            <tbody >
+                                            {% for category_item in category if category_item.category_name!='' %}
+                                                <tr id='tr{{ category_item.id_category }}'>
+
+                                                    <td > {{ loop.index }}</td >
+                                                    <td >
+                                                        {{ category_item.category_name }}
+                                                    </td >
+                                                    <td >
+                                                        <div class="form-group">
+                                                            <input type="text" id="alias{{ category_item.id_category }}" class="form-control" value="{{ category_item.alias_name }}">
+                                                        </div>
+
+                                                    </td >
+                                                    <td align='center'>
+                                                        <label>
+                                                            <input type="checkbox" value="" id="check{{ category_item.id_category }}" {% if category_item.statusm == 1 %}checked{% endif %}  onclick="setViewGroup({% if category_item.statusm  == 1 %}false{% else %}true{% endif %},{{ category_item.department_id }},{{ category_item.id_category }})">
+
+                                                        </label>
+                                                        <button type="button" class="btn btn-primary" onclick="setAlias({{ category_item.department_id }},{{ category_item.id_category }})">Сохранить</button>
+                                                    </td >
+
+                                                </tr >
+                                            {% endfor %}
+
+                                            </tbody >
+                                        </table >
+                                    </div >
+                                </div >
+                            </div >
+                        </div >
+
+                    </div >
+                    <div class="row" >
+                        <div class="col-xl-9 col-lg-12 col-md-6 col-sm-12 col-12" >
+                            <h4>Продукты</h4>
+                            <div class="card" >
+
+                                <div class="card-body p-0" >
+                                    <div class="table-responsive" >
+                                        <table class="table table-hover" >
+                                            <thead class="bg-light" >
+                                            <tr class="border-0" >
+                                                <th class="border-0" >#</th >
+                                                <th class="border-0" >Продукты</th >
+                                                <th class="border-0" >Группа</th >
+                                                <th class="border-0" >Тип</th >
+                                                <th class="border-0" >Следить</th >
+                                            </tr >
+                                            </thead >
+                                            <tbody >
+                                            {% for name, product_item in product %}
+                                                <tr class='link-inline' >
+
+                                                    <td > {{ loop.index }}</td >
+                                                    <td >
+                                                        {{ name }}
+                                                    </td >
+                                                    <td >
+                                                        <select class="form-control form-control-sm">
+                                                            <option>{{ product_item.group }}</option>
+                                                        </select>
+                                                    </td >
+                                                    <td >
+                                                        <select class="form-control form-control-sm">
+                                                            <option>{{ product_item.group }}</option>
+                                                        </select>
+                                                    </td >
+                                                    <td >
+                                                        <label>
+                                                            <input type="checkbox" value="" id="check{{ department_item.id_department }}" {% if department_item.right  ==1 %}checked{% endif %}  onclick="setRight({% if department_item.right  ==1 %}false{% else %}true{% endif %},{{ department_item.id_department }},{{ department_item.id_department }})">
+
+                                                        </label>
+                                                    </td >
+
+                                                </tr >
+                                            {% endfor %}
+
+                                            </tbody >
+                                        </table >
+                                    </div >
+                                </div >
+                            </div >
+                        </div >
+
+                    </div >
+
+                </div >
+{% endblock %}
+{% block js_footer %}
+{% endblock %}
+{% block js_inlline %}
+
+
+<script type="application/javascript" >
+
+
+    function setViewGroup(status,id_dep,id_category) {
+        $.ajax({
+            type: 'GET',
+            url: '?path=admin/setviewgroup',
+            data: {"status": status,
+                'id_dep':id_dep,
+                'id_category':id_category
+            },
+            success: function(result) {
+                if (status==true){
+                    status = false;
+                } else {
+                    status = true;
+                }
+                $('#check'+id_category).attr('onClick','setRight('+status+','+id_dep+','+id_category+')')
+            }
+        });
+
+    }
+    function setAlias(id_dep,id_category) {
+        let alias = $('#alias'+id_category).val();
+
+        $.ajax({
+            type: 'GET',
+            url: '?path=admin/setaliasCategory',
+            data: {"alias": alias,
+                'id_dep':id_dep,
+                'id_category':id_category
+            },
+            success: function(result) {
+                if (status==true){
+                    status = false;
+                } else {
+                    status = true;
+                }
+                $('#tr'+id_category).addClass('good');
+
+
+                $('#tr'+id_category).removeClass('good', 1000);
+            }
+        });
+    }
+
+</script >
+{% endblock %}

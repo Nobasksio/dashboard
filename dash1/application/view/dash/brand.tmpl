@@ -1,0 +1,286 @@
+{% extends '/templates/index.tmpl' %}
+{% block linkrefresh  %}
+
+    <a class="btn btn-default"
+       onclick="refresh_date('?path={{ type }}/{{ level }}&month={% if month == False %}False{% else %}True{% endif %}&id_b={{ id_b }}')" role="button">Обновить</a>
+
+{% endblock  %}
+                {% block body %}
+                <div class="ecommerce-widget" >
+
+                    <div class="row" >
+                        <div class="col-xl-3 col-lg-6 col-md-6 col-sm-12 col-12" >
+                            <div class="card" >
+                                <div class="card-body" >
+                                    <h5 class="text-muted" >{% if month == TRUE %}В этом месяце {% else %}В этому году{% endif %}</h5 >
+                                    <div class="metric-value d-inline-block" >
+                                        <h1 class="mb-1" >{{ all_summ|number_format(0, ' ', ' ') }} руб</h1 >
+                                    </div >
+                                    <div class="metric-label d-inline-block float-right {{ style }} font-weight-bold" >
+                                        <span ><i class="fa fa-fw {{ ikon }}" ></i ></span ><span >{{ per_delta }}%</span >
+                                    </div >
+                                </div >
+                                <!-- <div id="sparkline-revenue" ></div >-->
+                            </div >
+                        </div >
+
+                        <div class="col-xl-3 col-lg-6 col-md-6 col-sm-12 col-12" >
+                            <div class="card" >
+                                <div class="card-body" >
+                                    <h5 class="text-muted" >Фот {% if month == TRUE %}в этом месяце {% else %}В этому году{% endif %}</h5 >
+                                    <div class="metric-value d-inline-block" >
+                                        <h1 class="mb-1" >{{ fot|number_format(0, ' ', ' ') }} руб</h1 >
+                                    </div >
+                                    <div class="metric-label d-inline-block float-right font-weight-bold" >
+                                        <span ><i class="fa fa-fw " ></i ></span ><span >{{ per_fot }}%</span >
+                                    </div >
+                                </div >
+                                <!-- <div id="sparkline-revenue" ></div >-->
+                            </div >
+                        </div >
+                        <div class="col-xl-3 col-lg-6 col-md-6 col-sm-12 col-12" >
+                            <div class="card" >
+                                <div class="card-body" >
+                                    <h5 class="text-muted" >СС {% if month == TRUE %}в этом месяце {% else %}В этому году{% endif %}</h5 >
+                                    <div class="metric-value d-inline-block" >
+                                        <h1 class="mb-1" >{{ all_summ_ss|number_format(0, ' ', ' ') }} руб</h1 >
+                                    </div >
+                                    <div class="metric-label d-inline-block float-right font-weight-bold" >
+                                        <span ><i class="fa fa-fw" ></i ></span ><span >{{ per_ss }}%</span >
+                                    </div >
+                                </div >
+                                <!-- <div id="sparkline-revenue" ></div >-->
+                            </div >
+                        </div >
+                    </div >
+                    <div class="row" >
+                        <!-- ============================================================== -->
+
+                        <!-- ============================================================== -->
+
+                        <!-- recent orders  -->
+                        <!-- ============================================================== -->
+
+
+                        <div class="col-xl-6  col-lg-7 col-md-12 col-sm-12 col-12" >
+                            <div class="card" >
+                                <h5 class="card-header" > Выручка по {% if month == TRUE %}дням{% else %}месяцам{% endif %}</h5 >
+                                <div class="card-body" >
+                                    <div id="myfirstchartK" ></div >
+                                </div >
+                                <div class="card-footer" >
+                                    <p class="display-7 font-weight-bold" ><span
+                                                class="text-primary d-inline-block" >{{ all_summ|number_format(0, ' ', ' ') }} руб</span >
+                                        <span class="metric-label d-inline-block float-right text-success font-weight-bold" >
+                                        <span ><i class="fa fa-fw fa-arrow-up" ></i ></span ><span >{{ per_delta }}%</span >
+                                    </span ></p >
+                                </div >
+                            </div >
+                        </div >
+                        <div class="col-xl-6  col-lg-7 col-md-12 col-sm-12 col-12" >
+                            <div class="card" >
+                                <h5 class="card-header" > Фот по {% if month == TRUE %}дням{% else %}месяцам{% endif %} %</h5 >
+                                <div class="card-body" >
+                                    <div id="fot" ></div >
+                                </div >
+                                <div class="card-footer" >
+                                    <p class="display-7 font-weight-bold" ><span
+                                                class="text-primary d-inline-block" >{{ fot|number_format(0, ' ', ' ') }} руб</span >
+                                        <span class="metric-label d-inline-block float-right {% if per_fot < 20 %}text-success{% else %}text-danger{% endif %} font-weight-bold" >
+                                        <span ><i class="fa fa-fw " ></i ></span ><span >{{ per_fot }}%</span >
+                                    </span ></p >
+                                </div >
+                            </div >
+                        </div >
+                        <div class="col-xl-6  col-lg-7 col-md-12 col-sm-12 col-12" >
+                            <div class="card" >
+                                <h5 class="card-header" > Себестоимость по {% if month == TRUE %}дням{% else %}месяцам{% endif %} %</h5 >
+                                <div class="card-body" >
+                                    <div id="ss" ></div >
+                                </div >
+                                <div class="card-footer" >
+                                    <p class="display-7 font-weight-bold" ><span
+                                                class="text-primary d-inline-block" >{{ all_summ_ss|number_format(0, ' ', ' ') }} руб</span >
+                                        <span class="metric-label d-inline-block float-right {% if per_ss < 32 %}text-success{% else %}text-danger{% endif %} font-weight-bold" >
+                                        <span ><i class="fa fa-fw " ></i ></span ><span >{{ per_ss }}%</span >
+                                    </span ></p >
+                                </div >
+                            </div >
+                        </div >
+
+
+
+
+
+
+
+
+
+
+                    </div >
+                    <div class="row">
+
+                        <div class="col-xl-12 col-lg-12 col-md-6 col-sm-12 col-12" >
+                            <div class="card" >
+                                <h5 class="card-header" >Выручка</h5 >
+                                <div class="card-body p-0" >
+                                    <div class="table-responsive" >
+                                        <table class="table table-hover" >
+                                            <thead class="bg-light" >
+
+                                            <tr class="border-0" >
+                                                <th class="border-0" ></th >
+                                                {% for fot_date,fot_value in to_table_fot%}
+                                                    <th class="border-0" >{{ fot_date }}.{{ "now"|date("m") }}</th >
+                                                {% endfor %}
+                                            </tr >
+                                            </thead >
+                                            <tbody >
+
+                                            <tr class='link-inline' >
+                                                <td  rowspan="2"> ФОТ </td >
+                                                {% for fot_date,fot_value in to_table_fot%}
+                                                    <td > {{ fot_value }}</td >
+                                                {% endfor %}
+
+
+                                            </tr >
+                                            <tr class='link-inline' >
+                                                {% for fot_date,fot_value in to_table_fot_per%}
+                                                    <td class="{% if fot_value < 20 %}text-success{% else %}text-danger{% endif %} "> {{ fot_value }}%</td >
+                                                {% endfor %}
+                                            </tr >
+                                            <tr class='link-inline' >
+                                                <td  rowspan="2"> CC </td >
+                                                {% for fot_date,fot_value in to_table_ss%}
+                                                    <td > {{ fot_value }}</td >
+                                                {% endfor %}
+
+
+                                            </tr >
+                                            <tr class='link-inline' >
+                                                {% for fot_date,fot_value in to_table_ss_per%}
+                                                    <td class="{% if fot_value < 32 %}text-success{% else %}text-danger{% endif %} "> {{ fot_value }}%</td >
+                                                {% endfor %}
+                                            </tr >
+                                            <tr class='link-inline' >
+                                                <td  rowspan="2"> Такси </td >
+                                                {% for fot_date,fot_value in to_table_taxi%}
+                                                    <td > {{ fot_value }}</td >
+                                                {% endfor %}
+
+
+                                            </tr >
+                                            <tr class='link-inline' >
+                                                {% for fot_date,fot_value in to_table_taxi_per%}
+                                                    <td class="{% if fot_value < 32 %}text-success{% else %}text-danger{% endif %} "> {{ fot_value }}%</td >
+                                                {% endfor %}
+                                            </tr >
+
+                                            </tbody >
+                                        </table >
+                                    </div >
+                                </div >
+                            </div >
+
+                        </div>
+
+                    </div >
+                </div >
+            </div >
+
+            {% endblock %}
+
+{% block js_inlline  %}
+    <script type="application/javascript" >
+
+
+        new Morris.Line({
+            // ID of the element in which to draw the chart.
+            element: 'myfirstchartK',
+            // Chart data records -- each entry in this array corresponds to a point on
+            // the chart.
+            data: [
+                {% for one_month in to_json %}
+                {
+                    {% for str in one_month %}
+                    {% for key, info_year in str %}
+                    '{{ key }}':"{{ info_year }}",
+                    {% endfor%}
+                    {% endfor%}
+                },
+                {% endfor%}]
+            ,
+            lineColors:['#a2b3bf','#5969ff', '#64b764'],
+            trendLineColors:['#a2b3bf','#5969ff', '#64b764'],
+            // The name of the data record attribute that contains x-values.
+            xkey: '{{ separator_name }}',
+            // A list of names of data record attributes that contain y-values.
+            ykeys: ['2018', '2019'],
+            // Labels for the ykeys -- will be displayed when you hover over the
+            // chart.
+            labels: ['2018', '2019'],
+            parseTime: false
+
+        })
+        new Morris.Line({
+            // ID of the element in which to draw the chart.
+            element: 'fot',
+            // Chart data records -- each entry in this array corresponds to a point on
+            // the chart.
+            data: [
+                {% for one_month in json_fot %}
+                {
+                    {% for str in one_month %}
+                    {% for key, info_year in str %}
+                    '{{ key }}':"{{ info_year }}",
+                    {% endfor%}
+                    {% endfor%}
+                },
+                {% endfor%}]
+            ,
+            lineColors:['#a2b3bf','#5969ff', '#64b764'],
+            trendLineColors:['#a2b3bf','#5969ff', '#64b764'],
+            // The name of the data record attribute that contains x-values.
+            xkey: '{{ separator_name }}',
+            // A list of names of data record attributes that contain y-values.
+            ykeys: ['2018', '2019'],
+            // Labels for the ykeys -- will be displayed when you hover over the
+            // chart.
+            labels: ['2018', '2019'],
+            parseTime: false
+
+        })
+        new Morris.Line({
+            // ID of the element in which to draw the chart.
+            element: 'ss',
+            // Chart data records -- each entry in this array corresponds to a point on
+            // the chart.
+            data: [
+                {% for one_month in json_ss %}
+                {
+                    {% for str in one_month %}
+                    {% for key, info_year in str %}
+                    '{{ key }}':"{{ info_year }}",
+                    {% endfor%}
+                    {% endfor%}
+                },
+                {% endfor%}]
+            ,
+            lineColors:['#a2b3bf','#5969ff', '#64b764'],
+            trendLineColors:['#a2b3bf','#5969ff', '#64b764'],
+            // The name of the data record attribute that contains x-values.
+            xkey: '{{ separator_name }}',
+            // A list of names of data record attributes that contain y-values.
+            ykeys: ['2018', '2019'],
+            // Labels for the ykeys -- will be displayed when you hover over the
+            // chart.
+            labels: ['2018', '2019'],
+            parseTime: false
+
+        })
+
+
+
+    </script >
+{% endblock  %}

@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="RU/ru" >
+
+
+    <!-- ============================================================== -->
+    <!-- navbar -->
+    <!-- ============================================================== -->
+
+                        {% include 'templates/menu.tmpl' %}
+
+    <!-- ============================================================== -->
+    <!-- end left sidebar -->
+    <!-- ============================================================== -->
+    <!-- ============================================================== -->
+    <!-- wrapper  -->
+    <!-- ============================================================== -->
+    <div class="dashboard-wrapper" >
+        <div class="dashboard-ecommerce" >
+            <div class="container-fluid dashboard-content " >
+                <div class="row" >
+                    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12" >
+                        <div class="page-header" >
+                            <h2 class="pageheader-title" >
+                                Список пользователей
+                            </h2 >
+
+                        </div >
+
+                    </div >
+                </div >
+                <!-- ============================================================== -->
+                <div class="ecommerce-widget" >
+
+                    <div class="row" >
+                        <div class="col-xl-9 col-lg-12 col-md-6 col-sm-12 col-12" >
+                            <div class="card" >
+
+                                <div class="card-body p-0" >
+                                    <div class="table-responsive" >
+                                        <table class="table table-hover" >
+                                            <thead class="bg-light" >
+                                            <tr class="border-0" >
+                                                <th class="border-0" >#</th >
+                                                <th class="border-0" >Login</th >
+                                                <th class="border-0" >Name</th >
+                                                <th class="border-0" >Роль</th >
+                                            </tr >
+                                            </thead >
+                                            <tbody >
+                                           {% for user_item in users%}
+                                            <tr class='link-inline' onclick="window.location.href='?path=admin/user&user_id={{ user_item.uid }}'; return false">
+
+                                                <td > {{ loop.index }}</td >
+                                                <td >
+                                                    {{ user_item.login }}
+                                                </td >
+                                                <td >{{ user_item.uname }}</td >
+                                                <td >{{ user_item.name_role }}</td >
+                                                </a>
+                                            </tr >
+                                           {% endfor %}
+
+                                            </tbody >
+                                        </table >
+                                    </div >
+                                </div >
+                            </div >
+                        </div >
+
+                     </div >
+                     <div class="row" >
+                         <!-- ============================================================== -->
+
+                        <!-- ============================================================== -->
+
+                        <!-- recent orders  -->
+                        <!-- ============================================================== -->
+
+
+                    </div >
+
+                </div >
+            </div >
+        </div >
+        <!-- ============================================================== -->
+        <!-- footer -->
+        <!-- ============================================================== -->
+        <div class="footer" >
+            <div class="container-fluid" >
+                <div class="row" >
+                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12" >
+                        Copyright © 2018 Concept. All rights reserved. Dashboard by <a href="https://colorlib.com/wp/" >Colorlib</a >.
+                    </div >
+                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12" >
+                        <div class="text-md-right footer-links d-none d-sm-block" >
+                            <a href="javascript: void(0);" >About</a >
+                            <a href="javascript: void(0);" >Support</a >
+                            <a href="javascript: void(0);" >Contact Us</a >
+                        </div >
+                    </div >
+                </div >
+            </div >
+        </div >
+        <!-- ============================================================== -->
+        <!-- end footer -->
+        <!-- ============================================================== -->
+    </div >
+    <!-- ============================================================== -->
+    <!-- end wrapper  -->
+    <!-- ============================================================== -->
+</div >
+<!-- ============================================================== -->
+<!-- end main wrapper  -->
+<!-- ============================================================== -->
+<!-- Optional JavaScript -->
+<!-- jquery 3.3.1 -->
+
+<!-- bootstap bundle js -->
+<script src="/dash/assets/vendor/bootstrap/js/bootstrap.bundle.js" ></script >
+<!-- slimscroll js -->
+<script src="/dash/assets/vendor/slimscroll/jquery.slimscroll.js" ></script >
+<!-- main js -->
+<script src="/dash/assets/libs/js/main-js.js" ></script >
+<!-- chart chartist js -->
+<script src="/dash/assets/vendor/charts/chartist-bundle/chartist.min.js" ></script >
+<!-- sparkline js -->
+<script src="/dash/assets/vendor/charts/sparkline/jquery.sparkline.js" ></script >
+<!-- morris js -->
+<script src="/dash/assets/vendor/charts/morris-bundle/raphael.min.js" ></script >
+<script src="/dash/assets/vendor/charts/morris-bundle/morris.js" ></script >
+<!-- chart c3 js -->
+<script src="/dash/assets/vendor/charts/c3charts/c3.min.js" ></script >
+<script src="/dash/assets/vendor/charts/c3charts/d3-5.4.0.min.js" ></script >
+<script src="/dash/assets/vendor/charts/c3charts/C3chartjs.js" ></script >
+<script src="/dash/assets/libs/js/dashboard-ecommerce.js" ></script >
+
+<script type="application/javascript" >
+
+
+        new Morris.Line({
+            // ID of the element in which to draw the chart.
+            element: 'myfirstchartK',
+            // Chart data records -- each entry in this array corresponds to a point on
+            // the chart.
+            data: [
+                {% for one_month in to_json %}
+                    {
+                        {% for str in one_month %}
+                            {% for key, info_year in str %}
+                                '{{ key }}':"{{ info_year }}",
+                            {% endfor%}
+                        {% endfor%}
+                    },
+                {% endfor%}]
+            ,
+            lineColors:['#a2b3bf','#5969ff', '#64b764'],
+            trendLineColors:['#a2b3bf','#5969ff', '#64b764'],
+            // The name of the data record attribute that contains x-values.
+            xkey: 'month',
+            // A list of names of data record attributes that contain y-values.
+            ykeys: ['2018', '2019'],
+            // Labels for the ykeys -- will be displayed when you hover over the
+            // chart.
+            labels: ['2018', '2019'],
+            parseTime: false
+
+    })
+
+
+
+
+</script >
+</body >
+
+</html >
