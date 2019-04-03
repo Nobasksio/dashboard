@@ -71,7 +71,7 @@ class AdminController extends BaseController
         return $this->view->render("admin/user", array('user' => $user_arr,
             'depatments'=>$departments,
             'user_id'=>$user_id
-            ));
+            )); 
     }
     public function action_departments(){
         $admin_model = new AdminModel;
