@@ -567,6 +567,7 @@ return array(
     'application\\model\\CategoryModel' => $baseDir . '/application/model/CategoryModel.php',
     'application\\model\\DashboardModel' => $baseDir . '/application/model/DashboardModel.php',
     'application\\model\\DepartmentModel' => $baseDir . '/application/model/DepartmentModel.php',
+    'application\\model\\DownloadModel' => $baseDir . '/application/model/DownloadModel.php',
     'application\\model\\MarketingModel' => $baseDir . '/application/model/MarketingModel.php',
     'application\\model\\OrderModel' => $baseDir . '/application/model/OrderModel.php',
     'application\\model\\ProductModel' => $baseDir . '/application/model/ProductModel.php',

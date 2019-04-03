@@ -43,6 +43,10 @@ class ComposerStaticInitbf7bb61cbc816c48ded0a06c98296aa9
             'Doctrine\\Instantiator\\' => 22,
             'DeepCopy\\' => 9,
         ),
+        'C' => 
+        array (
+            'Curl\\' => 5,
+        ),
     );
 
     public static $prefixDirsPsr4 = array (
@@ -83,6 +87,10 @@ class ComposerStaticInitbf7bb61cbc816c48ded0a06c98296aa9
         'DeepCopy\\' => 
         array (
             0 => __DIR__ . '/..' . '/myclabs/deep-copy/src/DeepCopy',
+        ),
+        'Curl\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/php-curl-class/php-curl-class/src/Curl',
         ),
     );
 
@@ -665,6 +673,7 @@ class ComposerStaticInitbf7bb61cbc816c48ded0a06c98296aa9
         'application\\model\\CategoryModel' => __DIR__ . '/../..' . '/application/model/CategoryModel.php',
         'application\\model\\DashboardModel' => __DIR__ . '/../..' . '/application/model/DashboardModel.php',
         'application\\model\\DepartmentModel' => __DIR__ . '/../..' . '/application/model/DepartmentModel.php',
+        'application\\model\\DownloadModel' => __DIR__ . '/../..' . '/application/model/DownloadModel.php',
         'application\\model\\MarketingModel' => __DIR__ . '/../..' . '/application/model/MarketingModel.php',
         'application\\model\\OrderModel' => __DIR__ . '/../..' . '/application/model/OrderModel.php',
         'application\\model\\ProductModel' => __DIR__ . '/../..' . '/application/model/ProductModel.php',

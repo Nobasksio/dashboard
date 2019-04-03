@@ -13,6 +13,7 @@ use \application\model\DashboardModel;
 
 class WaitersModel extends BaseModel
 {
+
     function getWaitersInfo($right,$date_start, $date_finish,$waiters_id=''){
 
         $brand_name = '';
@@ -25,6 +26,19 @@ class WaitersModel extends BaseModel
 
         return $this->toBeatifullArray($array_sales, true, $brand_name);
 
+    }
+    public function getOrdersInfoWaoiter($right,$id_waiter,$date_start, $date_finish,$kol){
+
+        $brand_name = '';
+        $dashboard_model = new DashboardModel;
+        $department_name_arr = $dashboard_model->getNameDepart($right);
+        $search_department = $dashboard_model->ArraytoWhereMysql($department_name_arr, 'department_name');
+
+        $search_waiter = $dashboard_model->getNameWaiters($id_waiter);
+        $search_waiter = $dashboard_model->ArraytoWhereMysql($search_waiter,'waiter_name');
+        $array_sales = $this->getOrdersWaiterFromMysql($right,$date_start, $date_finish,$id_waiter,$kol);
+
+        return $this->toBeatifullArrayOne($array_sales, true,$date_start, $date_finish,$brand_name);
 
     }
     function getOneWaiterInfo($right,$id_waiter,$date_start, $date_finish){
@@ -32,15 +46,12 @@ class WaitersModel extends BaseModel
         $brand_name = '';
         $dashboard_model = new DashboardModel;
 
-
             $department_name_arr = $dashboard_model->getNameDepart($right);
             $search_department = $dashboard_model->ArraytoWhereMysql($department_name_arr, 'department_name');
 
             $search_waiter = $dashboard_model->getNameWaiters($id_waiter);
             $search_waiter = $dashboard_model->ArraytoWhereMysql($search_waiter,'waiter_name');
             $array_sales = $this->getCheckFromMysql($search_department,$date_start, $date_finish,$search_waiter);
-
-
 
         return $this->toBeatifullArrayOne($array_sales, true,$date_start, $date_finish,$brand_name);
 
@@ -131,6 +142,8 @@ class WaitersModel extends BaseModel
                 } else {
                     $Department = $brand;
                 }
+                $id_check = $str['id_check'];
+
 
                 $Waiter = $str['Waiter'];
                 $Id_waiter= $str['id_waiter'];

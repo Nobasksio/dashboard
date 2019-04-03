@@ -140,6 +140,9 @@ class MarketingModel extends BaseModel
                     $Department = $brand;
                 }
                 $group = $str['group'];
+                if ($str['alias_name']!=""){
+                    $group = $str['alias_name'];
+                }
 
                 $ss = $str['ss'];
 
@@ -166,7 +169,14 @@ class MarketingModel extends BaseModel
                 $depart_name = $str['Department'];
                 $brand_id = $this->getBrandIdfromNameDepatment($depart_name);
                 $type_menu_arr = $this->type_menu[$brand_id];
-                $type_menu_str = @$type_menu_arr[$groupTop];
+
+                if (isset($type_menu_arr[$groupTop])){
+                    $type_menu_str = @$type_menu_arr[$groupTop];
+                }
+                else {
+                    $type_menu_str = 'kitchen';
+                }
+
 
 
                 if ($type_menu_str == 'bar') {

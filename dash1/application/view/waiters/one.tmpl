@@ -25,7 +25,7 @@
 
         <ul class="nav nav-pills">
             <!--<li role="presentation" class="{% if level == "index" %}active{% endif %}"><a href="?path={{ type }}/chain&month={% if month == False %}False{% else %}True{% endif %}">Сеть</a></li>-->
-            <li role="presentation" class="{% if level == "brands" %}active{% endif %}" ><a href="?path={% if type != 'product' %}{{ type }}{% else %}marketing{% endif %}/brands&month={% if month == False %}False{% else %}True{% endif %}&date_start={{ date_start }}&date_finish={{ date_finish }}">Бренды</a></li>
+            <!--<li role="presentation" class="{% if level == "brands" %}active{% endif %}" ><a href="?path={% if type != 'product' %}{{ type }}{% else %}marketing{% endif %}/brands&month={% if month == False %}False{% else %}True{% endif %}&date_start={{ date_start }}&date_finish={{ date_finish }}">Бренды</a></li>-->
             <li role="presentation" class="{% if level == "departments" %}active{% endif %}"><a href="?path={{ type }}/departments&month={% if month == False %}False{% else %}True{% endif %}&date_start={{ date_start }}&date_finish={{ date_finish }}">Подразделения</a></li>
         </ul>
 

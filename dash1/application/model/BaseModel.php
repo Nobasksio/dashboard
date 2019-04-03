@@ -106,6 +106,7 @@ abstract class BaseModel {
         'Фо Ми' => 'Phome',
         'СБ Юбилейный РНГ'=>'SS СБ Юбилейный',
         'Центральный Офис' => 'Центральный Офис',
+        'Антрекот Сухэ-Батора' => 'Антрекот КМ',
     );
 
     public $department_id_ar = array(
@@ -375,7 +376,7 @@ abstract class BaseModel {
         return $arr_accounts;
     }
 
-    protected function getOrdersFromMysql($month, $Department = '',$produts,$date_start,$date_finish)
+    protected function getOrdersFromMysql($month, $Department = '',$produts,$date_start,$date_finish,$id_waiter)
     {
         $date_start_arr = explode(".", $date_start);
         $date_finish_arr = explode(".", $date_finish);
@@ -387,6 +388,7 @@ abstract class BaseModel {
                          FROM orders
                         where Department_id=$Department
                           and DishName_id=$produts
+                          and 
                           $date_where
                            ");
         $statement->execute();
@@ -411,10 +413,57 @@ abstract class BaseModel {
 
         return $order_arr;
     }
+    protected function getOrdersWaiterFromMysql($Department = '',$date_start,$date_finish,$id_waiter,$kol)
+    {
+        $date_start_arr = explode(".", $date_start);
+        $date_finish_arr = explode(".", $date_finish);
+        $date_start = ($date_start_arr[2])."-".$date_start_arr[1]."-".$date_start_arr[0];
+        $date_finish = ($date_finish_arr[2])."-".$date_finish_arr[1]."-".$date_finish_arr[0];
+        $date_where = " and DATE(o.OpenTime) BETWEEN '$date_start' AND '$date_finish'";
+        $statement = self::$connection->prepare(
+            "SELECT DISTINCT o.OrderNum
+                         FROM orders o 
+                         LEFT JOIN checks c ON c.OrderNum=o.OrderNum
+                         LEFT JOIN waiters w ON w.waiter_name=c.Waiter
+                        where o.Department_id = $Department
+                          and w.id_waiter = :id_waiter
+                          $date_where
+                          Limit $kol
+                           ");
+
+        $statement->bindValue(':id_waiter', $id_waiter);
+        $statement->execute();
+        $arr_number = $statement->fetchAll(\PDO::FETCH_ASSOC);
+
+        if (count($arr_number)>0) {
+
+            $where_order_num = DashboardModel::ArraytoWhereMysql($arr_number, 'OrderNum');
+
+            $statement = self::$connection->prepare(
+                "SELECT * 
+                         FROM orders o 
+                         LEFT JOIN checks c ON c.OrderNum=o.OrderNum
+                         LEFT JOIN waiters w ON w.waiter_name=c.Waiter
+                         LEFT JOIN dishs d ON d.id_dish=o.DishName_id
+                        where o.Department_id = $Department
+                          and o.OrderNum IN $where_order_num
+                          and w.id_waiter = :id_waiter
+                          $date_where
+                           ");
+
+            $statement->bindValue(':id_waiter', $id_waiter);
+            $statement->execute();
+            $order_arr = $statement->fetchAll(\PDO::FETCH_ASSOC);
+        } else {
+            $order_arr=array();
+        }
+
+        return $order_arr;
+    }
     public function getCheckFromMysql($Department = '',$date_start,$date_finish,$search_waiter='')
     {
         if ($Department != '') {
-            $where = " and s.Department IN $Department ";
+            $where = " s.Department IN $Department ";
 
         } else {
             $where = '';
@@ -435,10 +484,9 @@ abstract class BaseModel {
 
         $statement = self::$connection->prepare(
             "SELECT * FROM 
-                          checks s,
-                          waiters w
+                          checks s
+                          LEFT JOIN waiters w ON s.Waiter=w.waiter_name
                         where 
-                          s.Waiter = w.waiter_name
                           $where $where_waiters
                           $date_where
                           order by s.Department ");
@@ -492,5 +540,8 @@ abstract class BaseModel {
         );
         return $arrayOfDates;
     }
+
+
+
 
 }

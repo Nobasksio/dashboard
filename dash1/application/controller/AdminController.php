@@ -14,12 +14,16 @@ use \application\model\UserModel;
 use \application\model\AdminModel;
 use \application\model\ProductModel;
 use \application\model\DepartmentModel;
+use \application\model\DownloadModel;
 
 
 class AdminController extends BaseController
 {
     public function before() {
         parent::before();
+        if (!$this->session->get("user")) {
+            $this->request->redirect("?path=auth/index");
+        }
 
         $admin_model = new AdminModel;
 
@@ -31,6 +35,18 @@ class AdminController extends BaseController
 
         return true;
     }
+    public function action_dowload2(){
+        $admin_model = new DownloadModel;
+
+        $user_arr = $admin_model->test_iiko();
+        return $this->view->render("admin/download2", array('users' => $user_arr));
+    }
+    public function action_dowload(){
+        $admin_model = new DownloadModel;
+
+        $user_arr = $admin_model->dowloadSaleIiko('20.03.2019','30.03.2019');
+        return $this->view->render("admin/download", array('users' => $user_arr));
+    }
 
     public function action_users(){
         $admin_model = new AdminModel;
@@ -39,14 +55,17 @@ class AdminController extends BaseController
         return $this->view->render("admin/users", array('users' => $user_arr));
     }
 
+
+
     public function action_user(){
         $user_id = $this->request->getGet('user_id');
         $user_model = new UserModel;
 
         $user_arr = $user_model->getUserById($user_id);
         $admin_model = new AdminModel();
-        $admin_model->makeDepartmentList();
+        //$admin_model->makeDepartmentList();
         //$admin_model->makeCategoryList();
+        //$admin_model->makeDepartmentsCategoryRelations();
         $departments = $admin_model->getDepartmentWithRight($user_id);
 
         return $this->view->render("admin/user", array('user' => $user_arr,
@@ -64,7 +83,7 @@ class AdminController extends BaseController
     public function action_department(){
         $depart_id = $this->request->getGet('depart_id');
         $admin_model = new AdminModel();
-        //$admin_model->makeDepartmentList();
+        //$admin_model->setCategoryAll();
         //$admin_model->makeCategoryList();
 
         //$admin_model->makeDepartmentsCategoryRelations();
@@ -104,6 +123,20 @@ class AdminController extends BaseController
         $admin_model = new AdminModel;
 
         $user_arr = $admin_model->SetViewGroup($id_dep,$id_category,$status);
+
+
+        return $user_arr;
+    }
+    public function action_setaliasCategory(){
+
+        #todo надо сделать проверку прав
+        $alias = $this->request->getGet('alias');
+        $id_dep = $this->request->getGet('id_dep');
+        $id_category = $this->request->getGet('id_category');
+
+        $admin_model = new AdminModel;
+
+        $user_arr = $admin_model->SetAliasCategory($id_category,$alias);
 
 
         return $user_arr;

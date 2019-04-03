@@ -6981,3 +6981,6 @@ Media Query
 .link-inline{
     cursor: pointer;
 }
+.good{
+    background: #87ff73;
+}

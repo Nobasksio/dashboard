@@ -97,9 +97,9 @@ class WaitersController extends BaseController
         }
         $id_d = $this->request->getGet('id_d');
         $id_waiter = $this->request->getGet('id_waiter');
-        $dashModel = new WaitersModel;
-        $dash_array = $dashModel->getOneWaiterInfo($id_d, $id_waiter, $this->date_start, $this->date_finish, $month);
-
+        $waiterModel = new WaitersModel;
+        $dash_array = $waiterModel->getOneWaiterInfo($id_d, $id_waiter, $this->date_start, $this->date_finish, $month);
+        //$order_array = $waiterModel->getOrdersInfoWaoiter($id_d, $id_waiter, $this->date_start, $this->date_finish,10);
 
         return $this->view->render("waiters/one", array('waiter_arr' => $dash_array['waiter_arr'],
             'department'=> $dash_array['department'],

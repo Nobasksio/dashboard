@@ -11,8 +11,8 @@ try {
 	\Twig_Autoloader::register();
 	\application\service\Autoloader::register();
 
-	$loader = new \Twig_Loader_Filesystem(APP.DIRECTORY_SEPARATOR.'view');
-	$twig = new \Twig_Environment($loader);
+	$loader = new \FilesystemLoader(APP.DIRECTORY_SEPARATOR.'view');
+	$twig = new \Environment($loader);
 
 	/**
 	 * Supporting objects

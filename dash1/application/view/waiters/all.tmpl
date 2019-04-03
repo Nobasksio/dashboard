@@ -10,6 +10,27 @@
        onclick="refresh_date('?path={{ type }}/{{ level }}&month={% if month == False %}False{% else %}True{% endif %}{% if id_d %}&id_d={{ id_d }}{% endif %}{% if id_b %}&id_b={{ id_b }}{% endif %}')" role="button">Обновить</a>
 
 {% endblock  %}
+{% block button %}
+
+    <div class="col-xl-2 col-lg-6 col-md-6 col-sm-12 col-12 pb-5" >
+
+        <ul class="nav nav-pills">
+            <li role="presentation" {% if month == False %} class="active" {% endif %} ><a href="?path={{ type }}/{{ level }}&month=False{% if id_d %}&id_d={{ id_d }}{% endif %}{% if id_b %}&id_b={{ id_b }}{% endif %}&date_start={{ "first day of january this year"| date("d.m.Y") }}&date_finish={{ "now"| date("d.m.Y") }}">Год</a></li>
+            <li role="presentation" {% if month == TRUE %} class="active" {% endif %} ><a href="?path={{ type }}/{{ level }}&month=True{% if id_d %}&id_d={{ id_d }}{% endif %}{% if id_b %}&id_b={{ id_b }}{% endif %}&date_start={{ "first day of this month"| date("d.m.Y") }}&date_finish={{ "now"| date("d.m.Y") }}">Месяц</a></li>
+        </ul>
+
+    </div>
+    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 pb-5" >
+
+        <ul class="nav nav-pills">
+            <!--<li role="presentation" class="{% if level == "index" %}active{% endif %}"><a href="?path={{ type }}/chain&month={% if month == False %}False{% else %}True{% endif %}">Сеть</a></li>-->
+            <!--<li role="presentation" class="{% if level == "brands" %}active{% endif %}" ><a href="?path={{ type }}/brands&month={% if month == False %}False{% else %}True{% endif %}{% if id_d %}&id_d={{ id_d }}{% endif %}{% if id_b %}&id_b={{ id_b }}{% endif %}&date_start={{ date_start }}&date_finish={{ date_finish }}">Бренды</a></li>-->
+            <li role="presentation" class="{% if level == "departments" %}active{% endif %}"><a href="?path={{ type }}/departments&month={% if month == False %}False{% else %}True{% endif %}{% if id_d %}&id_d={{ id_d }}{% endif %}{% if id_b %}&id_b={{ id_b }}{% endif %}&date_start={{ date_start }}&date_finish={{ date_finish }}">Подразделения</a></li>
+        </ul>
+
+    </div>
+
+{% endblock %}
                 {% block body %}
                 <div class="ecommerce-widget" >
 

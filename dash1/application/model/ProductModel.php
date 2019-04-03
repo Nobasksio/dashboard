@@ -33,7 +33,6 @@ class ProductModel extends BaseModel {
 
         }
 
-
         $department_name_arr = $dashboard_model->getNameDepart($rigth_arr);
 
         $search_department = $dashboard_model->ArraytoWhereMysql($department_name_arr, 'department_name');

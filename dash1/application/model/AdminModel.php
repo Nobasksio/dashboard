@@ -10,10 +10,13 @@ namespace application\model;
 
 use \application\service\Service;
 use \application\model\BaseModel;
+use \Curl\Curl;
 
 
 class AdminModel extends BaseModel
 {
+
+
     public function getRight($user) {
         $statement = self::$connection->prepare("SELECT * FROM user_role WHERE id_user = :id");
         $statement->bindValue(':id', $user['id'], \PDO::PARAM_INT);
@@ -84,8 +87,26 @@ class AdminModel extends BaseModel
         return $statement->fetchAll(\PDO::FETCH_ASSOC);
     }
 
+    public function getAllDishs() {
+        $statement = self::$connection->prepare(
+            "SELECT * FROM dishs
+        ");
+        $statement->execute();
+
+        return $statement->fetchAll(\PDO::FETCH_ASSOC);
+    }
+
+    public function getAllCategory() {
+        $statement = self::$connection->prepare(
+            "SELECT * FROM category
+        ");
+        $statement->execute();
+
+        return $statement->fetchAll(\PDO::FETCH_ASSOC);
+    }
+
     public function makeDepartmentList(){
-        $statement = self::$connection->prepare("SELECT DISTINCT Department FROM dashboard_this_month");
+        $statement = self::$connection->prepare("SELECT DISTINCT Department FROM dashboard_this_years_test");
         $statement->execute();
         $arr_departments = $statement->fetchAll(\PDO::FETCH_ASSOC);
         $statement2 = self::$connection->prepare("CREATE TABLE IF NOT EXISTS departments (
@@ -107,6 +128,52 @@ class AdminModel extends BaseModel
         return $statement;
     }
 
+    public static function addDepartment($department){
+        try {
+            $statement = self::$connection->prepare("INSERT IGNORE INTO departments (department_name) VALUE(:dep)");
+            $statement->bindValue(':dep', $department);
+            $statement->execute();
+            $dbo = self::$connection;
+            return $dbo->lastInsertId();
+        } catch(PDOExecption $e) {
+            return false;
+        }
+    }
+    public static function addCategory($Group,$Group2){
+        try {
+            $statement = self::$connection->prepare("INSERT IGNORE INTO category (category_name) VALUE(:category_name)");
+            $statement->bindValue(':category_name', $Group);
+            $statement->execute();
+            $dbo = self::$connection;
+            return $dbo->lastInsertId();
+        } catch(PDOExecption $e) {
+            return false;
+        }
+    }
+    public static function addDish($dish_name){
+        try {
+            $statement = self::$connection->prepare("INSERT IGNORE INTO dishs (dish_name) VALUE(:dish_name)");
+            $statement->bindValue(':dish_name', $dish_name);
+            $statement->execute();
+            $dbo = self::$connection;
+            return $dbo->lastInsertId();
+        } catch(PDOExecption $e) {
+            return false;
+        }
+    }
+    public static function UpdateDish($id_dish,$name_col,$new_value){
+        $statement2 = self::$connection->prepare(
+            "UPDATE dishs SET $name_col=$new_value
+                        where `id_dish`=$id_dish");
+        $statement2->execute();
+    }
+    public static function UpdateCategory($category_id,$name_col,$new_value){
+        $statement2 = self::$connection->prepare(
+            "UPDATE category SET $name_col=$new_value
+                        where `id_category`=$category_id");
+        $statement2->execute();
+    }
+
 
     public function makeCategoryList(){
         $statement = self::$connection->prepare("SELECT DISTINCT `group` FROM sales");
@@ -124,7 +191,8 @@ class AdminModel extends BaseModel
         $statement2->execute();
 
         foreach ($dish_departments as $category){
-            $category_name = $category['group'];
+
+                $category_name = $category['group'];
 
             $statement = self::$connection->prepare("INSERT IGNORE INTO category (category_name) VALUE(:category_name)");
             $statement->bindValue(':category_name', $category_name);
@@ -132,6 +200,13 @@ class AdminModel extends BaseModel
         }
 
         return $statement;
+    }
+
+    public function setCategoryAll(){
+        $statement2 = self::$connection->prepare(
+            "UPDATE sales s SET s.group=s.group0 
+                        where `group` is NULL");
+        $statement2->execute();
     }
 
     public function makeDepartmentsCategoryRelations(){
@@ -170,6 +245,17 @@ class AdminModel extends BaseModel
         }
 
         return $statement;
+    }
+
+    //todo доделать создание уникальных столбцов
+    public function makeUniqOrderId(){
+        $statement = self::$connection->prepare( "ALTER TABLE `orders` ADD `uid` varchar( 255 ) AFTER `date_update`");
+        $statement->execute();
+        $statement2 = self::$connection->prepare(
+            "UPDATE orders SET uid=s.group0 
+                        where `group` is NULL");
+        $statement2->execute();
+
     }
 
     public function makeDishList(){
@@ -270,5 +356,17 @@ class AdminModel extends BaseModel
 
         return  $statement2->execute();
     }
+    public function SetAliasCategory($id_category,$alias) {
+
+        $statement2 = self::$connection->prepare(
+            "UPDATE category SET alias_name=:alias_name 
+                        where id_category = :category_id");
+        $statement2->bindValue(':category_id', $id_category);
+        $statement2->bindValue(':alias_name', $alias);
+
+
+        return  $statement2->execute();
+    }
+
 
 }
