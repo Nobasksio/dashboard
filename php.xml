@@ -1,13 +1,13 @@
 <application>
   <component name="PhpInterpreters">
     <interpreters>
-      <interpreter home="/usr/local/Cellar/php@7.2/7.2.15/bin/php" id="ecd0fee1-7ef5-40a7-8f2c-4cc297311326" name="PHP 7.2" debugger_id="php.debugger.XDebug" />
+      <interpreter home="/usr/local/Cellar/php@7.2/7.2.19/bin/php" id="ecd0fee1-7ef5-40a7-8f2c-4cc297311326" name="PHP 7.2" debugger_id="php.debugger.XDebug" />
     </interpreters>
   </component>
   <component name="PhpInterpretersPhpInfoCache">
     <phpInfoCache>
       <interpreter name="PHP 7.2">
-        <phpinfo binary_type="PHP" php_cgi="/usr/local/Cellar/php@7.2/7.2.15/bin/php-cgi" php_cli="/usr/local/Cellar/php@7.2/7.2.15/bin/php" path_separator=":" version="7.2.15">
+        <phpinfo binary_type="PHP" php_cgi="/usr/local/Cellar/php@7.2/7.2.19/bin/php-cgi" php_cli="/usr/local/Cellar/php@7.2/7.2.19/bin/php" path_separator=":" version="7.2.19">
           <additional_php_ini>/usr/local/etc/php/7.2/conf.d/ext-opcache.ini</additional_php_ini>
           <configuration_file>/usr/local/etc/php/7.2/php.ini</configuration_file>
           <configuration_options>
@@ -60,7 +60,7 @@
             <configuration_option name="exif.encode_jis" value="" />
             <configuration_option name="exif.encode_unicode" value="ISO-8859-15" />
             <configuration_option name="expose_php" value="1" />
-            <configuration_option name="extension_dir" value="/usr/local/lib/php/pecl/20170718" />
+            <configuration_option name="extension_dir" value="/usr/local/Cellar/php@7.2/7.2.19/lib/php/20170718" />
             <configuration_option name="file_uploads" value="1" />
             <configuration_option name="filter.default" value="unsafe_raw" />
             <configuration_option name="filter.default_flags" value="" />
@@ -80,7 +80,7 @@
             <configuration_option name="ignore_repeated_source" value="" />
             <configuration_option name="ignore_user_abort" value="0" />
             <configuration_option name="implicit_flush" value="1" />
-            <configuration_option name="include_path" value=".:/usr/local/Cellar/php@7.2/7.2.15/share/php@7.2/pear" />
+            <configuration_option name="include_path" value=".:/usr/local/Cellar/php@7.2/7.2.19/share/php@7.2/pear" />
             <configuration_option name="input_encoding" value="" />
             <configuration_option name="internal_encoding" value="" />
             <configuration_option name="intl.default_locale" value="" />
@@ -108,7 +108,7 @@
             <configuration_option name="mbstring.strict_detection" value="0" />
             <configuration_option name="mbstring.substitute_character" value="" />
             <configuration_option name="memory_limit" value="128M" />
-            <configuration_option name="mysqli.allow_local_infile" value="1" />
+            <configuration_option name="mysqli.allow_local_infile" value="0" />
             <configuration_option name="mysqli.allow_persistent" value="1" />
             <configuration_option name="mysqli.default_host" value="" />
             <configuration_option name="mysqli.default_port" value="3306" />
@@ -166,7 +166,7 @@
             <configuration_option name="opcache.preferred_memory_model" value="" />
             <configuration_option name="opcache.protect_memory" value="0" />
             <configuration_option name="opcache.restrict_api" value="" />
-            <configuration_option name="opcache.revalidate_freq" value="2" />
+            <configuration_option name="opcache.revalidate_freq" value="0" />
             <configuration_option name="opcache.revalidate_path" value="0" />
             <configuration_option name="opcache.save_comments" value="1" />
             <configuration_option name="opcache.use_cwd" value="1" />
@@ -243,13 +243,14 @@
             <configuration_option name="soap.wsdl_cache_enabled" value="1" />
             <configuration_option name="soap.wsdl_cache_limit" value="5" />
             <configuration_option name="soap.wsdl_cache_ttl" value="86400" />
+            <configuration_option name="sqlite3.defensive" value="1" />
             <configuration_option name="sqlite3.extension_dir" value="" />
             <configuration_option name="sys_temp_dir" value="" />
             <configuration_option name="tidy.clean_output" value="" />
             <configuration_option name="tidy.default_config" value="" />
             <configuration_option name="track_errors" value="0" />
             <configuration_option name="unserialize_callback_func" value="" />
-            <configuration_option name="upload_max_filesize" value="2M" />
+            <configuration_option name="upload_max_filesize" value="50M" />
             <configuration_option name="upload_tmp_dir" value="" />
             <configuration_option name="url_rewriter.hosts" value="" />
             <configuration_option name="url_rewriter.tags" value="form=" />
@@ -288,23 +289,23 @@
             <configuration_option name="xdebug.gc_stats_output_name" value="gcstats.%p" />
             <configuration_option name="xdebug.halt_level" value="0" />
             <configuration_option name="xdebug.idekey" value="PHPSTORM" />
-            <configuration_option name="xdebug.max_nesting_level" value="256" />
+            <configuration_option name="xdebug.max_nesting_level" value="150" />
             <configuration_option name="xdebug.max_stack_frames" value="-1" />
             <configuration_option name="xdebug.overload_var_dump" value="2" />
             <configuration_option name="xdebug.profiler_aggregate" value="0" />
             <configuration_option name="xdebug.profiler_append" value="0" />
-            <configuration_option name="xdebug.profiler_enable" value="0" />
+            <configuration_option name="xdebug.profiler_enable" value="1" />
             <configuration_option name="xdebug.profiler_enable_trigger" value="0" />
             <configuration_option name="xdebug.profiler_enable_trigger_value" value="" />
             <configuration_option name="xdebug.profiler_output_dir" value="/var/tmp/" />
             <configuration_option name="xdebug.profiler_output_name" value="cachegrind.out.%p" />
             <configuration_option name="xdebug.remote_addr_header" value="" />
             <configuration_option name="xdebug.remote_autostart" value="1" />
-            <configuration_option name="xdebug.remote_connect_back" value="1" />
+            <configuration_option name="xdebug.remote_connect_back" value="0" />
             <configuration_option name="xdebug.remote_cookie_expire_time" value="3600" />
             <configuration_option name="xdebug.remote_enable" value="0" />
             <configuration_option name="xdebug.remote_handler" value="dbgp" />
-            <configuration_option name="xdebug.remote_host" value="localhost" />
+            <configuration_option name="xdebug.remote_host" value="127.0.0.1" />
             <configuration_option name="xdebug.remote_log" value="$USER_HOME$/logxde.log" />
             <configuration_option name="xdebug.remote_mode" value="req" />
             <configuration_option name="xdebug.remote_port" value="9001" />
@@ -336,7 +337,7 @@
             <configuration_option name="zlib.output_handler" value="" />
           </configuration_options>
           <debuggers>
-            <debugger_info debugger="xdebug" debugger_version="2.7.0">
+            <debugger_info debugger="xdebug" debugger_version="2.6.1">
               <debug_extensions />
             </debugger_info>
           </debuggers>
