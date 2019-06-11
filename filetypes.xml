@@ -4,6 +4,7 @@
       <mapping ext="ejs" type="HTML" />
       <mapping pattern="seting" type="PLAIN_TEXT" />
       <mapping ext="textclipping" type="PLAIN_TEXT" />
+      <mapping ext="phprgzsjh" type="PLAIN_TEXT" />
       <mapping ext="tmpl" type="Twig" />
     </extensionMap>
   </component>
