@@ -2,6 +2,7 @@
   <component name="FileTypeManager" version="17">
     <extensionMap>
       <mapping ext="ejs" type="HTML" />
+      <mapping pattern="test" type="PLAIN_TEXT" />
       <mapping pattern="seting" type="PLAIN_TEXT" />
       <mapping ext="textclipping" type="PLAIN_TEXT" />
       <mapping ext="phprgzsjh" type="PLAIN_TEXT" />
