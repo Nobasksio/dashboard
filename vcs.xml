@@ -10,6 +10,10 @@
           <option name="url" value="vogsphere@vgs.42.us.org:intra/2019/activities/piscine_c_day_00/aelchenk" />
           <option name="userName" value="" />
         </UrlAndUserName>
+        <UrlAndUserName>
+          <option name="url" value="https://github.com/ArturRest38/SmartFeedback-v3.git" />
+          <option name="userName" value="" />
+        </UrlAndUserName>
       </list>
     </option>
     <option name="cloneParentDir" value="$USER_HOME$/sites" />
